@@ -8,6 +8,9 @@ public class Cadastros <T extends IIdentificador>{
     List<T> listaCadastros = new ArrayList<>();
 
     public void adicionar(T cadastro){
+        if(cadastro == null){
+            throw new IllegalArgumentException("ERRO: cadastro não pode ser NULL");
+        }
         this.listaCadastros.add(cadastro);
     }
 
