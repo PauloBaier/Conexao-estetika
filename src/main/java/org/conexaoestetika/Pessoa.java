@@ -1,4 +1,4 @@
-package ProjetoMensal1;
+package org.conexaoestetika;
 
 public abstract class Pessoa {
     private int id;

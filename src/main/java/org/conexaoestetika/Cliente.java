@@ -1,4 +1,4 @@
-package ProjetoMensal1;
+package org.conexaoestetika;
 
 public class Cliente extends Pessoa implements IIdentificador {
     private String cpf;
