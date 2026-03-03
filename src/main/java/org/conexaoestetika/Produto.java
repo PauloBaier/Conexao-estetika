@@ -1,7 +1,7 @@
-package ConexãoEstetika;
+package org.conexaoestetika;
 
-public class Produto {  //atributos
-    private String id;
+public class Produto implements IIdentificador{  //atributos
+    private int id;
     private String nome;
     private String descricao;
     private double precoCusto;
@@ -12,7 +12,7 @@ public class Produto {  //atributos
     Fornecedor fornecedor;
 
     //constructor
-    public Produto(String id, String nome, String descricao, double precoCusto, double precoVenda, int quantidadeEstoque, String marca, Fornecedor fornecedor) {
+    public Produto(int id, String nome, String descricao, double precoCusto, double precoVenda, int quantidadeEstoque, String marca, Fornecedor fornecedor) {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
@@ -24,11 +24,11 @@ public class Produto {  //atributos
     }
 
     //getters e setters
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
