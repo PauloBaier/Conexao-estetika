@@ -3,23 +3,40 @@ package ConexãoEstetika;
 public class Produto {  //atributos
     private String id;
     private String nome;
-    private String descricao;
+    private String categoria;
     private double precoCusto;
     private double precoVenda;
     private int quantidadeEstoque;
-    private String marca;
+    private int estoqueMinimo;
 
     Fornecedor fornecedor;
 
     //constructor
-    public Produto(String id, String nome, String descricao, double precoCusto, double precoVenda, int quantidadeEstoque, String marca, Fornecedor fornecedor) {
+    public Produto(String id, String nome, String categoria, double precoCusto, double precoVenda, int quantidadeEstoque, int estoqueMinimo, Fornecedor fornecedor) {
+
+        if (precoCusto < 0) {
+            throw new IllegalArgumentException("Preço de custo não pode ser negativo.");
+        }
+
+        if (precoVenda < precoCusto) {
+            throw new IllegalArgumentException("Preço de venda deve ser maior ou igual ao preço de custo.");
+        }
+
+        if (quantidadeEstoque < 0) {
+            throw new IllegalArgumentException("Estoque não pode ser negativo.");
+        }
+
+        if (estoqueMinimo < 0) {
+            throw new IllegalArgumentException("Estoque mínimo não pode ser negativo.");
+        }
+
         this.id = id;
         this.nome = nome;
-        this.descricao = descricao;
+        this.categoria = categoria;
         this.precoCusto = precoCusto;
         this.precoVenda = precoVenda;
         this.quantidadeEstoque = quantidadeEstoque;
-        this.marca = marca;
+        this.estoqueMinimo = estoqueMinimo;
         this.fornecedor = fornecedor;
     }
 
@@ -40,12 +57,12 @@ public class Produto {  //atributos
         this.nome = nome;
     }
 
-    public String getDescricao() {
-        return descricao;
+    public int getEstoqueMinimo () {
+        return estoqueMinimo;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
 
     public double getPrecoCusto() {
@@ -53,6 +70,14 @@ public class Produto {  //atributos
     }
 
     public void setPrecoCusto(double precoCusto) {
+        if (precoCusto < 0) {
+            throw new IllegalArgumentException("Preço de custo não pode ser negativo.");
+        }
+
+        if (this.precoVenda < precoCusto) {
+            throw new IllegalArgumentException("Preço de custo não pode ser maior que o preço de venda atual.");
+        }
+
         this.precoCusto = precoCusto;
     }
 
@@ -61,23 +86,33 @@ public class Produto {  //atributos
     }
 
     public void setPrecoVenda(double precoVenda) {
+        if (precoVenda < this.precoCusto) {
+            throw new IllegalArgumentException("Preço de venda deve ser maior ou igual ao preço de custo.");
+        }
+
         this.precoVenda = precoVenda;
     }
-
     public int getQuantidadeEstoque() {
         return quantidadeEstoque;
     }
 
     public void setQuantidadeEstoque(int quantidadeEstoque) {
+        if (quantidadeEstoque < 0) {
+            throw new IllegalArgumentException("Estoque não pode ser negativo.");
+        }
+
         this.quantidadeEstoque = quantidadeEstoque;
     }
-
-    public String getMarca() {
-        return marca;
+    public int setEstoqueMinimo() {
+        return estoqueMinimo;
     }
 
-    public void setMarca(String marca) {
-        this.marca = marca;
+    public void setEstoqueMinimo(int estoqueMinimo) {
+        if (estoqueMinimo < 0) {
+            throw new IllegalArgumentException("Estoque mínimo não pode ser negativo.");
+        }
+
+        this.estoqueMinimo = estoqueMinimo;
     }
 
     public Fornecedor getFornecedor() {
@@ -107,9 +142,13 @@ public class Produto {  //atributos
         return false;
     }
 
-    //Calcular margem de lucro
-    public double calcularMargemLucro() {
-        if (precoCusto == 0) return 0;
-        return ((precoVenda - precoCusto) / precoCusto) * 100;
+    //verifica estoque abaixo do minimo
+    public String verificarEstoque() {
+        if (quantidadeEstoque <= estoqueMinimo) {
+            return "ATENÇÃO: Estoque abaixo do mínimo!";
+        } else {
+            return "Estoque OK.";
+        }
     }
+
 }
