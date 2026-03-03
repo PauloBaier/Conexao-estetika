@@ -1,12 +1,12 @@
 package org.conexaoestetika;
 
-public class Cliente extends Pessoa implements IIdentificador {
+public class Cliente extends Pessoa {
     private String cpf;
     private double dinheiroGasto;
 
     public Cliente(int id, String nome, String telefone, String email, String cpf) {
         super(id, nome, telefone, email);
-        this.cpf = cpf;
+        this.setCpf(cpf);
         this.dinheiroGasto = 0.0;
     }
 

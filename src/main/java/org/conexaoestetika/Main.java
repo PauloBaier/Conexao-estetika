@@ -6,6 +6,43 @@ public class Main {
     static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
+        Cadastros<Produto> produtos = new Cadastros<>();
+        Cadastros<Cliente> clientes = new Cadastros<>();
+        Cadastros<Fornecedor> fornecedores = new Cadastros<>();
+
+        clientes.adicionar(
+                new Cliente(
+                        1, "Adão", "123456789", "Adao@gmail.com", "12345678901"
+                )
+        );
+
+        fornecedores.adicionar(
+                new Fornecedor(
+                        1,
+                        "Serpente",
+                        "40028922",
+                        "ssssssssss@gmail.com",
+                        "03031053000168",
+                        "Destruir O Mundo"
+                )
+        );
+
+        produtos.adicionar(
+                new Produto(
+                        1,
+                        "Maca",
+                        "Maca",
+                        25.0,
+                        -2.0,
+                        -1,
+                        "Eden",
+                        fornecedores.buscarId(1)
+                )
+        );
+
+        Cliente cliente = clientes.buscarId(1);
+        System.out.println("Nome: " + cliente.getNome() + " telefone: " + cliente.getTelefone() );
+
 
         int opcao;
 

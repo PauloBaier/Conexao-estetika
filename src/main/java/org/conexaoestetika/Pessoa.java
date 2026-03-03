@@ -1,19 +1,19 @@
 package org.conexaoestetika;
 
-public abstract class Pessoa {
+public abstract class Pessoa implements IIdentificador {
     private int id;
     private String nome;
     private String telefone;
     private String email;
 
     public Pessoa(int id, String nome, String telefone, String email) {
-        this.id = id;
+        this.setId(id);
         this.setNome(nome);
         this.setTelefone(telefone);
         this.setEmail(email);
     }
 
-    public double getId() {
+    public int getId() {
         return id;
     }
 
@@ -51,7 +51,7 @@ public abstract class Pessoa {
     }
 
     public void setEmail(String email) {
-        if(telefone == null || !email.contains("@"))
+        if(email == null || !email.contains("@"))
             throw new IllegalArgumentException("Email inválido.");
         this.email = email;
     }

@@ -2,20 +2,20 @@ package org.conexaoestetika;
 
 public class Fornecedor extends Pessoa{
     private String cnpj;
-    private String razaoSozial;
+    private String razaoSocial;
 
-    public Fornecedor(int id, String nome, String telefone, String email, String cnpj, String razaoSozial) {
-        super(id, nome, telefone, razaoSozial);
+    public Fornecedor(int id, String nome, String telefone, String email, String cnpj, String razaoSocial) {
+        super(id, nome, telefone,email);
         this.setCnpj(cnpj);
-        this.setRazaoSozial(razaoSozial);
+        this.setRazaoSocial(razaoSocial);
     }
 
     public String getCnpj() {
         return cnpj;
     }
 
-    public String getRazaoSozial() {
-        return razaoSozial;
+    public String getRazaoSocial() {
+        return razaoSocial;
     }
 
     public void setCnpj(String cnpj) {
@@ -25,10 +25,10 @@ public class Fornecedor extends Pessoa{
         this.cnpj = cnpj;
     }
 
-    public void setRazaoSozial(String razaoSozial) {
-        if(razaoSozial == null || razaoSozial.trim().isEmpty()) {
+    public void setRazaoSocial(String razaoSocial) {
+        if(razaoSocial == null || razaoSocial.trim().isEmpty()) {
             throw new IllegalArgumentException("Razão social não pode ser vazia.");
         }
-        this.razaoSozial = razaoSozial;
+        this.razaoSocial = razaoSocial;
     }
 }
