@@ -7,7 +7,7 @@ public class ContaReceber extends Conta {
     private String venda;
     private String cliente;
 
-    public ContaReceber(String id, double valor, LocalDate data,
+    public ContaReceber(int id, double valor, LocalDate data,
                         String venda, String cliente) {
 
         super(id, valor, data);
@@ -15,7 +15,6 @@ public class ContaReceber extends Conta {
         setCliente(cliente);
     }
 
-    // GETTERS
 
     public String getVenda() {
         return venda;
@@ -25,7 +24,6 @@ public class ContaReceber extends Conta {
         return cliente;
     }
 
-    // SETTERS COM VALIDAÇÃO
 
     public void setVenda(String venda) {
         if (venda == null || venda.trim().isEmpty()) {
