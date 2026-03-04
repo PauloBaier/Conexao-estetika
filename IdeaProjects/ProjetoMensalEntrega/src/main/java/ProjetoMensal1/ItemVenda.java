@@ -4,7 +4,7 @@ public class ItemVenda {
 
     private Produto produto;
     private int quantidade;
-    provate double subtotal;
+    private double subtotal;
     
     public ItemVenda(Produto produto, int quantidade) {
 
