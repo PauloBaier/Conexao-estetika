@@ -11,7 +11,7 @@ public class Main {
             System.out.println("TESTE CONTA A PAGAR");
 
             ContaPagar conta1 = new ContaPagar(
-                    "1",
+                    1,
                     500.0,
                     LocalDate.now(),
                     "Produtos de limpeza",
@@ -38,7 +38,7 @@ public class Main {
             System.out.println("\n TESTE CONTA A RECEBER");
 
             ContaReceber conta2 = new ContaReceber(
-                    "2",
+                    2,
                     1000.0,
                     LocalDate.now(),
                     "Venda 123",
