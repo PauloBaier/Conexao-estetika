@@ -1,15 +1,17 @@
 package ProjetoMensal_1;
+import java.util.List;
+import ProjetoMensal_1.Fornecedor;
+import ProjetoMensal_1.ItemVenda;
 
 import java.time.LocalDate;
 
 public class ContaPagar extends Conta {
 
-    private String itens;
-    private String fornecedor;
+    private Fornecedor fornecedor;
+    private List<ItemVenda> itens;
     private LocalDate vencimento;
 
-    public ContaPagar(int id, double valor, LocalDate data,
-                      String itens, String fornecedor, LocalDate vencimento) {
+    public ContaPagar(int id, double valor, LocalDate data, List<ItemVenda> itens, Fornecedor fornecedor, LocalDate vencimento) {
 
         super(id, valor, data);
         setItens(itens);
@@ -18,11 +20,11 @@ public class ContaPagar extends Conta {
     }
 
 
-    public String getItens() {
+    public List<ItemVenda> getItens() {
         return itens;
     }
 
-    public String getFornecedor() {
+    public Fornecedor getFornecedor() {
         return fornecedor;
     }
 
@@ -31,21 +33,20 @@ public class ContaPagar extends Conta {
     }
 
 
-    public void setItens(String itens) {
-        if (itens == null || itens.trim().isEmpty()) {
-            throw new IllegalArgumentException("Itens não podem ser vazios.");
-        }
-        this.itens = itens;
+public void setItens(List<ItemVenda> itens) {
+    if (itens == null || itens.isEmpty()) {
+        throw new IllegalArgumentException("Lista de itens não pode ser vazia.");
     }
-
-    public void setFornecedor(String fornecedor) {
-        if (fornecedor == null || fornecedor.trim().isEmpty()) {
-            throw new IllegalArgumentException("Fornecedor não pode ser vazio.");
-        }
-        this.fornecedor = fornecedor;
+    this.itens = itens;
+}
+public void setFornecedor(Fornecedor fornecedor) {
+    if (fornecedor == null) {
+        throw new IllegalArgumentException("Fornecedor não pode ser nulo.");
     }
+    this.fornecedor = fornecedor;
+}
 
-    public void setVencimento(LocalDate vencimento) {
+ public void setVencimento(LocalDate vencimento) {
         if (vencimento == null) {
             throw new IllegalArgumentException("Vencimento não pode ser nulo.");
         }
