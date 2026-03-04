@@ -1,14 +1,15 @@
 package ProjetoMensal_1;
 
+import ProjetoMensal_1.Venda;
+import ProjetoMensal_1.Cliente;
 import java.time.LocalDate;
 
 public class ContaReceber extends Conta {
 
-    private String venda;
-    private String cliente;
+    private Venda venda;
+    private Cliente cliente;
 
-    public ContaReceber(int id, double valor, LocalDate data,
-                        String venda, String cliente) {
+    public ContaReceber(int id, double valor, LocalDate data, Venda venda, Cliente cliente) {
 
         super(id, valor, data);
         setVenda(venda);
@@ -16,26 +17,26 @@ public class ContaReceber extends Conta {
     }
 
 
-    public String getVenda() {
+    public Venda getVenda() {
         return venda;
     }
 
-    public String getCliente() {
+    public Cliente getCliente() {
         return cliente;
     }
 
 
-    public void setVenda(String venda) {
-        if (venda == null || venda.trim().isEmpty()) {
-            throw new IllegalArgumentException("Venda não pode ser vazia.");
-        }
-        this.venda = venda;
+public void setVenda(Venda venda) {
+    if (venda == null) {
+        throw new IllegalArgumentException("Venda não pode ser nula.");
     }
+    this.venda = venda;
+}
 
-    public void setCliente(String cliente) {
-        if (cliente == null || cliente.trim().isEmpty()) {
-            throw new IllegalArgumentException("Cliente não pode ser vazio.");
-        }
-        this.cliente = cliente;
+public void setCliente(Cliente cliente) {
+    if (cliente == null) {
+        throw new IllegalArgumentException("Cliente não pode ser nulo.");
+    }
+    this.cliente = cliente;
     }
 }
