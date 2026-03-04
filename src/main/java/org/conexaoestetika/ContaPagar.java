@@ -1,7 +1,5 @@
-package ProjetoMensal_1;
+package org.conexaoestetika;
 import java.util.List;
-import ProjetoMensal_1.Fornecedor;
-import ProjetoMensal_1.ItemVenda;
 
 import java.time.LocalDate;
 

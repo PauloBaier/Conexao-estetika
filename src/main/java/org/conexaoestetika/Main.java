@@ -33,15 +33,18 @@ public class Main {
                         "Maca",
                         "Maca",
                         25.0,
-                        -2.0,
-                        -1,
+                        30.0,
+                        11,
                         "Eden",
                         fornecedores.buscarId(1)
                 )
         );
 
+
         Cliente cliente = clientes.buscarId(1);
         System.out.println("Nome: " + cliente.getNome() + " telefone: " + cliente.getTelefone() );
+
+
 
 
         int opcao;

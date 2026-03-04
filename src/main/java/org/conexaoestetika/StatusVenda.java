@@ -1,4 +1,4 @@
-package ProjetoMensal1;
+package org.conexaoestetika;
 
 public enum StatusVenda {
     PAGO,

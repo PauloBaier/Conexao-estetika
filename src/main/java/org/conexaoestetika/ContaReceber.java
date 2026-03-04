@@ -1,7 +1,5 @@
-package ProjetoMensal_1;
+package org.conexaoestetika;
 
-import ProjetoMensal_1.Venda;
-import ProjetoMensal_1.Cliente;
 import java.time.LocalDate;
 
 public class ContaReceber extends Conta {
