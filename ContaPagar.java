@@ -8,7 +8,7 @@ public class ContaPagar extends Conta {
     private String fornecedor;
     private LocalDate vencimento;
 
-    public ContaPagar(String id, double valor, LocalDate data,
+    public ContaPagar(int id, double valor, LocalDate data,
                       String itens, String fornecedor, LocalDate vencimento) {
 
         super(id, valor, data);
