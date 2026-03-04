@@ -4,12 +4,12 @@ import java.time.LocalDate;
 
 public abstract class Conta {
 
-    private String id;
+    private int id;
     private double valor;
     private LocalDate data;
     private boolean pago;
 
-    public Conta(String id, double valor, LocalDate data) {
+    public Conta(int id, double valor, LocalDate data) {
 
         setId(id);
         setValor(valor);
@@ -18,7 +18,7 @@ public abstract class Conta {
     }
 
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
@@ -39,12 +39,12 @@ public abstract class Conta {
     }
 
 
-    public void setId(String id) {
-        if (id == null || id.trim().isEmpty()) {
-            throw new IllegalArgumentException("ID não pode ser vazio.");
-        }
-        this.id = id;
+   public void setId(int id) {
+    if (id <= 0) {
+        throw new IllegalArgumentException("ID deve ser maior que zero.");
     }
+    this.id = id;
+}
 
     public void setValor(double valor) {
         if (valor <= 0) {
