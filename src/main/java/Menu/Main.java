@@ -1,4 +1,6 @@
 package Menu;
+import ProjetoMensal1.StatusVenda;
+
 import java.util.Scanner;
 
 public class Main {
@@ -64,31 +66,31 @@ public class Main {
 
             switch (opcao) {
                 case 1:
-                  cadastroCliente();
+                  cadastroCliente(sistema);
                     break;
                 case 2:
-                    cadastroFornecedor();
+                    cadastroFornecedor(sistema);
                     break;
                 case 3:
-                    cadastroProduto();
+                    cadastroProduto(sistema);
                     break;
                 case 4:
-                    listarCliente();
+                    listarCliente(sistema);
                     break;
                 case 5:
-                    listarFornecedor();
+                    listarFornecedor(sistema);
                     break;
                 case 6:
-                    listarProduto();
+                    listarProduto(sistema);
                     break;
                 case 7:
-                    removerCliente();
+                    removerCliente(sistema);
                     break;
                 case 8:
-                    removerFornecedor();
+                    removerFornecedor(sistema);
                     break;
                 case 9:
-                    removerProduto();
+                    removerProduto(sistema);
                     break;
                 case 0:
                     break;
@@ -112,9 +114,7 @@ public class Main {
 
             switch (opcao) {
                 case 1:
-                    System.out.println("Adicionar Cliente...");
-                    System.out.println("Adicionar Produtos...");
-                    System.out.println("Fechar Venda...");
+                    novaVenda(sistema);
                     break;
                 case 2:
                     System.out.println("Venda cancelada!");
@@ -285,9 +285,9 @@ public class Main {
         return null;
     }
 
-    public void listarCliente() {
+    public void listarCliente(Sistema sistema) {
 
-        for(Cliente c : listaClientes()) {
+        for(Cliente c : sistema.listaClientes()) {
             System.out.println("ID: " + c.getId()
                     + "| Nome: " + c.getNome()
                     + "| Telefone" + c.getTelefone()
@@ -297,9 +297,9 @@ public class Main {
         }
     }
 
-    public void listarFornecedor() {
+    public void listarFornecedor(Sistema sistema) {
 
-        for(Fornecedor f : listaFornecedores()) {
+        for(Fornecedor f : sistema.listaFornecedores()) {
             System.out.println("ID: " + f.getId()
                     + "| Nome: " + f.getNome()
                     + "| Telefone" + f.getTelefone()
@@ -309,8 +309,8 @@ public class Main {
         }
     }
 
-    public void listarProduto() {
-        for(Produto p : listaProdutos()) {
+    public void listarProduto(Sistema sistema) {
+        for(Produto p : sistema.listaProdutos()) {
             System.out.println("ID: " + p.getId()
                     + "| Nome: " + p.getNome()
                     + "| Descrição" + p.getDescricao()
@@ -323,7 +323,7 @@ public class Main {
 
     public void removerCliente(Sistema sistema) {
 
-        listarCliente();
+        listarCliente(sistema);
 
         System.out.print("Digite o ID do cliente que deseja remover: ");
         int id = sc.nextInt();
@@ -339,7 +339,7 @@ public class Main {
 
     public void removerFornecedor(Sistema sistema) {
 
-        listarFornecedor();
+        listarFornecedor(sistema);
 
         System.out.print("Digite o ID do fornecedor que deseja remover: ");
         int id = sc.nextInt();
@@ -355,7 +355,7 @@ public class Main {
 
     public void removerProduto(Sistema sistema) {
 
-        listarProduto();
+        listarProduto(sistema);
 
         System.out.print("Digite o ID do produto que deseja remover: ");
         int id = sc.nextInt();
@@ -368,4 +368,150 @@ public class Main {
             System.out.println("Produto não encontrado.");
         }
     }
+
+    public Cliente adicionarClienteVenda(Sistema sistema) {
+
+        for(Cliente c : sistema.listaClientes()) {
+            System.out.println("ID: " + c.getId() + "Nome: " + c.getNome());
+        }
+
+        System.out.println("Digite o ID do Cliente ou 0 para continuar sem cliente: ");
+        int idEscolhido = sc.nextInt();
+
+        if(idEscolhido == 0) {
+            return null;
+        }
+
+        for (Cliente c : sistema.listaClientes()) {
+            if (c.getId() == idEscolhido) {
+                return c;
+            }
+        }
+
+        System.out.println("Cliente não encontrado");
+        return null;
+    }
+
+    public void adicionarProdutoVenda(Sistema sistema) {
+
+        Produto p = sistema.listaProdutos();
+        while (true) {
+
+            // LISTAR PRODUTOS
+            for (Produto p : listaProdutos()) {
+                System.out.println("ID: " + p.getId()
+                        + " | Nome: " + p.getNome()
+                        + " | Preço: " + p.getPrecoVenda()
+                        + " | Estoque: " + p.getQuantidadeEstoque());
+            }
+
+            System.out.println("Digite o Id do produto ou (-1 Cancelar / -2 Pagamento): ");
+            int produtoEscolhido = sc.nextInt();
+
+            if (produtoEscolhido == -1) {
+                sistema.alterarStatusVendaAtual(StatusVenda.CANCELADA);
+                System.out.println("Venda cancelada!");
+                return;
+            }
+
+            if (produtoEscolhido == -2) {
+
+                double total = 0;
+
+                System.out.println("\n===== RESUMO DA VENDA =====");
+
+                for (ItemVenda item : sistema.getListaVendaAtual()) {
+
+                    double subtotal = item.getSubtotal();
+                    total += subtotal;
+
+                    System.out.println(
+                            "Produto: " + item.produto.getNome()
+                                    + " | Quantidade: " + item.getQuantidade()
+                                    + " | Valor Unitário: " + item.produto.getPrecoVenda()
+                                    + " | Subtotal: " + subtotal
+                    );
+                }
+
+                System.out.println("TOTAL DA VENDA: R$ " + total);
+                System.out.println("===========================\n");
+
+                finalizarVenda(sistema);
+                return;
+            }
+
+            if (produtoSelecionado == null) {
+                System.out.println("Produto não encontrado!");
+                continue;
+            }
+
+            System.out.println("Digite a quantidade: ");
+            int quantidade = sc.nextInt();
+
+            sistema.adicionarProduto(produtoEscolhido, quantidade);
+
+            System.out.println("Produto adicionado ao carrinho!");
+        }
+
+    }
+
+    public void finalizarVenda(Sistema sistema) {
+
+        System.out.println("1 - Dinheiro | 2 - Pix | 3 - Cartão | 4 - Cancelar venda");
+        int numeroEscolhido = sc.nextInt();
+
+        if (numeroEscolhido == 4) {
+            sistema.alterarStatusVendaAtual(StatusVenda.CANCELADA);
+            return;
+        }
+
+        double total = sistema.getTotalVendaAtual();
+
+        System.out.println("Total da venda: R$ " + total);
+
+        // DESCONTO
+        System.out.println("Deseja aplicar desconto? (1-Sim / 2-Não)");
+        int descontoOpcao = sc.nextInt();
+
+        if (descontoOpcao == 1) {
+            System.out.println("Digite o valor do desconto: ");
+            double desconto = sc.nextDouble();
+
+            total = total - desconto;
+
+            if (total < 0) {
+                total = 0;
+            }
+        }
+
+        System.out.println("Total final: R$ " + total);
+
+        // PAGAMENTO EM DINHEIRO (CALCULAR TROCO)
+        if (numeroEscolhido == 1) {
+
+            System.out.println("Valor recebido: ");
+            double valorPago = sc.nextDouble();
+
+            if (valorPago < total) {
+                System.out.println("Valor insuficiente!");
+                return;
+            }
+
+            double troco = valorPago - total;
+
+            System.out.printf("Troco: R$ %.2f\n", troco);
+        }
+
+        sistema.alterarStatusVendaAtual(StatusVenda.PAGA);
+
+        System.out.println("Venda finalizada com sucesso!");
+    }
+
+    public void novaVenda(Sistema sistema) {
+
+        System.out.println("ID: " + id);
+        adicionarClienteVenda(sistema);
+        adicionarProdutoVenda(sistema);
+    }
+
 }
