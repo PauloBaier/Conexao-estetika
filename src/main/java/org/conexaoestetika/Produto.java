@@ -12,7 +12,7 @@ public class Produto implements IIdentificador{  //atributos
     Fornecedor fornecedor;
 
     //constructor
-    public Produto(int id, String nome, String descricao, double precoCusto, double precoVenda, int quantidadeEstoque, String marca, Fornecedor fornecedor) {
+    public Produto(int id, String nome, String descricao, double precoCusto, double precoVenda, int quantidadeEstoque, Fornecedor fornecedor) {
         this.id = id;
         this.nome = nome;
         this.categoria = categoria;

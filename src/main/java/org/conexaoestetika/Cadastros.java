@@ -5,7 +5,8 @@ import java.util.List;
 import java.util.Optional;
 
 public class Cadastros <T extends IIdentificador>{
-    List<T> listaCadastros = new ArrayList<>();
+    private List<T> listaCadastros = new ArrayList<>();
+    private int ultimoId = 1;
 
     public void adicionar(T cadastro){
         if(cadastro == null){
@@ -15,12 +16,7 @@ public class Cadastros <T extends IIdentificador>{
     }
 
     public void remover(int id){
-        Optional<T> resultado = this.listaCadastros.stream().filter(c -> c.getId() == id).findFirst();
-        if(resultado.isEmpty()){
-            throw new RuntimeException("ERRO: Cadastro não encontrado!");
-        }
-
-        this.listaCadastros.remove(resultado.get());
+        this.listaCadastros.remove(buscarId(id));
     }
 
     public T buscarId(int id){
@@ -33,5 +29,9 @@ public class Cadastros <T extends IIdentificador>{
 
     public List<T> listarTodos(){
         return this.listaCadastros;
+    }
+
+    public int getUltimoId(){
+        return this.ultimoId + 1;
     }
 }
