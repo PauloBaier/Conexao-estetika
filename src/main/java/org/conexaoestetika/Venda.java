@@ -44,6 +44,10 @@ public class Venda {
         return itens;
     }
 
+    public Cliente getCliente(){
+        return this.cliente;
+    }
+
     // Adicionar Item.
     public void adicionarItem(ItemVenda item) {
 

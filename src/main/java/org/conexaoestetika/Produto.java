@@ -1,26 +1,31 @@
 package org.conexaoestetika;
 
-public class Produto implements IIdentificador{  //atributos
+public class Produto implements IIdentificador {  //atributos
     private int id;
     private String nome;
     private String categoria;
-    private double precoCusto;
     private double precoVenda;
+    private double precoCusto;
     private int quantidadeEstoque;
     private int estoqueMinimo;
 
-    Fornecedor fornecedor;
+    private Fornecedor fornecedor;
 
     //constructor
-    public Produto(int id, String nome, String descricao, double precoCusto, double precoVenda, int quantidadeEstoque, Fornecedor fornecedor) {
-        this.id = id;
-        this.nome = nome;
-        this.categoria = categoria;
-        this.precoCusto = precoCusto;
-        this.precoVenda = precoVenda;
-        this.quantidadeEstoque = quantidadeEstoque;
-        this.estoqueMinimo = estoqueMinimo;
-        this.fornecedor = fornecedor;
+    public Produto(int id, String nome, String categoria,
+                   double precoCusto, double precoVenda,
+                   int quantidadeEstoque, int estoqueMinimo,
+                   Fornecedor fornecedor) {
+
+
+        this.setId(id);
+        this.setNome(nome);
+        this.setCategoria(categoria);
+        this.setPrecoVenda(precoVenda);
+        this.setPrecoCusto(precoCusto);
+        this.setQuantidadeEstoque(quantidadeEstoque);
+        this.setEstoqueMinimo(estoqueMinimo);
+        this.setFornecedor(fornecedor);
     }
 
     //getters e setters
@@ -29,6 +34,9 @@ public class Produto implements IIdentificador{  //atributos
     }
 
     public void setId(int id) {
+        if (id <= 0) {
+            throw new IllegalArgumentException("ID deve ser maior que 0.");
+        }
         this.id = id;
     }
 
@@ -37,6 +45,9 @@ public class Produto implements IIdentificador{  //atributos
     }
 
     public void setNome(String nome) {
+        if (nome == null || nome.trim().isEmpty()) {
+            throw new IllegalArgumentException("Nome do produto não pode ser vazio.");
+        }
         this.nome = nome;
     }
 
@@ -44,8 +55,33 @@ public class Produto implements IIdentificador{  //atributos
         return estoqueMinimo;
     }
 
+    public String getCategoria() {
+        return categoria;
+    }
+
     public void setCategoria(String categoria) {
+        if (categoria == null || categoria.trim().isEmpty()) {
+            throw new IllegalArgumentException("Categoria não pode ser vazia.");
+        }
+
         this.categoria = categoria;
+    }
+
+    public double getPrecoVenda() {
+        return precoVenda;
+    }
+
+    public void setPrecoVenda(double precoVenda) {
+
+        if (precoVenda < 0) {
+            throw new IllegalArgumentException("Preço de venda não pode ser negativo.");
+        }
+
+        if (precoVenda < this.precoCusto) {
+            throw new IllegalArgumentException("Preço de venda deve ser maior ou igual ao preço de custo.");
+        }
+
+        this.precoVenda = precoVenda;
     }
 
     public double getPrecoCusto() {
@@ -55,6 +91,7 @@ public class Produto implements IIdentificador{  //atributos
     public void setPrecoCusto(double precoCusto) {
         if (precoCusto < 0) {
             throw new IllegalArgumentException("Preço de custo não pode ser negativo.");
+
         }
 
         if (this.precoVenda < precoCusto) {
@@ -64,17 +101,6 @@ public class Produto implements IIdentificador{  //atributos
         this.precoCusto = precoCusto;
     }
 
-    public double getPrecoVenda() {
-        return precoVenda;
-    }
-
-    public void setPrecoVenda(double precoVenda) {
-        if (precoVenda < this.precoCusto) {
-            throw new IllegalArgumentException("Preço de venda deve ser maior ou igual ao preço de custo.");
-        }
-
-        this.precoVenda = precoVenda;
-    }
 
     public int getQuantidadeEstoque() {
         return quantidadeEstoque;
@@ -86,9 +112,6 @@ public class Produto implements IIdentificador{  //atributos
         }
 
         this.quantidadeEstoque = quantidadeEstoque;
-    }
-    public int setEstoqueMinimo() {
-        return estoqueMinimo;
     }
 
     public void setEstoqueMinimo(int estoqueMinimo) {
@@ -104,6 +127,10 @@ public class Produto implements IIdentificador{  //atributos
     }
 
     public void setFornecedor(Fornecedor fornecedor) {
+        if (fornecedor == null) {
+            throw new IllegalArgumentException("Fornecedor não pode ser nulo.");
+        }
+
         this.fornecedor = fornecedor;
     }
 
@@ -112,27 +139,31 @@ public class Produto implements IIdentificador{  //atributos
 
     //adicionar estoque
     public void adicionarEstoque(int quantidade) {
-        if (quantidade > 0) {
-            this.quantidadeEstoque += quantidade;
+        if (quantidade <= 0) {
+            throw new IllegalArgumentException("Quantidade deve ser maior que zero.");
         }
+
+        this.quantidadeEstoque += quantidade;
     }
 
     //remover estoque
     public boolean removerEstoque(int quantidade) {
-        if (quantidade > 0 && quantidade <= this.quantidadeEstoque) {
-            this.quantidadeEstoque -= quantidade;
-            return true;
+
+        if (quantidade <= 0) {
+            return false;
         }
-        return false;
+
+        if (quantidade > quantidadeEstoque) {
+            return false;
+        }
+
+        quantidadeEstoque -= quantidade;
+        return true;
     }
 
-    //verifica estoque abaixo do minimo
-    public String verificarEstoque() {
-        if (quantidadeEstoque <= estoqueMinimo) {
-            return "ATENÇÃO: Estoque abaixo do mínimo!";
-        } else {
-            return "Estoque OK.";
-        }
+    // verifica se o estoque está abaixo do mínimo
+    public boolean precisaReporEstoque() {
+        return quantidadeEstoque <= estoqueMinimo;
     }
 
 }

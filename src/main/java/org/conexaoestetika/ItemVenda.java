@@ -4,6 +4,7 @@ public class ItemVenda {
 
     private Produto produto;
     private int quantidade;
+    private double subtotal;
 
     public ItemVenda(Produto produto, int quantidade) {
 
@@ -17,7 +18,7 @@ public class ItemVenda {
 
         this.produto = produto;
         this.quantidade = quantidade;
-
+        this.subtotal = calcularSubtotal();
     }
 
     public Produto getProduto() {
@@ -27,12 +28,16 @@ public class ItemVenda {
     public int getQuantidade() {
         return quantidade;
     }
+    public double getSubtotal(){
+        return subtotal;
+    }
 
     public void setQuantidade(int quantidade) {
         if (quantidade <= 0) {
             throw new IllegalArgumentException("Quantidade deve ser maior que zero");
         }
         this.quantidade = quantidade;
+        this.subtotal = calcularSubtotal();
     }
 
     public double calcularSubtotal() {

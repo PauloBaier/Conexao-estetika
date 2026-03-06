@@ -53,7 +53,7 @@ public class Sistema {
         }
     }
 
-    public boolean novoCadastroProduto(String nome, String descricao, double precoCusto, double precoVenda, int qntdEstoque, Fornecedor fornecedor){
+    public boolean novoCadastroProduto(String nome, String descricao, double precoCusto, double precoVenda, int qntdEstoque,int estoqueMin, Fornecedor fornecedor){
         try{
             Produto novoProduto = new Produto(
                     cadastroProdutos.getUltimoId() + 1,
@@ -62,6 +62,7 @@ public class Sistema {
                     precoCusto,
                     precoVenda,
                     qntdEstoque,
+                    estoqueMin,
                     fornecedor
             );
 
@@ -125,12 +126,31 @@ public class Sistema {
         return this.vendaAtual.calcularTotal();
     }
 
-    public boolean registrarVendaAtual(){
+    public void alterarStatusVendaAtual(StatusVenda novoStatus){
         try{
-            registroContasReceber.adicionar(new ContaReceber(registroContasReceber.getUltimoId(), LocalDate.now(), this.vendaAtual, vendaAtual.getCliente()));
+            vendaAtual.alterarStatus(novoStatus);
         }
         catch(Exception ex){
             System.out.println(ex.getMessage());
+        }
+    }
+
+    public List<ItemVenda> getListaVendaAtual(){
+        return this.vendaAtual.getItens();
+    }
+
+    public boolean registrarVendaAtual(){
+        try{
+            registroContasReceber.adicionar(new ContaReceber(registroContasReceber.getUltimoId(), vendaAtual.calcularTotal(), LocalDate.now(), vendaAtual, vendaAtual.getCliente()));
+            for(ItemVenda itens: vendaAtual.getItens()){
+                itens.getProduto().removerEstoque(itens.getQuantidade());
+            }
+            vendaAtual = null;
+            return true;
+        }
+        catch(Exception ex){
+            System.out.println(ex.getMessage());
+            return false;
         }
 
     }
