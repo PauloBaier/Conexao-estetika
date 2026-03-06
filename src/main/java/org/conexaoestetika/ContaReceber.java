@@ -2,7 +2,7 @@ package org.conexaoestetika;
 
 import java.time.LocalDate;
 
-public class ContaReceber extends Conta {
+public class ContaReceber extends Conta implements IIdentificador {
 
     private Venda venda;
     private Cliente cliente;

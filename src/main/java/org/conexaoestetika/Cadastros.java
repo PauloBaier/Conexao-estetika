@@ -32,6 +32,6 @@ public class Cadastros <T extends IIdentificador>{
     }
 
     public int getUltimoId(){
-        return this.ultimoId + 1;
+        return this.ultimoId;
     }
 }

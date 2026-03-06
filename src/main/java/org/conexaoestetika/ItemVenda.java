@@ -17,6 +17,7 @@ public class ItemVenda {
 
         this.produto = produto;
         this.quantidade = quantidade;
+
     }
 
     public Produto getProduto() {

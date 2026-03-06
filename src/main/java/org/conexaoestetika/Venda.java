@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Venda {
 
-    private Long id;
+    private int id;
     private LocalDateTime data;
     private List<ItemVenda> itens;
 
@@ -16,9 +16,9 @@ public class Venda {
     private StatusVenda status;
     private FormaPagamento formaPagamento;
 
-    public Venda(Long id, Cliente cliente) {
+    public Venda(int id, Cliente cliente) {
 
-        if (id == null || id <= 0) {
+        if (id <= 0) {
             throw new IllegalArgumentException("Id inválido");
         }
         if (cliente == null) {
@@ -32,7 +32,7 @@ public class Venda {
         this.status = StatusVenda.PENDENTE;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 

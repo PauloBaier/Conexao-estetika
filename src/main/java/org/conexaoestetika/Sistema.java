@@ -1,11 +1,17 @@
 package org.conexaoestetika;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class Sistema {
-    private Cadastros<Cliente> cadastroClientes = new Cadastros<Cliente>();
-    private Cadastros<Fornecedor> cadastroFornecedores = new Cadastros<Fornecedor>();
-    private Cadastros<Produto> cadastroProdutos = new Cadastros<Produto>();
+    public Cadastros<Cliente> cadastroClientes = new Cadastros<Cliente>();
+    public Cadastros<Fornecedor> cadastroFornecedores = new Cadastros<Fornecedor>();
+    public Cadastros<Produto> cadastroProdutos = new Cadastros<Produto>();
+
+    public Cadastros<ContaReceber> registroContasReceber = new Cadastros<ContaReceber>();
+
+    private Venda vendaAtual = null;
+    private int proximoIdVenda = 1;
 
 
     public boolean novoCadastroCliente(String nome, String telefone, String email, String cpf){
@@ -68,21 +74,15 @@ public class Sistema {
         }
     }
 
-    public List<Cliente> listaClientes(){
-        return cadastroClientes.listarTodos();
-    }
+    public boolean novaVenda(Cliente cliente){
+        if(vendaAtual != null){
+            System.out.println("Já há uma venda em aberto!");
+            return false;
+        }
 
-    public List<Fornecedor> listaFornecedores(){
-        return cadastroFornecedores.listarTodos();
-    }
-
-    public List<Produto> listaProdutos(){
-        return cadastroProdutos.listarTodos();
-    }
-
-    public boolean removerCliente(int id){
         try{
-            cadastroClientes.remover(id);
+            vendaAtual = new Venda(proximoIdVenda, cliente);
+            proximoIdVenda++;
             return true;
         }
         catch (Exception ex){
@@ -91,34 +91,47 @@ public class Sistema {
         }
     }
 
-    public boolean removerFornecedor(int id){
+    public int getIdProximaVenda(){
+        return this.proximoIdVenda;
+    }
+
+    public boolean adicionarProdutoVenda(Produto produto, int quantidade){
         try{
-            cadastroFornecedores.remover(id);
+            vendaAtual.adicionarItem(new ItemVenda(produto, quantidade));
             return true;
         }
-        catch (Exception ex){
+        catch(Exception ex){
             System.out.println(ex.getMessage());
             return false;
         }
     }
 
-    public boolean removerProduto(int id){
+    public boolean alterarStatusVenda(StatusVenda novoStatus){
         try{
-            cadastroProdutos.remover(id);
+            vendaAtual.alterarStatus(novoStatus);
             return true;
         }
-        catch (Exception ex){
+        catch(Exception ex){
             System.out.println(ex.getMessage());
             return false;
         }
     }
 
-
-    public int getUltimoId(){
-        return cadastroClientes.getUltimoId();
+    public List<ItemVenda> getListaItensVendaAtual(){
+        return this.vendaAtual.getItens();
     }
 
-    public List<Fornecedor> listarFornecedores(){
-        return cadastroFornecedores.listarTodos();
+    public double getTotalVendaAtual(){
+        return this.vendaAtual.calcularTotal();
+    }
+
+    public boolean registrarVendaAtual(){
+        try{
+            registroContasReceber.adicionar(new ContaReceber(registroContasReceber.getUltimoId(), LocalDate.now(), this.vendaAtual, vendaAtual.getCliente()));
+        }
+        catch(Exception ex){
+            System.out.println(ex.getMessage());
+        }
+
     }
 }
