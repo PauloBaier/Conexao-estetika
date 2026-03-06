@@ -189,7 +189,7 @@ public class Main {
 
     public void cadastroCliente(Sistema sistema) {
 
-        System.out.print("ID: " + id);
+        System.out.print("ID: " + (sistema.cadastroCliente.getUltimoId() + 1));
 
         System.out.print("Nome: ");
         String nome = sc.nextLine();
@@ -213,7 +213,7 @@ public class Main {
 
     public void cadastroFornecedor(Sistema sistema) {
 
-        System.out.print("ID: " + id);
+        System.out.print("ID: " + (sistema.cadastroFornecedor.getUltimoId() + 1));
 
         System.out.print("Nome: ");
         String nome = sc.nextLine();
@@ -237,7 +237,7 @@ public class Main {
 
     public void cadastroProduto(Sistema sistema) {
 
-        System.out.print("ID: " + id);
+        System.out.print("ID: " + (sistema.cadastroProduto.getUltimoId() + 1));
 
         System.out.print("Nome: ");
         String nome = sc.nextLine();
@@ -287,7 +287,7 @@ public class Main {
 
     public void listarCliente(Sistema sistema) {
 
-        for(Cliente c : sistema.listaClientes()) {
+        for(Cliente c : sistema.cadastroCliente.listarTodos()) {
             System.out.println("ID: " + c.getId()
                     + "| Nome: " + c.getNome()
                     + "| Telefone" + c.getTelefone()
@@ -299,7 +299,7 @@ public class Main {
 
     public void listarFornecedor(Sistema sistema) {
 
-        for(Fornecedor f : sistema.listaFornecedores()) {
+        for(Fornecedor f : sistema.cadastroFornecedor.listarTodos()) {
             System.out.println("ID: " + f.getId()
                     + "| Nome: " + f.getNome()
                     + "| Telefone" + f.getTelefone()
@@ -310,7 +310,7 @@ public class Main {
     }
 
     public void listarProduto(Sistema sistema) {
-        for(Produto p : sistema.listaProdutos()) {
+        for(Produto p : sistema.cadastroProduto.listarTodos()) {
             System.out.println("ID: " + p.getId()
                     + "| Nome: " + p.getNome()
                     + "| Descrição" + p.getDescricao()
@@ -328,11 +328,10 @@ public class Main {
         System.out.print("Digite o ID do cliente que deseja remover: ");
         int id = sc.nextInt();
 
-        boolean removido = sistema.removerCliente(id);
-
-        if(removido){
+        try {
+            sistema.cadastroCliente.remover(id);
             System.out.println("Cliente removido com sucesso!");
-        } else {
+        } catch {
             System.out.println("Cliente não encontrado.");
         }
     }
@@ -344,11 +343,10 @@ public class Main {
         System.out.print("Digite o ID do fornecedor que deseja remover: ");
         int id = sc.nextInt();
 
-        boolean removido = sistema.removerFornecedor(id);
-
-        if(removido){
+          try {
+            sistema.cadastroFornecedor.remover(id);
             System.out.println("Fornecedor removido com sucesso!");
-        } else {
+        } catch {
             System.out.println("Fornecedor não encontrado.");
         }
     }
@@ -360,11 +358,10 @@ public class Main {
         System.out.print("Digite o ID do produto que deseja remover: ");
         int id = sc.nextInt();
 
-        boolean removido = sistema.removerProduto(id);
-
-        if(removido){
+         try {
+            sistema.cadastroProduto.remover(id);
             System.out.println("Produto removido com sucesso!");
-        } else {
+        } catch {
             System.out.println("Produto não encontrado.");
         }
     }
@@ -509,7 +506,7 @@ public class Main {
 
     public void novaVenda(Sistema sistema) {
 
-        System.out.println("ID: " + id);
+        System.out.println("ID: " + sistema.getIdProximaVenda();
         adicionarClienteVenda(sistema);
         adicionarProdutoVenda(sistema);
     }
