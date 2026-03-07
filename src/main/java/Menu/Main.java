@@ -1,10 +1,12 @@
 package Menu;
-import ProjetoMensal1.StatusVenda;
 
 import java.util.Scanner;
+import java.time.LocalDate;
+import java.util.List;
 
 public class Main {
 
+    static Sistema sistema = new Sistema();
     static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
@@ -66,7 +68,7 @@ public class Main {
 
             switch (opcao) {
                 case 1:
-                  cadastroCliente(sistema);
+                    cadastroCliente(sistema);
                     break;
                 case 2:
                     cadastroFornecedor(sistema);
@@ -141,11 +143,10 @@ public class Main {
 
             switch (opcao) {
                 case 1:
-                    System.out.println("Marcar conta como paga...");
+                    contasReceber(sistema);
                     break;
                 case 2:
-                    System.out.println("Cadastrar Conta a Pagar...");
-                    System.out.println("Marcar Conta como paga...");
+                    contasPagar(sistema);
                     break;
                 case 0:
                     break;
@@ -170,13 +171,13 @@ public class Main {
 
             switch (opcao) {
                 case 1:
-                    System.out.println("Filtrar por data e status...");
+                    relatorioContasReceber(sistema);
                     break;
                 case 2:
-                    System.out.println("Filtrar por data e status...");
+                    relatorioContasPagar(sistema);
                     break;
                 case 3:
-                    System.out.println("Filtro: Todos / Estoque Baixo...");
+                    relatorioEstoqueBaixo(sistema);
                     break;
                 case 0:
                     break;
@@ -187,9 +188,11 @@ public class Main {
         } while (opcao != 0);
     }
 
-    public void cadastroCliente(Sistema sistema) {
+    // Cadastro Cliente
+    public static void cadastroCliente(Sistema sistema) {
 
-        System.out.print("ID: " + (sistema.cadastroCliente.getUltimoId() + 1));
+        System.out.print("ID: " + (sistema.cadastroClientes.getUltimoId() + 1));
+        sc.nextLine();
 
         System.out.print("Nome: ");
         String nome = sc.nextLine();
@@ -203,17 +206,17 @@ public class Main {
         System.out.print("CPF (11 números): ");
         String cpf = sc.nextLine();
 
-        System.out.print("Dinheiro Gasto: ");
-        double dinheiroGasto = sc.nextDouble();
 
-        sistema.novoCadastroCliente(nome, telefone, email, cpf, dinheiroGasto);
+        sistema.novoCadastroCliente(nome, telefone, email, cpf);
 
         System.out.println("Cliente cadastro com sucesso!");
     }
 
-    public void cadastroFornecedor(Sistema sistema) {
+    // Cadastro Fornecedor
+    public static void cadastroFornecedor(Sistema sistema) {
 
-        System.out.print("ID: " + (sistema.cadastroFornecedor.getUltimoId() + 1));
+        System.out.print("ID: " + (sistema.cadastroFornecedores.getUltimoId() + 1));
+        sc.nextLine();
 
         System.out.print("Nome: ");
         String nome = sc.nextLine();
@@ -235,9 +238,11 @@ public class Main {
         System.out.println("Fornecedor cadastrado com sucesso!");
     }
 
-    public void cadastroProduto(Sistema sistema) {
+    // Cadastro Produto
+    public static void cadastroProduto(Sistema sistema) {
 
-        System.out.print("ID: " + (sistema.cadastroProduto.getUltimoId() + 1));
+        System.out.print("ID: " + (sistema.cadastroProdutos.getUltimoId() + 1));
+        sc.nextLine();
 
         System.out.print("Nome: ");
         String nome = sc.nextLine();
@@ -258,7 +263,7 @@ public class Main {
         int estoqueMinimo = sc.nextInt();
 
         System.out.println("Fornecedor: ");
-        Fornecedor fornecedor = escolherFornecedor();
+        Fornecedor fornecedor = escolherFornecedor(sistema);
 
         sistema.novoCadastroProduto(nome, descricao, precoCusto, precoVenda, qntdEstoque, estoqueMinimo, fornecedor);
 
@@ -266,16 +271,17 @@ public class Main {
 
     }
 
-    public Fornecedor escolherFornecedor() {
+    // Loop que exibe todos os fornecedores e escolhe por id
+    public static Fornecedor escolherFornecedor(Sistema sistema) {
 
-        for (Fornecedor f : listaFornecedores()) {
+        for (Fornecedor f : sistema.cadastroFornecedores.listarTodos()) {
             System.out.println("ID: " + f.getId() + " | Nome: " + f.getNome());
         }
 
         System.out.print("Digite o ID do fornecedor: ");
         int idEscolhido = sc.nextInt();
 
-        for (Fornecedor f : listaFornecedores()) {
+        for (Fornecedor f : sistema.cadastroFornecedores.listarTodos()) {
             if (f.getId() == idEscolhido) {
                 return f;
             }
@@ -285,9 +291,10 @@ public class Main {
         return null;
     }
 
-    public void listarCliente(Sistema sistema) {
+    // Função para listar todos os clientes cadastrados
+    public static void listarCliente(Sistema sistema) {
 
-        for(Cliente c : sistema.cadastroCliente.listarTodos()) {
+        for(Cliente c : sistema.cadastroClientes.listarTodos()) {
             System.out.println("ID: " + c.getId()
                     + "| Nome: " + c.getNome()
                     + "| Telefone" + c.getTelefone()
@@ -297,9 +304,10 @@ public class Main {
         }
     }
 
-    public void listarFornecedor(Sistema sistema) {
+    // Função para listar todos os fornecedores cadastrados
+    public static void listarFornecedor(Sistema sistema) {
 
-        for(Fornecedor f : sistema.cadastroFornecedor.listarTodos()) {
+        for(Fornecedor f : sistema.cadastroFornecedores.listarTodos()) {
             System.out.println("ID: " + f.getId()
                     + "| Nome: " + f.getNome()
                     + "| Telefone" + f.getTelefone()
@@ -309,19 +317,20 @@ public class Main {
         }
     }
 
-    public void listarProduto(Sistema sistema) {
-        for(Produto p : sistema.cadastroProduto.listarTodos()) {
+    // Função para listar todos os produtos cadastrados
+    public static void listarProduto(Sistema sistema) {
+        for(Produto p : sistema.cadastroProdutos.listarTodos()) {
             System.out.println("ID: " + p.getId()
                     + "| Nome: " + p.getNome()
-                    + "| Descrição" + p.getDescricao()
                     + "| Preço de Custo: " + p.getPrecoCusto()
                     + "| Preço de Venda: " + p.getPrecoVenda()
-                    + "| Quantidade Estoque: " + p.getQuantidadeEstoque
+                    + "| Quantidade Estoque: " + p.getQuantidadeEstoque()
                     + "| Estoque Minimo: " + p.getEstoqueMinimo());
         }
     }
 
-    public void removerCliente(Sistema sistema) {
+    // Função para remover cliente por id
+    public static void removerCliente(Sistema sistema) {
 
         listarCliente(sistema);
 
@@ -329,46 +338,49 @@ public class Main {
         int id = sc.nextInt();
 
         try {
-            sistema.cadastroCliente.remover(id);
+            sistema.cadastroClientes.remover(id);
             System.out.println("Cliente removido com sucesso!");
-        } catch {
+        } catch (Exception ex){
             System.out.println("Cliente não encontrado.");
         }
     }
 
-    public void removerFornecedor(Sistema sistema) {
+    // Função para remover fornecedor por id
+    public static void removerFornecedor(Sistema sistema) {
 
         listarFornecedor(sistema);
 
         System.out.print("Digite o ID do fornecedor que deseja remover: ");
         int id = sc.nextInt();
 
-          try {
-            sistema.cadastroFornecedor.remover(id);
+        try {
+            sistema.cadastroFornecedores.remover(id);
             System.out.println("Fornecedor removido com sucesso!");
-        } catch {
+        } catch(Exception ex){
             System.out.println("Fornecedor não encontrado.");
         }
     }
 
-    public void removerProduto(Sistema sistema) {
+    // Função para remover produtos por id
+    public static void removerProduto(Sistema sistema) {
 
         listarProduto(sistema);
 
         System.out.print("Digite o ID do produto que deseja remover: ");
         int id = sc.nextInt();
 
-         try {
-            sistema.cadastroProduto.remover(id);
+        try {
+            sistema.cadastroProdutos.remover(id);
             System.out.println("Produto removido com sucesso!");
-        } catch {
+        } catch(Exception ex){
             System.out.println("Produto não encontrado.");
         }
     }
 
-    public Cliente adicionarClienteVenda(Sistema sistema) {
+    // Função para adicionar cliente a venda(caso tenha)
+    public static Cliente adicionarClienteVenda(Sistema sistema) {
 
-        for(Cliente c : sistema.listaClientes()) {
+        for(Cliente c : sistema.cadastroClientes.listarTodos()) {
             System.out.println("ID: " + c.getId() + "Nome: " + c.getNome());
         }
 
@@ -379,7 +391,7 @@ public class Main {
             return null;
         }
 
-        for (Cliente c : sistema.listaClientes()) {
+        for (Cliente c : sistema.cadastroClientes.listarTodos()) {
             if (c.getId() == idEscolhido) {
                 return c;
             }
@@ -389,13 +401,13 @@ public class Main {
         return null;
     }
 
-    public void adicionarProdutoVenda(Sistema sistema) {
+    // Função para adicionar produto a venda e exibir como um carrinho
+    public static void adicionarProdutoVenda(Sistema sistema) {
 
-        Produto p = sistema.listaProdutos();
         while (true) {
 
             // LISTAR PRODUTOS
-            for (Produto p : listaProdutos()) {
+            for (Produto p : sistema.cadastroProdutos.listarTodos()) {
                 System.out.println("ID: " + p.getId()
                         + " | Nome: " + p.getNome()
                         + " | Preço: " + p.getPrecoVenda()
@@ -406,7 +418,8 @@ public class Main {
             int produtoEscolhido = sc.nextInt();
 
             if (produtoEscolhido == -1) {
-                sistema.alterarStatusVendaAtual(StatusVenda.CANCELADA);
+                sistema.alterarStatusVendaAtual(StatusVenda.CANCELADO);
+                sistema.registrarVendaAtual();
                 System.out.println("Venda cancelada!");
                 return;
             }
@@ -423,9 +436,9 @@ public class Main {
                     total += subtotal;
 
                     System.out.println(
-                            "Produto: " + item.produto.getNome()
+                            "Produto: " + item.getProduto().getNome()
                                     + " | Quantidade: " + item.getQuantidade()
-                                    + " | Valor Unitário: " + item.produto.getPrecoVenda()
+                                    + " | Valor Unitário: " + item.getProduto().getPrecoVenda()
                                     + " | Subtotal: " + subtotal
                     );
                 }
@@ -437,6 +450,8 @@ public class Main {
                 return;
             }
 
+            Produto produtoSelecionado = sistema.cadastroProdutos.buscarId(produtoEscolhido);
+
             if (produtoSelecionado == null) {
                 System.out.println("Produto não encontrado!");
                 continue;
@@ -445,20 +460,22 @@ public class Main {
             System.out.println("Digite a quantidade: ");
             int quantidade = sc.nextInt();
 
-            sistema.adicionarProduto(produtoEscolhido, quantidade);
+            sistema.adicionarProdutoVenda(produtoSelecionado, quantidade);
 
             System.out.println("Produto adicionado ao carrinho!");
         }
 
     }
 
-    public void finalizarVenda(Sistema sistema) {
+    // Função para finalizar a venda e registar qual método de pagamento foi utilizado e registar status da venda
+    public static void finalizarVenda(Sistema sistema) {
 
         System.out.println("1 - Dinheiro | 2 - Pix | 3 - Cartão | 4 - Cancelar venda");
         int numeroEscolhido = sc.nextInt();
 
         if (numeroEscolhido == 4) {
-            sistema.alterarStatusVendaAtual(StatusVenda.CANCELADA);
+            sistema.alterarStatusVendaAtual(StatusVenda.CANCELADO);
+            sistema.registrarVendaAtual();
             return;
         }
 
@@ -499,16 +516,165 @@ public class Main {
             System.out.printf("Troco: R$ %.2f\n", troco);
         }
 
-        sistema.alterarStatusVendaAtual(StatusVenda.PAGA);
+        sistema.alterarStatusVendaAtual(StatusVenda.PAGO);
+        sistema.registrarVendaAtual();
 
         System.out.println("Venda finalizada com sucesso!");
     }
 
-    public void novaVenda(Sistema sistema) {
+    // Função para agrupar todas as funções que geram a venda
+    public static void novaVenda(Sistema sistema) {
 
-        System.out.println("ID: " + sistema.getIdProximaVenda();
-        adicionarClienteVenda(sistema);
+        System.out.println("ID: " + sistema.getIdProximaVenda());
+        sistema.novaVenda(adicionarClienteVenda(sistema));
         adicionarProdutoVenda(sistema);
+    }
+
+    // Função para exibir todas as vendas que não foram fechadas
+    public static void contasReceber(Sistema sistema) {
+
+        System.out.println("\n===== CONTAS A RECEBER =====");
+
+        for (ContaReceber c : sistema.listaTodasContasReceber(false)) {
+
+            System.out.println(
+                    "ID: " + c.getId()
+                            + " | Cliente: " + c.getCliente().getNome()
+                            + " | Valor: R$ " + c.getValor()
+                            + " | Data: " + c.getData()
+            );
+        }
+
+        System.out.print("Digite o ID da conta para marcar como paga (0 para voltar): ");
+        int id = sc.nextInt();
+
+        if (id != 0) {
+
+            if (sistema.receberConta(id)) {
+                System.out.println("Conta marcada como paga!");
+            } else {
+                System.out.println("Erro ao marcar conta.");
+            }
+        }
+    }
+
+    // Funçãp para exibir todas as contas que não foram pagas e precisam ser fechadas e pagas
+    public static void contasPagar(Sistema sistema) {
+
+        System.out.println("\n===== CONTAS A PAGAR =====");
+
+        for (ContaPagar c : sistema.listaTodasContasPagar(false)) {
+
+            System.out.println(
+                    "ID: " + c.getId()
+                            + " | Fornecedor: " + c.getFornecedor().getNome()
+                            + " | Valor: R$ " + c.getValor()
+                            + " | Vencimento: " + c.getVencimento()
+            );
+        }
+
+        System.out.print("Digite o ID da conta para pagar (0 para voltar): ");
+        int id = sc.nextInt();
+
+        if (id != 0) {
+
+            if (sistema.PagarConta(id)) {
+                System.out.println("Conta paga com sucesso!");
+            } else {
+                System.out.println("Erro ao pagar conta.");
+            }
+        }
+    }
+
+    // Função para filtrar o relatório
+    public static StatusVenda escolherFiltroStatus() {
+
+        System.out.println("Filtro de Status:");
+        System.out.println("1 - Todos");
+        System.out.println("2 - Pagos");
+        System.out.println("3 - Pendentes");
+
+        int opcao = sc.nextInt();
+
+        switch (opcao) {
+            case 2:
+                return StatusVenda.PAGO;
+
+            case 3:
+                return StatusVenda.PENDENTE;
+
+            default:
+                return StatusVenda.CANCELADO;
+        }
+    }
+
+    // Função para gerar relatório de contas a receber
+    public static void relatorioContasReceber(Sistema sistema) {
+
+        System.out.println("\n===== RELATÓRIO CONTAS A RECEBER =====");
+
+        System.out.print("Data inicial (AAAA-MM-DD): ");
+        LocalDate dataInicial = LocalDate.parse(sc.next());
+
+        System.out.print("Data final (AAAA-MM-DD): ");
+        LocalDate dataFinal = LocalDate.parse(sc.next());
+
+        StatusVenda filtro = escolherFiltroStatus();
+
+        List<ContaReceber> lista = sistema.listarContasReceber(dataInicial, dataFinal, filtro);
+
+        for (ContaReceber c : lista) {
+
+            System.out.println(
+                    "ID: " + c.getId()
+                            + " | Cliente: " + c.getCliente().getNome()
+                            + " | Valor: R$ " + c.getValor()
+                            + " | Data: " + c.getData()
+                            + " | Pago: " + c.estaPago()
+            );
+        }
+    }
+
+    // Função para gerar relatório de contas a pagar
+    public static void relatorioContasPagar(Sistema sistema) {
+
+        System.out.println("\n===== RELATÓRIO CONTAS A PAGAR =====");
+
+        System.out.print("Data inicial (AAAA-MM-DD): ");
+        LocalDate dataInicial = LocalDate.parse(sc.next());
+
+        System.out.print("Data final (AAAA-MM-DD): ");
+        LocalDate dataFinal = LocalDate.parse(sc.next());
+
+        StatusVenda filtro = escolherFiltroStatus();
+
+        List<ContaPagar> lista = sistema.listarContasPagar(dataInicial, dataFinal, filtro);
+
+        for (ContaPagar c : lista) {
+
+            System.out.println(
+                    "ID: " + c.getId()
+                            + " | Fornecedor: " + c.getFornecedor().getNome()
+                            + " | Valor: R$ " + c.getValor()
+                            + " | Vencimento: " + c.getVencimento()
+                            + " | Pago: " + c.estaPago()
+            );
+        }
+    }
+
+    // Função para gerar relatório de estoque baixo
+    public static void relatorioEstoqueBaixo(Sistema sistema) {
+
+        System.out.println("\n===== PRODUTOS COM ESTOQUE BAIXO =====");
+
+        for(Produto p : sistema.listarProdutosEstoqueAbaixoMin()) {
+
+            System.out.println(
+                    "Produto: " + p.getNome()
+                            + " | Estoque: " + p.getQuantidadeEstoque()
+                            + " | Mínimo: " + p.getEstoqueMinimo()
+            );
+        }
     }
 
 }
