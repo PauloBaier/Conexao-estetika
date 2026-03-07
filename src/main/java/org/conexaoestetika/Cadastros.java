@@ -6,13 +6,14 @@ import java.util.Optional;
 
 public class Cadastros <T extends IIdentificador>{
     private List<T> listaCadastros = new ArrayList<>();
-    private int ultimoId = 1;
+    private int ultimoId = 0;
 
     public void adicionar(T cadastro){
         if(cadastro == null){
             throw new IllegalArgumentException("ERRO: cadastro não pode ser NULL");
         }
         this.listaCadastros.add(cadastro);
+        ultimoId++;
     }
 
     public void remover(int id){
