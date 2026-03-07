@@ -1,5 +1,7 @@
 package org.conexaoestetika;
 import java.util.Scanner;
+import java.time.LocalDate;
+import java.util.List;
 
 public class Main {
 
@@ -65,7 +67,7 @@ public class Main {
 
             switch (opcao) {
                 case 1:
-                  cadastroCliente(sistema);
+                    cadastroCliente(sistema);
                     break;
                 case 2:
                     cadastroFornecedor(sistema);
@@ -140,11 +142,10 @@ public class Main {
 
             switch (opcao) {
                 case 1:
-                    System.out.println("Marcar conta como paga...");
+                    contasReceber(sistema);
                     break;
                 case 2:
-                    System.out.println("Cadastrar Conta a Pagar...");
-                    System.out.println("Marcar Conta como paga...");
+                    contasPagar(sistema);
                     break;
                 case 0:
                     break;
@@ -169,13 +170,13 @@ public class Main {
 
             switch (opcao) {
                 case 1:
-                    System.out.println("Filtrar por data e status...");
+                    relatorioContasReceber(sistema);
                     break;
                 case 2:
-                    System.out.println("Filtrar por data e status...");
+                    relatorioContasPagar(sistema);
                     break;
                 case 3:
-                    System.out.println("Filtro: Todos / Estoque Baixo...");
+                    relatorioEstoqueBaixo(sistema);
                     break;
                 case 0:
                     break;
@@ -186,6 +187,7 @@ public class Main {
         } while (opcao != 0);
     }
 
+    // Cadastro Cliente
     public static void cadastroCliente(Sistema sistema) {
 
         System.out.print("ID: " + (sistema.cadastroClientes.getUltimoId() + 1));
@@ -209,6 +211,7 @@ public class Main {
         System.out.println("Cliente cadastro com sucesso!");
     }
 
+    // Cadastro Fornecedor
     public static void cadastroFornecedor(Sistema sistema) {
 
         System.out.print("ID: " + (sistema.cadastroFornecedores.getUltimoId() + 1));
@@ -234,6 +237,7 @@ public class Main {
         System.out.println("Fornecedor cadastrado com sucesso!");
     }
 
+    // Cadastro Produto
     public static void cadastroProduto(Sistema sistema) {
 
         System.out.print("ID: " + (sistema.cadastroProdutos.getUltimoId() + 1));
@@ -266,6 +270,7 @@ public class Main {
 
     }
 
+    // Loop que exibe todos os fornecedores e escolhe por id
     public static Fornecedor escolherFornecedor(Sistema sistema) {
 
         for (Fornecedor f : sistema.cadastroFornecedores.listarTodos()) {
@@ -285,6 +290,7 @@ public class Main {
         return null;
     }
 
+    // Função para listar todos os clientes cadastrados
     public static void listarCliente(Sistema sistema) {
 
         for(Cliente c : sistema.cadastroClientes.listarTodos()) {
@@ -297,6 +303,7 @@ public class Main {
         }
     }
 
+    // Função para listar todos os fornecedores cadastrados
     public static void listarFornecedor(Sistema sistema) {
 
         for(Fornecedor f : sistema.cadastroFornecedores.listarTodos()) {
@@ -309,6 +316,7 @@ public class Main {
         }
     }
 
+    // Função para listar todos os produtos cadastrados
     public static void listarProduto(Sistema sistema) {
         for(Produto p : sistema.cadastroProdutos.listarTodos()) {
             System.out.println("ID: " + p.getId()
@@ -320,6 +328,7 @@ public class Main {
         }
     }
 
+    // Função para remover cliente por id
     public static void removerCliente(Sistema sistema) {
 
         listarCliente(sistema);
@@ -335,6 +344,7 @@ public class Main {
         }
     }
 
+    // Função para remover fornecedor por id
     public static void removerFornecedor(Sistema sistema) {
 
         listarFornecedor(sistema);
@@ -342,7 +352,7 @@ public class Main {
         System.out.print("Digite o ID do fornecedor que deseja remover: ");
         int id = sc.nextInt();
 
-          try {
+        try {
             sistema.cadastroFornecedores.remover(id);
             System.out.println("Fornecedor removido com sucesso!");
         } catch(Exception ex){
@@ -350,6 +360,7 @@ public class Main {
         }
     }
 
+    // Função para remover produtos por id
     public static void removerProduto(Sistema sistema) {
 
         listarProduto(sistema);
@@ -357,7 +368,7 @@ public class Main {
         System.out.print("Digite o ID do produto que deseja remover: ");
         int id = sc.nextInt();
 
-         try {
+        try {
             sistema.cadastroProdutos.remover(id);
             System.out.println("Produto removido com sucesso!");
         } catch(Exception ex){
@@ -365,6 +376,7 @@ public class Main {
         }
     }
 
+    // Função para adicionar cliente a venda(caso tenha)
     public static Cliente adicionarClienteVenda(Sistema sistema) {
 
         for(Cliente c : sistema.cadastroClientes.listarTodos()) {
@@ -388,6 +400,7 @@ public class Main {
         return null;
     }
 
+    // Função para adicionar produto a venda e exibir como um carrinho
     public static void adicionarProdutoVenda(Sistema sistema) {
 
         while (true) {
@@ -453,6 +466,7 @@ public class Main {
 
     }
 
+    // Função para finalizar a venda e registar qual método de pagamento foi utilizado e registar status da venda
     public static void finalizarVenda(Sistema sistema) {
 
         System.out.println("1 - Dinheiro | 2 - Pix | 3 - Cartão | 4 - Cancelar venda");
@@ -507,11 +521,159 @@ public class Main {
         System.out.println("Venda finalizada com sucesso!");
     }
 
+    // Função para agrupar todas as funções que geram a venda
     public static void novaVenda(Sistema sistema) {
 
         System.out.println("ID: " + sistema.getIdProximaVenda());
         sistema.novaVenda(adicionarClienteVenda(sistema));
         adicionarProdutoVenda(sistema);
+    }
+
+    // Função para exibir todas as vendas que não foram fechadas
+    public static void contasReceber(Sistema sistema) {
+
+        System.out.println("\n===== CONTAS A RECEBER =====");
+
+        for (ContaReceber c : sistema.listaTodasContasReceber(false)) {
+
+            System.out.println(
+                    "ID: " + c.getId()
+                            + " | Cliente: " + c.getCliente().getNome()
+                            + " | Valor: R$ " + c.getValor()
+                            + " | Data: " + c.getData()
+            );
+        }
+
+        System.out.print("Digite o ID da conta para marcar como paga (0 para voltar): ");
+        int id = sc.nextInt();
+
+        if (id != 0) {
+
+            if (sistema.receberConta(id)) {
+                System.out.println("Conta marcada como paga!");
+            } else {
+                System.out.println("Erro ao marcar conta.");
+            }
+        }
+    }
+
+    // Funçãp para exibir todas as contas que não foram pagas e precisam ser fechadas e pagas
+    public static void contasPagar(Sistema sistema) {
+
+        System.out.println("\n===== CONTAS A PAGAR =====");
+
+        for (ContaPagar c : sistema.listaTodasContasPagar(false)) {
+
+            System.out.println(
+                    "ID: " + c.getId()
+                            + " | Fornecedor: " + c.getFornecedor().getNome()
+                            + " | Valor: R$ " + c.getValor()
+                            + " | Vencimento: " + c.getVencimento()
+            );
+        }
+
+        System.out.print("Digite o ID da conta para pagar (0 para voltar): ");
+        int id = sc.nextInt();
+
+        if (id != 0) {
+
+            if (sistema.PagarConta(id)) {
+                System.out.println("Conta paga com sucesso!");
+            } else {
+                System.out.println("Erro ao pagar conta.");
+            }
+        }
+    }
+
+    // Função para filtrar o relatório
+    public static StatusVenda escolherFiltroStatus() {
+
+        System.out.println("Filtro de Status:");
+        System.out.println("1 - Todos");
+        System.out.println("2 - Pagos");
+        System.out.println("3 - Pendentes");
+
+        int opcao = sc.nextInt();
+
+        switch (opcao) {
+            case 2:
+                return StatusVenda.PAGO;
+
+            case 3:
+                return StatusVenda.PENDENTE;
+
+            default:
+                return StatusVenda.CANCELADO;
+        }
+    }
+
+    // Função para gerar relatório de contas a receber
+    public static void relatorioContasReceber(Sistema sistema) {
+
+        System.out.println("\n===== RELATÓRIO CONTAS A RECEBER =====");
+
+        System.out.print("Data inicial (AAAA-MM-DD): ");
+        LocalDate dataInicial = LocalDate.parse(sc.next());
+
+        System.out.print("Data final (AAAA-MM-DD): ");
+        LocalDate dataFinal = LocalDate.parse(sc.next());
+
+        StatusVenda filtro = escolherFiltroStatus();
+
+        List<ContaReceber> lista = sistema.listarContasReceber(dataInicial, dataFinal, filtro);
+
+        for (ContaReceber c : lista) {
+
+            System.out.println(
+                    "ID: " + c.getId()
+                            + " | Cliente: " + c.getCliente().getNome()
+                            + " | Valor: R$ " + c.getValor()
+                            + " | Data: " + c.getData()
+                            + " | Pago: " + c.estaPago()
+            );
+        }
+    }
+
+    // Função para gerar relatório de contas a pagar
+    public static void relatorioContasPagar(Sistema sistema) {
+
+        System.out.println("\n===== RELATÓRIO CONTAS A PAGAR =====");
+
+        System.out.print("Data inicial (AAAA-MM-DD): ");
+        LocalDate dataInicial = LocalDate.parse(sc.next());
+
+        System.out.print("Data final (AAAA-MM-DD): ");
+        LocalDate dataFinal = LocalDate.parse(sc.next());
+
+        StatusVenda filtro = escolherFiltroStatus();
+
+        List<ContaPagar> lista = sistema.listarContasPagar(dataInicial, dataFinal, filtro);
+
+        for (ContaPagar c : lista) {
+
+            System.out.println(
+                    "ID: " + c.getId()
+                            + " | Fornecedor: " + c.getFornecedor().getNome()
+                            + " | Valor: R$ " + c.getValor()
+                            + " | Vencimento: " + c.getVencimento()
+                            + " | Pago: " + c.estaPago()
+            );
+        }
+    }
+
+    // Função para gerar relatório de estoque baixo
+    public static void relatorioEstoqueBaixo(Sistema sistema) {
+
+        System.out.println("\n===== PRODUTOS COM ESTOQUE BAIXO =====");
+
+        for(Produto p : sistema.listarProdutosEstoqueAbaixoMin()) {
+
+            System.out.println(
+                    "Produto: " + p.getNome()
+                            + " | Estoque: " + p.getQuantidadeEstoque()
+                            + " | Mínimo: " + p.getEstoqueMinimo()
+            );
+        }
     }
 
 }
