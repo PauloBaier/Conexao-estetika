@@ -1,4 +1,4 @@
-package ConexaoEstetika;
+package org.conexaoestetika;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -7,9 +7,9 @@ import java.util.List;
 public class Relatorios {
 
     private Financeiro financeiro;
-    private List<Produto> produtos;
+    private Cadastros<Produto> produtos;
 
-    public Relatorios(Financeiro financeiro, List<Produto> produtos) {
+    public Relatorios(Financeiro financeiro, Cadastros<Produto> produtos) {
         this.financeiro = financeiro;
         this.produtos = produtos;
     }
@@ -32,8 +32,8 @@ public class Relatorios {
 
             boolean statusOk =
                     filtro == FiltroStatus.TODOS ||
-                            (filtro == FiltroStatus.PAGO && conta.isPaga()) ||
-                            (filtro == FiltroStatus.ABERTO && !conta.isPaga());
+                            (filtro == FiltroStatus.PAGO && conta.isPago()) ||
+                            (filtro == FiltroStatus.ABERTO && !conta.isPago());
 
             if (dentroPeriodo && statusOk) {
                 resultado.add(conta);
@@ -61,8 +61,8 @@ public class Relatorios {
 
             boolean statusOk =
                     filtro == FiltroStatus.TODOS ||
-                            (filtro == FiltroStatus.PAGO && conta.isPaga()) ||
-                            (filtro == FiltroStatus.ABERTO && !conta.isPaga());
+                            (filtro == FiltroStatus.PAGO && conta.isPago()) ||
+                            (filtro == FiltroStatus.ABERTO && !conta.isPago());
 
             if (dentroPeriodo && statusOk) {
                 resultado.add(conta);
@@ -76,14 +76,14 @@ public class Relatorios {
     // produtos
 
     public List<Produto> listarTodosProdutos() {
-        return new ArrayList<>(produtos);
+        return new ArrayList<>(produtos.listarTodos());
     }
 
     public List<Produto> listarProdutosEstoqueBaixo() {
 
         List<Produto> resultado = new ArrayList<>();
 
-        for (Produto produto : produtos) {
+        for (Produto produto : produtos.listarTodos()) {
             if (produto.getQuantidadeEstoque() <= produto.getEstoqueMinimo()) {
                 resultado.add(produto);
             }

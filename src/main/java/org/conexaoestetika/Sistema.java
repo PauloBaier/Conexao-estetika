@@ -241,7 +241,7 @@ public class Sistema {
         return relatorios.listarContasPagar(dataInicial, dataFinal, filtro);
     }
 
-    public List<Produtos> listarProdutosEstoqueAbaixoMin(){
+    public List<Produto> listarProdutosEstoqueAbaixoMin(){
         return relatorios.listarProdutosEstoqueBaixo();
     }
 }

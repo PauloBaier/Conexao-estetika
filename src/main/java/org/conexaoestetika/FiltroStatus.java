@@ -1,4 +1,4 @@
-package ConexãoEstetika;
+package org.conexaoestetika;
 
 public enum FiltroStatus {
     ABERTO,
