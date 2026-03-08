@@ -581,6 +581,11 @@ public class Main {
                 System.out.println("Digite a quantidade: ");
                 int quantidade = sc.nextInt();
 
+                if(produtoSelecionado.getQuantidadeEstoque() < quantidade){
+                    System.out.println("Estoque Insuficiente!");
+                    continue;
+                }
+
                 sistema.adicionarProdutoVenda(produtoSelecionado, quantidade);
 
                 System.out.println("Produto adicionado ao carrinho!");
@@ -613,7 +618,11 @@ public class Main {
             switch (numeroEscolhido) {
                 case 1:
                     pago = pagamentoDinheiro();
-                    if(!pago) continue;
+                    if(!pago) {
+                        continue;
+                    }else{
+                        sistema.alterarStatusVendaAtual(StatusVenda.PAGO);
+                    }
                     break;
                 case 2:
                     sistema.getVendaAtual().alterarFormaPagamento(FormaPagamento.PIX);
@@ -745,7 +754,7 @@ public class Main {
 
                     System.out.println(
                             "ID: " + c.getId()
-                                    + " | Cliente: " + c.getCliente().getNome()
+                                    + " | Cliente: " + (c.getCliente() == null? "Venda sem cliente": c.getCliente().getNome())
                                     + " | Valor: R$ " + c.getValor()
                                     + " | Data: " + c.getData()
                     );
@@ -753,6 +762,18 @@ public class Main {
 
                 System.out.print("Digite o ID da conta para marcar como paga (0 para voltar): ");
                 id = sc.nextInt();
+
+
+                if (id != 0) {
+
+                    if (sistema.receberConta(id)) {
+                        System.out.println("Conta marcada como paga!");
+                    } else {
+                        System.out.println("Erro ao marcar conta.");
+                    }
+                }
+
+                break;
             }
             catch (InputMismatchException ex){
                 printEntradaInvalida();
@@ -763,16 +784,6 @@ public class Main {
                 continue;
             }
 
-            if (id != 0) {
-
-                if (sistema.receberConta(id)) {
-                    System.out.println("Conta marcada como paga!");
-                } else {
-                    System.out.println("Erro ao marcar conta.");
-                }
-            }
-
-            break;
         }
 
 
@@ -798,6 +809,17 @@ public class Main {
 
                 System.out.print("Digite o ID da conta para pagar (0 para voltar): ");
                 id = sc.nextInt();
+
+                if (id != 0) {
+
+                    if (sistema.PagarConta(id)) {
+                        System.out.println("Conta paga com sucesso!");
+                    } else {
+                        System.out.println("Erro ao pagar conta.");
+                    }
+                }
+
+                break;
             }
             catch (InputMismatchException ex){
                 printEntradaInvalida();
@@ -808,16 +830,6 @@ public class Main {
                 continue;
             }
 
-            if (id != 0) {
-
-                if (sistema.PagarConta(id)) {
-                    System.out.println("Conta paga com sucesso!");
-                } else {
-                    System.out.println("Erro ao pagar conta.");
-                }
-            }
-
-            break;
         }
 
 
@@ -984,8 +996,8 @@ public class Main {
             for (ContaReceber c : lista) {
 
                 System.out.println(
-                        "ID: " + c.getId()
-                                + " | Cliente: " + c.getCliente().getNome()
+                                "ID: " + c.getId()
+                                + " | Cliente: " + (c.getCliente() == null? "Venda sem cliente": c.getCliente().getNome())
                                 + " | Valor: R$ " + c.getValor()
                                 + " | Data: " + c.getData()
                                 + " | Pago: " + c.estaPago()
