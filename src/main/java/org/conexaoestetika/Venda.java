@@ -22,7 +22,7 @@ public class Venda {
             throw new IllegalArgumentException("Id inválido");
         }
         if (cliente == null) {
-            throw new IllegalArgumentException("Clinete não pode ser null");
+            throw new IllegalArgumentException("Cliente não pode ser null");
         }
         this.id = id;
         this.cliente = cliente;
@@ -56,11 +56,13 @@ public class Venda {
         }
 
         itens.add(item);
+        calcularTotal();
     }
 
     //Remover Item.
     public void removerItem(ItemVenda item) {
         itens.remove(item);
+        calcularTotal();
     }
 
     //Calcular Total da ProjetoMensal1.Venda.
@@ -85,6 +87,7 @@ public class Venda {
             throw new IllegalArgumentException("Desconto não pode ser negativo");
         }
         this.desconto = desconto;
+        this.calcularTotal();
     }
 
     public void alterarStatus(StatusVenda novoStatus) {
@@ -100,20 +103,6 @@ public class Venda {
             throw new IllegalArgumentException("Forma de pagamento naõ pode ser null");
         }
         this.formaPagamento = formaPagamento;
-    }
 
-    public void finalizarVenda() {
-
-
-        if (itens.isEmpty()) {
-            throw new IllegalStateException("ProjetoMensal1.Venda não possui itens");
-        }
-        if (status == StatusVenda.CANCELADO) {
-            throw new IllegalStateException("ProjetoMensal1.Venda cancelada não finalizada");
-        }
-        for (ItemVenda item : itens) {
-            item.getProduto().removerEstoque(item.getQuantidade());
-        }
-        this.status = StatusVenda.PAGO;
     }
 }

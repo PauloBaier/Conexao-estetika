@@ -18,6 +18,9 @@ public class Sistema {
     private Venda vendaAtual = null;
     private int proximoIdVenda = 1;
 
+    public Venda getVendaAtual() {
+        return vendaAtual;
+    }
 
     public boolean novoCadastroCliente(String nome, String telefone, String email, String cpf){
         try{
@@ -112,17 +115,6 @@ public class Sistema {
         }
     }
 
-    public boolean alterarStatusVenda(StatusVenda novoStatus){
-        try{
-            vendaAtual.alterarStatus(novoStatus);
-            return true;
-        }
-        catch(Exception ex){
-            System.out.println(ex.getMessage());
-            return false;
-        }
-    }
-
     public List<ItemVenda> getListaItensVendaAtual(){
         return this.vendaAtual.getItens();
     }
@@ -148,7 +140,7 @@ public class Sistema {
 
     public boolean registrarVendaAtual(){
         try{
-            financeiro.adicionarContaReceber(new ContaReceber(financeiro.getUltimoIdContaReceber(), vendaAtual.calcularTotal(), LocalDate.now(), vendaAtual, vendaAtual.getCliente()));
+            financeiro.adicionarContaReceber(new ContaReceber(financeiro.getUltimoIdContaReceber() + 1 , vendaAtual.calcularTotal(), LocalDate.now(), vendaAtual, vendaAtual.getCliente()));
             for(ItemVenda itens: vendaAtual.getItens()){
                 itens.getProduto().removerEstoque(itens.getQuantidade());
             }
@@ -243,5 +235,15 @@ public class Sistema {
 
     public List<Produto> listarProdutosEstoqueAbaixoMin(){
         return relatorios.listarProdutosEstoqueBaixo();
+    }
+
+    public void cancelarVendaAtual(){
+        if(vendaAtual.getItens().isEmpty()){
+            vendaAtual = null;
+            return;
+        }
+        alterarStatusVendaAtual(StatusVenda.CANCELADO);
+        registrarVendaAtual();
+        vendaAtual = null;
     }
 }
