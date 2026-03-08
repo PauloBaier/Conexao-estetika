@@ -115,10 +115,6 @@ public class Sistema {
         }
     }
 
-    public List<ItemVenda> getListaItensVendaAtual(){
-        return this.vendaAtual.getItens();
-    }
-
     public double getTotalVendaAtual(){
         return this.vendaAtual.calcularTotal();
     }
@@ -140,7 +136,14 @@ public class Sistema {
 
     public boolean registrarVendaAtual(){
         try{
-            financeiro.adicionarContaReceber(new ContaReceber(financeiro.getUltimoIdContaReceber() + 1 , vendaAtual.calcularTotal(), LocalDate.now(), vendaAtual, vendaAtual.getCliente()));
+            ContaReceber novaContaReceber = new ContaReceber(financeiro.getUltimoIdContaReceber() + 1 , vendaAtual.calcularTotal(), LocalDate.now(), vendaAtual, vendaAtual.getCliente());
+
+            if(vendaAtual.getStatus() == StatusVenda.PAGO){
+                novaContaReceber.setPago(true);
+            }
+
+            financeiro.adicionarContaReceber(novaContaReceber);
+
             for(ItemVenda itens: vendaAtual.getItens()){
                 itens.getProduto().removerEstoque(itens.getQuantidade());
             }
@@ -190,11 +193,11 @@ public class Sistema {
     }
 
     public List<ContaPagar> listaContaPagarVencidas(){
-        LocalDateTime agora = LocalDateTime.now();
+        LocalDate agora = LocalDate.now();
         List<ContaPagar> contasVencidas = new ArrayList<>();
 
         for(ContaPagar conta: financeiro.listarTodasContasPagar()){
-            if(conta.getVencimento().isBefore(ChronoLocalDate.from(agora))){
+            if(conta.getVencimento().isBefore(agora) && !conta.isPago()){
                 contasVencidas.add(conta);
             }
         }
@@ -215,7 +218,7 @@ public class Sistema {
 
     public boolean novaEntrada(double valor, List<ItemVenda> produtos, Fornecedor fornecedor, LocalDate vencimento){
         try{
-            financeiro.adicionarContaPagar(new ContaPagar(financeiro.getUltimoIdContaPagar(), valor, LocalDate.now(), produtos, fornecedor, vencimento));
+            financeiro.adicionarContaPagar(new ContaPagar(financeiro.getUltimoIdContaPagar() + 1, valor, LocalDate.now(), produtos, fornecedor, vencimento));
             produtos.forEach(p -> p.getProduto().adicionarEstoque(p.getQuantidade()));
             return true;
         }
@@ -238,6 +241,8 @@ public class Sistema {
     }
 
     public void cancelarVendaAtual(){
+        if(vendaAtual == null) return;
+
         if(vendaAtual.getItens().isEmpty()){
             vendaAtual = null;
             return;

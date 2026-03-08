@@ -32,9 +32,6 @@ public void setVenda(Venda venda) {
 }
 
 public void setCliente(Cliente cliente) {
-    if (cliente == null) {
-        throw new IllegalArgumentException("Cliente não pode ser nulo.");
-    }
-    this.cliente = cliente;
+        this.cliente = cliente;
     }
 }

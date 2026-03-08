@@ -2,6 +2,6 @@ package org.conexaoestetika;
 
 public enum FormaPagamento {
     DINHEIRO,
-    CARTAPO,
+    CARTAO,
     PIX
 }

@@ -21,15 +21,16 @@ public class Venda {
         if (id <= 0) {
             throw new IllegalArgumentException("Id inválido");
         }
-        if (cliente == null) {
-            throw new IllegalArgumentException("Cliente não pode ser null");
-        }
         this.id = id;
         this.cliente = cliente;
         this.data = LocalDateTime.now();
         this.desconto = 0;
         this.itens = new ArrayList<>();
         this.status = StatusVenda.PENDENTE;
+    }
+
+    public StatusVenda getStatus() {
+        return status;
     }
 
     public int getId() {
@@ -105,4 +106,6 @@ public class Venda {
         this.formaPagamento = formaPagamento;
 
     }
+
+
 }

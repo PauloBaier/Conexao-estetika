@@ -1,4 +1,9 @@
 package org.conexaoestetika;
+import java.text.Normalizer;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.time.LocalDate;
 import java.util.List;
@@ -10,7 +15,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        int opcao =- 1;
+        int opcao = -1;
 
         do {
             System.out.println("\n===== MENU PRINCIPAL =====");
@@ -44,17 +49,14 @@ public class Main {
                         System.out.println("Opção inválida!");
                 }
             }catch(Exception ex){
-                System.out.println("===================");
-                System.out.println("|Entrada inválida!|");
-                System.out.println("===================");
-                sc.nextLine();
+                printEntradaInvalida();
             }
 
         } while (opcao != 0);
     }
 
     public static void menuCadastros() {
-        int opcao =- 1;
+        int opcao = -1;
 
         do {
             System.out.println("\n===== MENU CADASTROS =====");
@@ -109,10 +111,7 @@ public class Main {
                 }
             }
             catch(Exception ex){
-                System.out.println("===================");
-                System.out.println("|Entrada inválida!|");
-                System.out.println("===================");
-                sc.nextLine();
+                printEntradaInvalida();
             }
 
         } while (opcao != 0);
@@ -140,10 +139,7 @@ public class Main {
                 }
             }
             catch(Exception ex){
-                System.out.println("===================");
-                System.out.println("|Entrada inválida!|");
-                System.out.println("===================");
-                sc.nextLine();
+                printEntradaInvalida();
             }
 
         } while (opcao != 0);
@@ -156,6 +152,7 @@ public class Main {
             System.out.println("\n===== MENU FINANCEIRO =====");
             System.out.println("1 - Contas a Receber");
             System.out.println("2 - Contas a Pagar");
+            System.out.println("3 - Entrada de Produtos");
             System.out.println("0 - Voltar");
 
             try {
@@ -168,6 +165,9 @@ public class Main {
                     case 2:
                         contasPagar(sistema);
                         break;
+                    case 3:
+                        entradaDeProdutos(sistema);
+                        break;
                     case 0:
                         break;
                     default:
@@ -175,10 +175,7 @@ public class Main {
                 }
             }
             catch (Exception ex){
-                System.out.println("===================");
-                System.out.println("|Entrada inválida!|");
-                System.out.println("===================");
-                sc.nextLine();
+                printEntradaInvalida();
             }
 
         } while (opcao != 0);
@@ -189,9 +186,11 @@ public class Main {
 
         do {
             System.out.println("\n===== MENU RELATÓRIOS =====");
-            System.out.println("1 - Contas a Receber / Vendas");
+            System.out.println("1 - Vendas");
             System.out.println("2 - Contas a Pagar");
-            System.out.println("3 - Produtos (Estoque)");
+            System.out.println("3 - Contas a pagar vencidas");
+            System.out.println("4 - Produtos (Estoque abaixo do mínimo)");
+            System.out.println("5 - Produtos");
             System.out.println("0 - Voltar");
 
             try {
@@ -205,7 +204,13 @@ public class Main {
                         relatorioContasPagar(sistema);
                         break;
                     case 3:
+                        relatorioContasVencidas(sistema);
+                        break;
+                    case 4:
                         relatorioEstoqueBaixo(sistema);
+                        break;
+                    case 5:
+                        relatoriotodosProdutos(sistema);
                         break;
                     case 0:
                         break;
@@ -214,10 +219,7 @@ public class Main {
                 }
             }
             catch (Exception ex){
-                System.out.println("===================");
-                System.out.println("|Entrada inválida!|");
-                System.out.println("===================");
-                sc.nextLine();
+                printEntradaInvalida();
             }
 
         } while (opcao != 0);
@@ -258,7 +260,7 @@ public class Main {
     // Cadastro Fornecedor
     public static void cadastroFornecedor(Sistema sistema) {
 
-        System.out.print("ID: " + (sistema.cadastroFornecedores.getUltimoId() + 1));
+        System.out.println("ID: " + (sistema.cadastroFornecedores.getUltimoId() + 1));
         sc.nextLine();
 
         try{
@@ -292,7 +294,7 @@ public class Main {
     // Cadastro Produto
     public static void cadastroProduto(Sistema sistema) {
 
-        System.out.print("ID: " + (sistema.cadastroProdutos.getUltimoId() + 1));
+        System.out.println("ID: " + (sistema.cadastroProdutos.getUltimoId() + 1));
         sc.nextLine();
 
         try{
@@ -318,7 +320,7 @@ public class Main {
             Fornecedor fornecedor = escolherFornecedor(sistema);
 
             if (sistema.novoCadastroProduto(nome, descricao, precoCusto, precoVenda, qntdEstoque, estoqueMinimo, fornecedor)) {
-                System.out.println("Pproduto cadastrado com sucesso!");
+                System.out.println("Produto cadastrado com sucesso!");
             }
         }
         catch(Exception ex){
@@ -367,7 +369,7 @@ public class Main {
         for(Cliente c : clientes) {
             System.out.println("ID: " + c.getId()
                     + "| Nome: " + c.getNome()
-                    + "| Telefone" + c.getTelefone()
+                    + "| Telefone: " + c.getTelefone()
                     + "| Email: " + c.getEmail()
                     + "| CPF: " + c.getCpf()
                     + "| Dinheiro Gasto: " + c.getDinheiroGasto());
@@ -386,7 +388,7 @@ public class Main {
         for(Fornecedor f : fornecedores) {
             System.out.println("ID: " + f.getId()
                     + "| Nome: " + f.getNome()
-                    + "| Telefone" + f.getTelefone()
+                    + "| Telefone: " + f.getTelefone()
                     + "| Email: " + f.getEmail()
                     + "| CNPJ: " + f.getCnpj()
                     + "| Razão Social: " + f.getRazaoSocial());
@@ -481,10 +483,7 @@ public class Main {
                 break;
             }
             catch (Exception ex){
-                System.out.println("===================");
-                System.out.println("|Entrada inválida!|");
-                System.out.println("===================");
-                sc.nextLine();
+                printEntradaInvalida();
             }
         }
 
@@ -509,6 +508,7 @@ public class Main {
         while (true) {
 
             List<Produto> produtos = sistema.cadastroProdutos.listarTodos();
+            int produtoEscolhido = -3;
 
             if(produtos.isEmpty()){
                 System.out.println("Nenhum Produto Cadastrado: Cadastre Produtos antes de iniciar Nova Venda!");
@@ -530,7 +530,7 @@ public class Main {
 
 
             try{
-                int produtoEscolhido = sc.nextInt();
+                produtoEscolhido = sc.nextInt();
 
                 if (produtoEscolhido == -1) {
                     sistema.cancelarVendaAtual();
@@ -586,10 +586,7 @@ public class Main {
                 System.out.println("Produto adicionado ao carrinho!");
             }
             catch (Exception ex) {
-                System.out.println("===================");
-                System.out.println("|Entrada inválida!|");
-                System.out.println("===================");
-                sc.nextLine();
+                printEntradaInvalida();
             }
         }
 
@@ -597,32 +594,92 @@ public class Main {
 
     // Função para finalizar a venda e registar qual metodo de pagamento foi utilizado e registar status da venda
     public static void finalizarVenda(Sistema sistema) {
-        int descontoOpcao = -1;
+        boolean pago =  false;
 
         while(true) {
             int numeroEscolhido = -1;
+
+
             System.out.println("1 - Dinheiro | 2 - Pix | 3 - Cartão | 4 - Cancelar venda");
 
             try {
                 numeroEscolhido = sc.nextInt();
             }
             catch (Exception ex) {
-                System.out.println("===================");
-                System.out.println("|Entrada inválida!|");
-                System.out.println("===================");
-                sc.nextLine();
+                printEntradaInvalida();
                 continue;
             }
 
-            if (numeroEscolhido == 4) {
-                sistema.cancelarVendaAtual();
+            switch (numeroEscolhido) {
+                case 1:
+                    pago = pagamentoDinheiro();
+                    if(!pago) continue;
+                    break;
+                case 2:
+                    sistema.getVendaAtual().alterarFormaPagamento(FormaPagamento.PIX);
+                    break;
+                case 3:
+                    sistema.getVendaAtual().alterarFormaPagamento(FormaPagamento.CARTAO);
+                    break;
+                case 4:
+                    sistema.cancelarVendaAtual();
+                    return;
+                default:
+                    System.out.println("Opção Inválida!");
+                    break;
             }
 
-            System.out.println("Total da venda: R$ " + sistema.getTotalVendaAtual());
+            if(!pago){
+                while(true){
+                    try{
+                        System.out.println("Pagamento teve sucesso? 1-sim 2-não 3-cancelar");
+                        int opcao = sc.nextInt();
 
-            // DESCONTO
+                        switch (opcao) {
+                            case 1:
+                                sistema.alterarStatusVendaAtual(StatusVenda.PAGO);
+                                break;
+                            case 2:
+                                sistema.alterarStatusVendaAtual(StatusVenda.PENDENTE);
+                                break;
+                            case 3:
+                                sistema.cancelarVendaAtual();
+                                return;
+                            default:
+                                System.out.println("Opção inválida!");
+                                continue;
+                        }
+
+                        break;
+                    }
+                    catch (Exception ex){
+                        System.out.println("===================");
+                        System.out.println("|Entrada inválida!|");
+                        System.out.println("===================");
+                        sc.nextLine();
+                    }
+                }
+            }
+
+            if(sistema.registrarVendaAtual()) {
+                System.out.println("Venda finalizada com sucesso!");
+            }
+            else{
+                System.out.println("Erro ao registrar venda!");
+            }
+
+            break;
+        }
+    }
+
+    public static boolean pagamentoDinheiro(){
+        int descontoOpcao = -3;
+
+        // DESCONTO
+        do {
+            System.out.println("Total da venda: R$ " + sistema.getTotalVendaAtual());
             System.out.println("Deseja aplicar desconto? (1-Sim / 2-Não)");
-            try{
+            try {
                 descontoOpcao = sc.nextInt();
 
 
@@ -631,47 +688,42 @@ public class Main {
                     double desconto = sc.nextDouble();
 
                     sistema.getVendaAtual().setDesconto(desconto);
+                    break;
                 }
-            }
-            catch (Exception ex){
-                System.out.println("===================");
-                System.out.println("|Entrada inválida!|");
-                System.out.println("===================");
-                sc.nextLine();
+                else if( descontoOpcao == 2){
+                    break;
+                }
+                else{
+                    System.out.println("Opção Inválida");
+                }
+
+            } catch (Exception ex) {
+                printEntradaInvalida();
                 continue;
             }
+        }while(true);
+        System.out.println("Total final: R$ " + sistema.getTotalVendaAtual());
 
-            System.out.println("Total final: R$ " + sistema.getTotalVendaAtual());
+        // PAGAMENTO EM DINHEIRO (CALCULAR TROCO)
+        double valorPago, troco;
 
-            // PAGAMENTO EM DINHEIRO (CALCULAR TROCO)
+        do {
+            System.out.println("Valor recebido: ");
+            valorPago = sc.nextDouble();
 
+            if(valorPago == -1) return false;
 
-            if (numeroEscolhido == 1) {
-                double valorPago, troco;
-
-                do {
-                    System.out.println("Valor recebido: ");
-                    valorPago = sc.nextDouble();
-
-                    if (valorPago < sistema.getTotalVendaAtual()) {
-                        System.out.println("Valor insuficiente!");
-                        System.out.println("Digite -1 para cancelar Venda");
-                    }
-
-                    troco = valorPago - sistema.getTotalVendaAtual();
-                } while (valorPago < sistema.getTotalVendaAtual());
-
-
-                System.out.printf("Troco: R$ %.2f\n", troco);
-
+            if (valorPago < sistema.getTotalVendaAtual()) {
+                System.out.println("Valor insuficiente!");
+                System.out.println("Digite -1 para cancelar Venda");
             }
 
-            sistema.alterarStatusVendaAtual(StatusVenda.PAGO);
-            sistema.registrarVendaAtual();
+            troco = valorPago - sistema.getTotalVendaAtual();
+        } while (valorPago < sistema.getTotalVendaAtual());
 
-            System.out.println("Venda finalizada com sucesso!");
-            break;
-        }
+
+        System.out.printf("Troco: R$ %.2f\n", troco);
+        return true;
     }
 
     // Função para agrupar todas as funções que geram a venda
@@ -686,27 +738,44 @@ public class Main {
 
         System.out.println("\n===== CONTAS A RECEBER =====");
 
-        for (ContaReceber c : sistema.listaTodasContasReceber(false)) {
+        while(true){
+            int id = 0;
+            try {
+                for (ContaReceber c : sistema.listaTodasContasReceber(false)) {
 
-            System.out.println(
-                    "ID: " + c.getId()
-                            + " | Cliente: " + c.getCliente().getNome()
-                            + " | Valor: R$ " + c.getValor()
-                            + " | Data: " + c.getData()
-            );
-        }
+                    System.out.println(
+                            "ID: " + c.getId()
+                                    + " | Cliente: " + c.getCliente().getNome()
+                                    + " | Valor: R$ " + c.getValor()
+                                    + " | Data: " + c.getData()
+                    );
+                }
 
-        System.out.print("Digite o ID da conta para marcar como paga (0 para voltar): ");
-        int id = sc.nextInt();
-
-        if (id != 0) {
-
-            if (sistema.receberConta(id)) {
-                System.out.println("Conta marcada como paga!");
-            } else {
-                System.out.println("Erro ao marcar conta.");
+                System.out.print("Digite o ID da conta para marcar como paga (0 para voltar): ");
+                id = sc.nextInt();
             }
+            catch (InputMismatchException ex){
+                printEntradaInvalida();
+                continue;
+            }
+            catch (Exception e) {
+                System.out.println(e.getMessage());
+                continue;
+            }
+
+            if (id != 0) {
+
+                if (sistema.receberConta(id)) {
+                    System.out.println("Conta marcada como paga!");
+                } else {
+                    System.out.println("Erro ao marcar conta.");
+                }
+            }
+
+            break;
         }
+
+
     }
 
     // Funçãp para exibir todas as contas que não foram pagas e precisam ser fechadas e pagas
@@ -714,27 +783,159 @@ public class Main {
 
         System.out.println("\n===== CONTAS A PAGAR =====");
 
-        for (ContaPagar c : sistema.listaTodasContasPagar(false)) {
+        while (true){
+            int id = 0;
+            try {
+                for (ContaPagar c : sistema.listaTodasContasPagar(false)) {
 
-            System.out.println(
-                    "ID: " + c.getId()
-                            + " | Fornecedor: " + c.getFornecedor().getNome()
-                            + " | Valor: R$ " + c.getValor()
-                            + " | Vencimento: " + c.getVencimento()
-            );
+                    System.out.println(
+                            "ID: " + c.getId()
+                                    + " | Fornecedor: " + c.getFornecedor().getNome()
+                                    + " | Valor: R$ " + c.getValor()
+                                    + " | Vencimento: " + c.getVencimento()
+                    );
+                }
+
+                System.out.print("Digite o ID da conta para pagar (0 para voltar): ");
+                id = sc.nextInt();
+            }
+            catch (InputMismatchException ex){
+                printEntradaInvalida();
+                continue;
+            }
+            catch (Exception e) {
+                System.out.println(e.getMessage());
+                continue;
+            }
+
+            if (id != 0) {
+
+                if (sistema.PagarConta(id)) {
+                    System.out.println("Conta paga com sucesso!");
+                } else {
+                    System.out.println("Erro ao pagar conta.");
+                }
+            }
+
+            break;
         }
 
-        System.out.print("Digite o ID da conta para pagar (0 para voltar): ");
-        int id = sc.nextInt();
 
-        if (id != 0) {
+    }
 
-            if (sistema.PagarConta(id)) {
-                System.out.println("Conta paga com sucesso!");
-            } else {
-                System.out.println("Erro ao pagar conta.");
+    public static void entradaDeProdutos(Sistema sistema){
+        //public boolean novaEntrada(double valor, List<ItemVenda> produtos, Fornecedor fornecedor, LocalDate vencimento)
+        double valor = 0;
+        List<ItemVenda> produtos;
+        Fornecedor fornecedor;
+        LocalDate vencimento;
+
+        produtos = adicionarProdutosEntrada(sistema);
+
+        if(produtos.isEmpty()) return;
+
+        fornecedor = adicionarFornecedorEntrada(sistema);
+
+        if (fornecedor == null) return;
+
+        while(true){
+            try{
+                System.out.println("Digite a Data de Vencimento: (AAAA-MM-DD) (-1 Cancelar)");
+                String entrada = sc.next();
+
+                if(entrada.equalsIgnoreCase("-1")) return;
+
+                vencimento = LocalDate.parse(entrada);
+                break;
+            }
+            catch (Exception ex){
+                printEntradaInvalida();
+                continue;
             }
         }
+
+        for (ItemVenda item: produtos){
+            valor += item.getSubtotal();
+        }
+
+        sistema.novaEntrada(valor, produtos, fornecedor, vencimento);
+
+    }
+
+    public static List<ItemVenda> adicionarProdutosEntrada(Sistema sistema){
+        List<ItemVenda> produtos = new ArrayList<>();
+
+        while (true){
+            Produto produto = null;
+            int quantidade = -1;
+
+            int opcao = -3;
+            listarProduto(sistema);
+            System.out.println("Digite o codigo do Produto: (-1 para continuar/ -2 para cancelar)");
+            try{
+                opcao = sc.nextInt();
+
+                if(opcao == -1){
+                    return produtos;
+                }
+
+                if(opcao == -2){
+                    return new ArrayList<>();
+                }
+
+                try{
+                    produto = sistema.cadastroProdutos.buscarId(opcao);
+                }
+                catch (Exception ex){
+                    System.out.println("Produto não encontrado!");
+                    continue;
+                }
+
+                System.out.println("Digite a quantidade:");
+
+                quantidade = sc.nextInt();
+
+                if(quantidade <= 0){
+                    System.out.println("Quantidade deve ser um valor positivo acima de zero!");
+                    continue;
+                }
+
+            }
+            catch (Exception ex){
+                printEntradaInvalida();
+                continue;
+            }
+
+            produtos.add(new ItemVenda(produto, quantidade));
+
+        }
+
+    }
+
+    public static Fornecedor adicionarFornecedorEntrada(Sistema sistema){
+        Fornecedor fornecedor;
+
+        while(true){
+            int opcao = -3;
+            listarFornecedor(sistema);
+            try{
+                System.out.println("Digite o codigo do Fornecedor: (-1 para cancelar)");
+                opcao = sc.nextInt();
+
+                if(opcao == -1) return null;
+
+                fornecedor = sistema.cadastroFornecedores.buscarId(opcao);
+
+                return fornecedor;
+            }
+            catch (InputMismatchException ex){
+                printEntradaInvalida();
+            }
+            catch (Exception ex){
+                System.out.println("Fornecedor não encontrado!");
+            }
+        }
+
     }
 
     // Função para filtrar o relatório
@@ -762,63 +963,119 @@ public class Main {
     // Função para gerar relatório de contas a receber
     public static void relatorioContasReceber(Sistema sistema) {
 
-        System.out.println("\n===== RELATÓRIO CONTAS A RECEBER =====");
+        try {
+            System.out.println("\n===== RELATÓRIO CONTAS A RECEBER =====");
 
-        System.out.print("Data inicial (AAAA-MM-DD): ");
-        LocalDate dataInicial = LocalDate.parse(sc.next());
+            System.out.print("Data inicial (AAAA-MM-DD): ");
+            LocalDate dataInicial = LocalDate.parse(sc.next());
 
-        System.out.print("Data final (AAAA-MM-DD): ");
-        LocalDate dataFinal = LocalDate.parse(sc.next());
+            System.out.print("Data final (AAAA-MM-DD): ");
+            LocalDate dataFinal = LocalDate.parse(sc.next());
 
-        FiltroStatus filtro = escolherFiltroStatus();
+            FiltroStatus filtro = escolherFiltroStatus();
 
-        List<ContaReceber> lista = sistema.listarContasReceber(dataInicial, dataFinal, filtro);
+            List<ContaReceber> lista = sistema.listarContasReceber(dataInicial, dataFinal, filtro);
 
-        for (ContaReceber c : lista) {
+            if(lista.isEmpty()){
+                System.out.println("Nunhuma conta registrada!");
+                return;
+            }
 
-            System.out.println(
-                    "ID: " + c.getId()
-                            + " | Cliente: " + c.getCliente().getNome()
-                            + " | Valor: R$ " + c.getValor()
-                            + " | Data: " + c.getData()
-                            + " | Pago: " + c.estaPago()
-            );
+            for (ContaReceber c : lista) {
+
+                System.out.println(
+                        "ID: " + c.getId()
+                                + " | Cliente: " + c.getCliente().getNome()
+                                + " | Valor: R$ " + c.getValor()
+                                + " | Data: " + c.getData()
+                                + " | Pago: " + c.estaPago()
+                );
+            }
+        }
+        catch (DateTimeParseException ex){
+            printEntradaInvalida();
+        }
+        catch (Exception ex) {
+            System.out.println(ex.getMessage());
         }
     }
 
     // Função para gerar relatório de contas a pagar
     public static void relatorioContasPagar(Sistema sistema) {
 
-        System.out.println("\n===== RELATÓRIO CONTAS A PAGAR =====");
+        try {
+            System.out.println("\n===== RELATÓRIO CONTAS A PAGAR =====");
 
-        System.out.print("Data inicial (AAAA-MM-DD): ");
-        LocalDate dataInicial = LocalDate.parse(sc.next());
+            System.out.print("Data inicial (AAAA-MM-DD): ");
+            LocalDate dataInicial = LocalDate.parse(sc.next());
 
-        System.out.print("Data final (AAAA-MM-DD): ");
-        LocalDate dataFinal = LocalDate.parse(sc.next());
+            System.out.print("Data final (AAAA-MM-DD): ");
+            LocalDate dataFinal = LocalDate.parse(sc.next());
 
-        FiltroStatus filtro = escolherFiltroStatus();
+            FiltroStatus filtro = escolherFiltroStatus();
 
-        List<ContaPagar> lista = sistema.listarContasPagar(dataInicial, dataFinal, filtro);
+            List<ContaPagar> lista = sistema.listarContasPagar(dataInicial, dataFinal, filtro);
 
-        for (ContaPagar c : lista) {
+            if(lista.isEmpty()){
+                System.out.println("Nenhuma conta registrada!");
+                return;
+            }
+
+            for (ContaPagar c : lista) {
+
+                System.out.println(
+                        "ID: " + c.getId()
+                                + " | Fornecedor: " + c.getFornecedor().getNome()
+                                + " | Valor: R$ " + c.getValor()
+                                + " | Vencimento: " + c.getVencimento()
+                                + " | Pago: " + c.estaPago()
+                );
+            }
+        }
+        catch (DateTimeParseException ex){
+            printEntradaInvalida();
+        }
+        catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
+    public static void relatorioContasVencidas(Sistema sistema){
+        List<ContaPagar> contasVencidas = sistema.listaContaPagarVencidas();
+
+        System.out.println("===== RELATÓRIO CONTAS A PAGAR VENCIDAS =====");
+
+        if(contasVencidas.isEmpty()){
+            System.out.println("Nunhuma conta vencida!");
+            return;
+        }
+
+        for (ContaPagar c : contasVencidas) {
 
             System.out.println(
                     "ID: " + c.getId()
                             + " | Fornecedor: " + c.getFornecedor().getNome()
                             + " | Valor: R$ " + c.getValor()
                             + " | Vencimento: " + c.getVencimento()
-                            + " | Pago: " + c.estaPago()
+                            + " | Data: " + c .getData()
             );
         }
     }
+
 
     // Função para gerar relatório de estoque baixo
     public static void relatorioEstoqueBaixo(Sistema sistema) {
 
         System.out.println("\n===== PRODUTOS COM ESTOQUE BAIXO =====");
 
-        for(Produto p : sistema.listarProdutosEstoqueAbaixoMin()) {
+        List<Produto> lista = sistema.listarProdutosEstoqueAbaixoMin();
+
+        if(lista.isEmpty()){
+            System.out.println("Nenhum Produto com estoque abaixo do Minimo");
+            return;
+        }
+
+        for(Produto p : lista) {
 
             System.out.println(
                     "Produto: " + p.getNome()
@@ -826,6 +1083,39 @@ public class Main {
                             + " | Mínimo: " + p.getEstoqueMinimo()
             );
         }
+    }
+
+    public static void relatoriotodosProdutos(Sistema sistema){
+        List<Produto> produtos = sistema.cadastroProdutos.listarTodos();
+
+        if(produtos.isEmpty()){
+            System.out.println("Nenhum Produto Cadastrado!");
+            return;
+        }
+
+        System.out.println("\n===== ESTOQUE PRODUTOS =====");
+
+        for (Produto produto: produtos){
+            String formatacaoEstoqueBaixo = produto.precisaReporEstoque() ? "\u001B[31m" : "";
+
+            System.out.println(
+                    formatacaoEstoqueBaixo
+                    +"ID: " + produto.getId()
+                    +" | Nome: " + produto.getNome()
+                    +" | Preço Custo: R$" + produto.getPrecoCusto()
+                    +" | Preço Venda: R$" + produto.getPrecoVenda()
+                    +" | Quantidade Estoque: " + produto.getQuantidadeEstoque()
+                    +" | Estoque Mínimo: " + produto.getEstoqueMinimo()
+                    +"\u001B[0m"
+            );
+        }
+    }
+
+    public static void printEntradaInvalida(){
+        System.out.println("===================");
+        System.out.println("|Entrada inválida!|");
+        System.out.println("===================");
+        sc.nextLine();
     }
 
 }
