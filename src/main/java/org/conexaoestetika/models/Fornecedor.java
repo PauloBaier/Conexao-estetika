@@ -1,6 +1,6 @@
-package org.conexaoestetika;
+package org.conexaoestetika.models;
 
-public class Fornecedor extends Pessoa{
+public class Fornecedor extends Pessoa {
     private String cnpj;
     private String razaoSocial;
 

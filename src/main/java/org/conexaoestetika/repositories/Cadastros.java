@@ -1,4 +1,6 @@
-package org.conexaoestetika;
+package org.conexaoestetika.repositories;
+
+import org.conexaoestetika.IIdentificador;
 
 import java.util.ArrayList;
 import java.util.List;

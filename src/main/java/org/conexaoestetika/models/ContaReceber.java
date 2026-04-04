@@ -1,4 +1,6 @@
-package org.conexaoestetika;
+package org.conexaoestetika.models;
+
+import org.conexaoestetika.IIdentificador;
 
 import java.time.LocalDate;
 

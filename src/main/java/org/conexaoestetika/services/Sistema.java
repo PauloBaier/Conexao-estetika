@@ -1,8 +1,11 @@
-package org.conexaoestetika;
+package org.conexaoestetika.services;
+
+import org.conexaoestetika.models.*;
+import org.conexaoestetika.models.enums.FiltroStatus;
+import org.conexaoestetika.models.enums.StatusVenda;
+import org.conexaoestetika.repositories.Cadastros;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.chrono.ChronoLocalDate;
 import java.util.ArrayList;
 import java.util.List;
 

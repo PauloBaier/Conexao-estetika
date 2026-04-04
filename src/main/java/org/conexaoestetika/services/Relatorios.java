@@ -1,4 +1,10 @@
-package org.conexaoestetika;
+package org.conexaoestetika.services;
+
+import org.conexaoestetika.models.ContaPagar;
+import org.conexaoestetika.models.ContaReceber;
+import org.conexaoestetika.models.Produto;
+import org.conexaoestetika.models.enums.FiltroStatus;
+import org.conexaoestetika.repositories.Cadastros;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

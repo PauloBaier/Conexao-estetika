@@ -1,4 +1,4 @@
-package org.conexaoestetika;
+package org.conexaoestetika.models;
 
 public class ItemVenda {
 

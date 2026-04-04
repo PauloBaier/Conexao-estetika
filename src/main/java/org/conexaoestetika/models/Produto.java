@@ -1,4 +1,6 @@
-package org.conexaoestetika;
+package org.conexaoestetika.models;
+
+import org.conexaoestetika.IIdentificador;
 
 public class Produto implements IIdentificador {  //atributos
     private int id;

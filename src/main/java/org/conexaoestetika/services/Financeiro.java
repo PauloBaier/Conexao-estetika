@@ -1,4 +1,7 @@
-package org.conexaoestetika;
+package org.conexaoestetika.services;
+
+import org.conexaoestetika.models.ContaPagar;
+import org.conexaoestetika.models.ContaReceber;
 
 import java.util.ArrayList;
 import java.util.Collections;

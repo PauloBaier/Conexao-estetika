@@ -1,5 +1,8 @@
-package org.conexaoestetika;
+package org.conexaoestetika.models;
 
+
+import org.conexaoestetika.models.enums.FormaPagamento;
+import org.conexaoestetika.models.enums.StatusVenda;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
