@@ -6,8 +6,13 @@ import repository.VendaRepository;
 import java.util.List;
 
 public class VendaService {
+    
+    
+    VendaRepository vendaRepository;
 
-    private VendaRepository repository = new VendaRepository();
+    public VendaService(VendaRepository vendaRepository) {
+        this.vendaRepository = vendaRepository;
+    }
 
     public void cadastrar(Venda venda) {
 
@@ -42,22 +47,22 @@ public class VendaService {
         }
         venda.setValorTotal(total);
 
-        repository.salvar(venda);
+        vendaRepository.salvar(venda);
     }
 
     public Venda buscar(Long id) {
-        return repository.buscarPorId(id);
+        return vendaRepository.buscarPorId(id);
     }
 
     public List<Venda> listar() {
-        return repository.listarTodos();
+        return vendaRepository.listarTodos();
     }
 
     public void atualizar(Venda venda) {
-        repository.atualizar(venda);
+        vendaRepository.atualizar(venda);
     }
 
     public void deletar(Long id) {
-        repository.deletar(id);
+        vendaRepository.deletar(id);
     }
 }
