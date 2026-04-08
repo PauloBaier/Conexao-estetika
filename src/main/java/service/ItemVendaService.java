@@ -7,7 +7,7 @@ import java.util.List;
 
 public class ItemVendaService {
 
-    ItemVendaRepository itemVendaRepository;
+    private ItemVendaRepository itemVendaRepository;
 
     public ItemVendaService(ItemVendaRepository itemVendaRepository) {
         this.itemVendaRepository = itemVendaRepository;
