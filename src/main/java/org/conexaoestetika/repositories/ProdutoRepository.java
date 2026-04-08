@@ -2,7 +2,7 @@ package org.conexaoestetika.repositories;
 
 import jakarta.persistence.EntityManager;
 import org.conexaoestetika.models.Produto;
-,
+
 
 import java.util.List;
 

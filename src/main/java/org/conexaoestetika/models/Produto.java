@@ -1,45 +1,53 @@
 package org.conexaoestetika.models;
 
-import org.conexaoestetika.IIdentificador;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.*;
+import org.conexaoestetika.repositories.FornecedorRepository;
 
-public class Produto implements IIdentificador {  //atributos
+import java.util.List;
+
+@Entity
+public class Produto {  //atributos
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(name = "nome")
     private String nome;
-    private String categoria;
+    @Column(name = "preco_compra")
+    private double precoCompra;
+    @Column(name = "preco_venda")
     private double precoVenda;
-    private double precoCusto;
+    @Column(name = "quantidade_estoque")
     private int quantidadeEstoque;
+    @Column(name = "estoque_minimo")
     private int estoqueMinimo;
+    @ManyToOne
+    @JoinColumn(name = "fk_categorias_id")
+    private Categoria categoria;
 
-    private Fornecedor fornecedor;
+    @ManyToMany
+    @JoinTable(name = "produto_fornecedor",
+        joinColumns = @JoinColumn(name = "fk_produto_id"),
+        inverseJoinColumns = @JoinColumn(name = "fk_fornecedor_id")
+    )
+    private List<Fornecedor> fornecedores;
+
+    public Produto(){};
 
     //constructor
-    public Produto(int id, String nome, String categoria,
-                   double precoCusto, double precoVenda,
-                   int quantidadeEstoque, int estoqueMinimo,
-                   Fornecedor fornecedor) {
-
-
-        this.setId(id);
+    public Produto(String nome, double precoCompra, double precoVenda, int quantidadeEstoque, int estoqueMinimo, Categoria categoria, List<Fornecedor>fornecedores) {
         this.setNome(nome);
-        this.setCategoria(categoria);
+        this.setPrecoCompra(precoCompra);
         this.setPrecoVenda(precoVenda);
-        this.setPrecoCusto(precoCusto);
         this.setQuantidadeEstoque(quantidadeEstoque);
         this.setEstoqueMinimo(estoqueMinimo);
-        this.setFornecedor(fornecedor);
+        this.setCategoria(categoria);
+        this.setFornecedores(fornecedores);
     }
 
-    //getters e setters
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        if (id <= 0) {
-            throw new IllegalArgumentException("ID deve ser maior que 0.");
-        }
-        this.id = id;
     }
 
     public String getNome() {
@@ -47,26 +55,21 @@ public class Produto implements IIdentificador {  //atributos
     }
 
     public void setNome(String nome) {
-        if (nome == null || nome.trim().isEmpty()) {
-            throw new IllegalArgumentException("Nome do produto não pode ser vazio.");
+        if(nome == null || nome.isEmpty()){
+            throw new IllegalArgumentException("ERRO: Nome de Produto não pode ser nulo ou vazio!");
         }
         this.nome = nome;
     }
 
-    public int getEstoqueMinimo () {
-        return estoqueMinimo;
+    public double getPrecoCompra() {
+        return precoCompra;
     }
 
-    public String getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(String categoria) {
-        if (categoria == null || categoria.trim().isEmpty()) {
-            throw new IllegalArgumentException("Categoria não pode ser vazia.");
+    public void setPrecoCompra(double precoCompra) {
+        if(precoCompra < 0.0){
+            throw  new IllegalArgumentException("ERRO: Preço de Compra não pode ser negativo!");
         }
-
-        this.categoria = categoria;
+        this.precoCompra = precoCompra;
     }
 
     public double getPrecoVenda() {
@@ -74,98 +77,74 @@ public class Produto implements IIdentificador {  //atributos
     }
 
     public void setPrecoVenda(double precoVenda) {
-
-        if (precoVenda < 0) {
-            throw new IllegalArgumentException("Preço de venda não pode ser negativo.");
+        if(precoVenda < this.getPrecoCompra()){
+            throw new IllegalArgumentException("ERRO: Preço de Venda deve ser maior que o preço de Compra!");
         }
-
-        if (precoVenda < this.precoCusto) {
-            throw new IllegalArgumentException("Preço de venda deve ser maior ou igual ao preço de custo.");
-        }
-
         this.precoVenda = precoVenda;
     }
-
-    public double getPrecoCusto() {
-        return precoCusto;
-    }
-
-    public void setPrecoCusto(double precoCusto) {
-        if (precoCusto < 0) {
-            throw new IllegalArgumentException("Preço de custo não pode ser negativo.");
-
-        }
-
-        if (this.precoVenda < precoCusto) {
-            throw new IllegalArgumentException("Preço de custo não pode ser maior que o preço de venda atual.");
-        }
-
-        this.precoCusto = precoCusto;
-    }
-
 
     public int getQuantidadeEstoque() {
         return quantidadeEstoque;
     }
 
     public void setQuantidadeEstoque(int quantidadeEstoque) {
-        if (quantidadeEstoque < 0) {
-            throw new IllegalArgumentException("Estoque não pode ser negativo.");
+        if(quantidadeEstoque < 0){
+            throw new IllegalArgumentException("ERRO: Estoque deve ser um número positvo!");
         }
-
         this.quantidadeEstoque = quantidadeEstoque;
     }
 
-    public void setEstoqueMinimo(int estoqueMinimo) {
-        if (estoqueMinimo < 0) {
-            throw new IllegalArgumentException("Estoque mínimo não pode ser negativo.");
-        }
+    public int getEstoqueMinimo() {
+        return estoqueMinimo;
+    }
 
+    public void setEstoqueMinimo(int estoqueMinimo) {
+        if(estoqueMinimo < 0){
+            throw new IllegalArgumentException("ERRO: Estoque Mínimo deve ser um número positvo!");
+        }
         this.estoqueMinimo = estoqueMinimo;
     }
 
-    public Fornecedor getFornecedor() {
-        return fornecedor;
+    public Categoria getCategoria() {
+        return categoria;
     }
 
-    public void setFornecedor(Fornecedor fornecedor) {
-        if (fornecedor == null) {
-            throw new IllegalArgumentException("Fornecedor não pode ser nulo.");
+    public void setCategoria(Categoria categoria) {
+        if(categoria == null){
+            throw new IllegalArgumentException("ERRO: Categoria não pode ser nulo!");
         }
-
-        this.fornecedor = fornecedor;
+        this.categoria = categoria;
     }
 
+    public List<Fornecedor> getFornecedores() {
+        return fornecedores;
+    }
 
-    //metodos
-
-    //adicionar estoque
-    public void adicionarEstoque(int quantidade) {
-        if (quantidade <= 0) {
-            throw new IllegalArgumentException("Quantidade deve ser maior que zero.");
+    public void setFornecedores(List<Fornecedor> fornecedores) {
+        if(fornecedores == null || fornecedores.isEmpty() ){
+            throw new IllegalArgumentException("ERRO: Fornecedores não pode estar vazio ou ser nulo!");
         }
-
-        this.quantidadeEstoque += quantidade;
+        this.fornecedores = fornecedores;
     }
 
-    //remover estoque
-    public boolean removerEstoque(int quantidade) {
-
-        if (quantidade <= 0) {
-            return false;
+    public void adicionarFornecedor(Fornecedor fornecedor){
+        if(fornecedor == null){
+            throw new IllegalArgumentException("ERRO: Fornecedor não pode ser nulo!");
         }
-
-        if (quantidade > quantidadeEstoque) {
-            return false;
+        if(!this.fornecedores.contains(fornecedor)){
+            this.fornecedores.add(fornecedor);
         }
-
-        quantidadeEstoque -= quantidade;
-        return true;
     }
 
-    // verifica se o estoque está abaixo do mínimo
-    public boolean precisaReporEstoque() {
-        return quantidadeEstoque <= estoqueMinimo;
+    public void removerFornecedor(Fornecedor fornecedor){
+        if(fornecedores == null || fornecedores.isEmpty() ){
+            throw new IllegalArgumentException("ERRO: Fornecedores não pode estar vazio ou ser nulo!");
+        }
+        if(this.fornecedores.size() == 1){
+            throw new IllegalArgumentException("ERRO: Fornecedores deve manter pelo menos um registro!");
+        }
+        if(this.fornecedores.contains(fornecedor)){
+            this.fornecedores.remove(fornecedor);
+        }
     }
-
 }
