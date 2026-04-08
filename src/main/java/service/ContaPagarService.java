@@ -39,7 +39,19 @@ public class ContaPagarService {
         repository.salvar(conta);
     }
 
+    public void atualizar(ContaPagar conta) {
+        repository.atualizar(conta);
+    }
+
     public List<ContaPagar> listar() {
         return repository.listarTodos();
+    }
+
+    public ContaPagar buscar(Long id) {
+        return repository.buscarPorId(id);
+    }
+
+    public void deletar(Long id) {
+        repository.deletar(id);
     }
 }

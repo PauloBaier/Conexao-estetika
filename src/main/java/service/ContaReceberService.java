@@ -34,7 +34,19 @@ public class ContaReceberService {
         repository.salvar(conta);
     }
 
+    public void atualizar(ContaReceber conta) {
+        repository.atualizar(conta);
+    }
+
     public List<ContaReceber> listar() {
         return repository.listarTodos();
+    }
+
+    public ContaReceber buscar(Long id) {
+        return repository.buscarPorId(id);
+    }
+
+    public void deletar(Long id) {
+        repository.deletar(id);
     }
 }
