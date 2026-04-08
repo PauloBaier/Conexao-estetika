@@ -7,7 +7,11 @@ import java.util.List;
 
 public class ContaPagarService {
 
-    private ContaPagarRepository repository = new ContaPagarRepository();
+    private ContasPagarRepository contasPagarRepository;
+
+    public ContaPagarService(ContasPagarRepository contasPagarRepository) {
+        this.contasPagarRepository = contasPagarRepository;
+    }
 
     public void cadastrar(ContaPagar conta) {
 
@@ -36,22 +40,22 @@ public class ContaPagarService {
             throw new IllegalArgumentException("Data de pagamento inválida.");
         }
 
-        repository.salvar(conta);
+        contasPagarRepository.salvar(conta);
     }
 
     public void atualizar(ContaPagar conta) {
-        repository.atualizar(conta);
+        contasPagarRepository.atualizar(conta);
     }
 
     public List<ContaPagar> listar() {
-        return repository.listarTodos();
+        return contasPagarRepository.listarTodos();
     }
 
     public ContaPagar buscar(Long id) {
-        return repository.buscarPorId(id);
+        return contasPagarRepository.buscarPorId(id);
     }
 
     public void deletar(Long id) {
-        repository.deletar(id);
+        contasPagarRepository.deletar(id);
     }
 }
