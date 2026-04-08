@@ -7,7 +7,7 @@ import java.util.List;
 
 public class ContaReceberService {
 
-    private ContaReceberRepository repository = new ContaReceberRepository();
+    private ContaReceberRepository contaReceberRepository;
 
     public void cadastrar(ContaReceber conta) {
 
@@ -31,22 +31,22 @@ public class ContaReceberService {
             throw new IllegalArgumentException("Data de vencimento não pode ser antes da emissão.");
         }
 
-        repository.salvar(conta);
+        contaReceberRepository.salvar(conta);
     }
 
     public void atualizar(ContaReceber conta) {
-        repository.atualizar(conta);
+        contaReceberRepository.atualizar(conta);
     }
 
     public List<ContaReceber> listar() {
-        return repository.listarTodos();
+        return contaReceberRepository.listarTodos();
     }
 
     public ContaReceber buscar(Long id) {
-        return repository.buscarPorId(id);
+        return contaReceberRepository.buscarPorId(id);
     }
 
     public void deletar(Long id) {
-        repository.deletar(id);
+        contaReceberRepository.deletar(id);
     }
 }
