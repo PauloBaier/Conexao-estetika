@@ -8,7 +8,7 @@ import java.util.List;
 public class VendaService {
     
     
-    VendaRepository vendaRepository;
+    private VendaRepository vendaRepository;
 
     public VendaService(VendaRepository vendaRepository) {
         this.vendaRepository = vendaRepository;
