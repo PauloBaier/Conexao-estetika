@@ -7,7 +7,11 @@ import java.util.List;
 
 public class ItemVendaService {
 
-    private ItemVendaRepository repository = new ItemVendaRepository();
+    ItemVendaRepository itemVendaRepository;
+
+    public ItemVendaService(ItemVendaRepository itemVendaRepository) {
+        this.itemVendaRepository = itemVendaRepository;
+    }
 
     public void cadastrar(ItemVenda item) {
 
@@ -28,15 +32,15 @@ public class ItemVendaService {
         }
 
         item.setTotalItem(item.getPrecoUnitario() * item.getQuantidade());
-        repository.salvar(item);
+        itemVendaRepository.salvar(item);
     }
 
     public ItemVenda buscar(Long id) {
-        return repository.buscarPorId(id);
+        return itemVendaRepository.buscarPorId(id);
     }
 
     public List<ItemVenda> listar() {
-        return repository.listarTodos();
+        return itemVendaRepository.listarTodos();
     }
 
     public void atualizar(ItemVenda item) {
@@ -50,10 +54,10 @@ public class ItemVendaService {
         }
 
         item.setTotalItem(item.getPrecoUnitario() * item.getQuantidade());
-        repository.atualizar(item);
+        itemVendaRepository.atualizar(item);
     }
 
     public void deletar(Long id) {
-        repository.deletar(id);
+        itemVendaRepository.deletar(id);
     }
 }
