@@ -1,3 +1,4 @@
+
 CREATE TYPE status_venda AS ENUM ('pendente', 'pago', 'cancelado');
 CREATE TYPE forma_pagamento AS ENUM ('dinheiro', 'cartao', 'pix');
 CREATE TYPE status_caixa AS ENUM ('aberto', 'fechado');
@@ -11,7 +12,6 @@ create table clientes(
                          email varchar(254) not null,
                          cpf varchar(11) not null
 );
-
 create table enderecos(
                           id serial not null primary key,
                           rua varchar(100) not null,
