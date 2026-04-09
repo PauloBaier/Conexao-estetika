@@ -232,26 +232,27 @@ public class Main {
     // Cadastro Cliente
     public static void cadastroCliente(Sistema sistema) {
 
-        System.out.println("ID: " + (sistema.cadastroClientes.getUltimoId() + 1));
-        sc.nextLine();
-
         try{
+            Cliente cliente = new Cliente();
+
             System.out.print("Nome: ");
             String nome = sc.nextLine();
+            cliente.setNome(nome);
 
             System.out.print("Telefone: ");
             String telefone = sc.nextLine();
+            cliente.setTelefone(telefone);
 
             System.out.print("Email: ");
             String email = sc.nextLine();
+            cliente.setEmail(email);
 
             System.out.print("CPF (11 números): ");
             String cpf = sc.nextLine();
+            cliente.setCpf(cpf);
 
 
-            if(sistema.novoCadastroCliente(nome, telefone, email, cpf)){
-                System.out.println("Cliente cadastro com sucesso!");
-            }
+            clienteService.salvar(cliente);
         }
         catch(Exception ex){
             System.out.println("===================");
@@ -264,28 +265,30 @@ public class Main {
     // Cadastro Fornecedor
     public static void cadastroFornecedor(Sistema sistema) {
 
-        System.out.println("ID: " + (sistema.cadastroFornecedores.getUltimoId() + 1));
-        sc.nextLine();
-
         try{
+            Fornecedor fornecedor = new Fornecedor();
+
             System.out.print("Nome: ");
             String nome = sc.nextLine();
+            fornecedor.setNome(nome);
 
             System.out.print("Telefone: ");
             String telefone = sc.nextLine();
+            fornecedor.setTelefone(telefone);
 
             System.out.print("Email: ");
             String email = sc.nextLine();
+            fornecedor.setEmail(email);
 
             System.out.print("CNPJ(14 números): ");
             String cnpj = sc.nextLine();
+            fornecedor.setCnpj(cnpj);
 
             System.out.print("Razão Social: ");
             String razaoSocial = sc.nextLine();
+            fornecedor.setRazaoSocial(razaoSocial);
 
-            if (sistema.novoCadastroFornecedor(nome, telefone, email, cnpj, razaoSocial)) {
-                System.out.println("Fornecedor cadastrado com sucesso!");
-            }
+            fornecedorService.salvar(fornecedor);
         }
         catch (Exception ex){
             System.out.println("===================");
@@ -298,34 +301,34 @@ public class Main {
     // Cadastro Produto
     public static void cadastroProduto(Sistema sistema) {
 
-        System.out.println("ID: " + (sistema.cadastroProdutos.getUltimoId() + 1));
-        sc.nextLine();
-
         try{
+            Produto produto = new Produto();
+
             System.out.print("Nome: ");
             String nome = sc.nextLine();
-
-            System.out.print("Descrição: ");
-            String descricao = sc.nextLine();
+            produto.setNome(nome);
 
             System.out.print("Preço de Custo: ");
             double precoCusto = sc.nextDouble();
+            produto.setPrecoCompra(precoCusto);
 
             System.out.print("Preço de Venda: ");
             double precoVenda = sc.nextDouble();
+            produto.setPrecoVenda(precoVenda);
 
             System.out.print("Quantidade de Estoque: ");
             int qntdEstoque = sc.nextInt();
+            produto.setQuantidadeEstoque(qntdEstoque);
 
             System.out.print("Estoque Minimo: ");
             int estoqueMinimo = sc.nextInt();
+            produto.setEstoqueMinimo(estoqueMinimo);
 
             System.out.println("Fornecedor: ");
             Fornecedor fornecedor = escolherFornecedor(sistema);
+            produto.adicionarFornecedor(fornecedor);
 
-            if (sistema.novoCadastroProduto(nome, descricao, precoCusto, precoVenda, qntdEstoque, estoqueMinimo, fornecedor)) {
-                System.out.println("Produto cadastrado com sucesso!");
-            }
+            produtoService.salvar(produto);
         }
         catch(Exception ex){
             System.out.println("===================");
@@ -337,7 +340,7 @@ public class Main {
 
     // Loop que exibe todos os fornecedores e escolhe por id
     public static Fornecedor escolherFornecedor(Sistema sistema) {
-        List<Fornecedor> fornecedores = sistema.cadastroFornecedores.listarTodos();
+        List<Fornecedor> fornecedores = fornecedorService.listarTodos();
 
         if(fornecedores.isEmpty()){
             System.out.println("Nenhum Fornecedor Cadastrado!");
@@ -351,7 +354,7 @@ public class Main {
         System.out.print("Digite o ID do fornecedor: ");
         int idEscolhido = sc.nextInt();
 
-        for (Fornecedor f : sistema.cadastroFornecedores.listarTodos()) {
+        for (Fornecedor f : fornecedores) {
             if (f.getId() == idEscolhido) {
                 return f;
             }

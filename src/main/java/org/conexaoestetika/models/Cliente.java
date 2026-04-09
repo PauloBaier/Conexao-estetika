@@ -1,14 +1,16 @@
 package org.conexaoestetika.models;
 
-public class Cliente extends Pessoa {
+public class Cliente{
     private String cpf;
     private double dinheiroGasto;
 
+    public Cliente(){};
+
     public Cliente(int id, String nome, String telefone, String email, String cpf) {
-        super(id, nome, telefone, email);
-        this.setCpf(cpf);
-        this.dinheiroGasto = 0.0;
+
     }
+
+
 
     public String getCpf() {
         return cpf;
