@@ -27,21 +27,6 @@ public class VendaService {
             throw new IllegalArgumentException("A forma de pagamento da venda deve ser definida.");
         }
 
-        double total = 0;
-        for (var item : venda.getItens()) {
-
-            if (item.getProduto() == null) {
-                throw new IllegalArgumentException("Cada item precisa ter um produto.");
-            }
-
-            if (item.getQuantidade() <= 0) {
-                throw new IllegalArgumentException("Quantidade do item deve ser maior que zero.");
-            }
-
-            total += item.getTotalItem();
-        }
-        venda.setValorTotal(total);
-
         repository.salvar(venda);
     }
 
