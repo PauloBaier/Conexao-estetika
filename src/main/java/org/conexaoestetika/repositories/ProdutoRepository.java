@@ -37,4 +37,9 @@ public class ProdutoRepository implements IRepository<Produto>{
     public List<Produto> listarTodos(){
         return em.createQuery("select p from Produto p", Produto.class).getResultList();
     }
+
+    public boolean cadastroFornecedorEstaSendoUsado(long idFornecedor){
+        List<Produto> produtos = em.createQuery("SELECT p FROM Produto p JOIN p.fornecedores f WHERE f.id = :id", Produto.class).setParameter("id", idFornecedor).getResultList();
+        return produtos.isEmpty()? false : true;
+    }
 }

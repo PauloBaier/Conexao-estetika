@@ -3,7 +3,6 @@ package org.conexaoestetika.models;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.*;
-import org.conexaoestetika.repositories.FornecedorRepository;
 
 import java.util.ArrayList;
 import java.util.List;
