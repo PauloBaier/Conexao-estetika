@@ -41,27 +41,28 @@ public class CaixaService {
 
         if(agora.isBefore(caixa.getDataAbertura())){
             throw new IllegalArgumentException("Data de abertura invalida!");
-
-            caixa.setDataFechamento(agora);
-            caixa.setStatus(StatusCaixa.FECHADO);
-
-            repository.atualizar(caixa);
+            
         }
+        caixa.setDataFechamento(agora);
+        caixa.setStatus(StatusCaixa.FECHADO);
+        repository.atualizar(caixa);
+        
+    }
 
-        public Caixa buscar(Long id) {
-            return repository.buscarPorId(id);
-        }
+    public Caixa buscar(Long id) {
+        return repository.buscarPorId(id);
+    }
 
-        public List<Caixa> listar(){
-            return repository.listarTodos();
-        }
+    public List<Caixa> listar() {
+        return repository.listarTodos();
+    }
 
-        public void atualizar(Caixa caixa){
-            repository.atualizar(caixa);
-        }
+    public void atualizar(Caixa caixa){
+        repository.atualizar(caixa);
+    }
 
-        public Caixa deletar (Long id){
-           repository.deletar(id);
-        }
+    public void deletar (Long id){
+         repository.deletar(id);
     }
 }
+
