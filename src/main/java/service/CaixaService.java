@@ -9,7 +9,11 @@ import java.util.List;
 
 public class CaixaService {
 
-    private CaixaRepository repository = new CaixaRepository();
+    private CaixaRepository repository;
+
+    public CaixaService(CaixaRepository repository) {
+        this.repository = repository;
+    }
 
     public void abrirCaixa(Caixa caixa){
 
