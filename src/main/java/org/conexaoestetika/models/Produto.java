@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.*;
 import org.conexaoestetika.repositories.FornecedorRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -33,7 +34,9 @@ public class Produto {  //atributos
     )
     private List<Fornecedor> fornecedores;
 
-    public Produto(){};
+    public Produto(){
+        this.fornecedores = new ArrayList<>();
+    };
 
     //constructor
     public Produto(String nome, double precoCompra, double precoVenda, int quantidadeEstoque, int estoqueMinimo, Categoria categoria, List<Fornecedor>fornecedores) {
