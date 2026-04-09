@@ -53,6 +53,14 @@ public class ItemVendaService {
             throw new IllegalArgumentException("O item precisa ter uma venda associada.");
         }
 
+        if (item.getQuantidade() <= 0) {
+            throw new IllegalArgumentException("A quantidade deve ser maior que zero.");
+        }
+
+        if (item.getPrecoUnitario() <= 0) {
+            throw new IllegalArgumentException("O preço unitário deve ser maior que zero.");
+        }
+
         item.setTotalItem(item.getPrecoUnitario() * item.getQuantidade());
         itemVendaRepository.atualizar(item);
     }
