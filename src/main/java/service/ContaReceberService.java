@@ -9,6 +9,10 @@ public class ContaReceberService {
 
     private ContaReceberRepository contaReceberRepository;
 
+    public ContaReceberService(ContaReceberRepository contaReceberRepository) {
+        this.contaReceberRepository = contaReceberRepository;
+    }
+
     public void cadastrar(ContaReceber conta) {
 
         if (conta.getCliente() == null) {
