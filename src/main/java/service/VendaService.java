@@ -1,13 +1,9 @@
-package service;
-
-import model.Venda;
-import repository.VendaRepository;
 
 import java.util.List;
 
 public class VendaService {
-    
-    
+
+
     private VendaRepository vendaRepository;
 
     public VendaService(VendaRepository vendaRepository) {
