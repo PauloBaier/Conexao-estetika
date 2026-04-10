@@ -33,6 +33,22 @@
             <version>42.7.10</version>
             <scope>compile</scope>
         </dependency>
+
+
+        <!-- Flyway -->
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>12.3.0</version>
+        </dependency>
+
+        <!-- Flyway PostgreSQL -->
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-database-postgresql</artifactId>
+            <version>12.3.0</version>
+        </dependency>
     </dependencies>
+
 
 </project>
