@@ -1,8 +1,8 @@
-package model;
+package org.conexaoestetika.models;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import model.enums.TipoMovimento;
+import org.conexaoestetika.models.enums.TipoMovimento;
 
 @Entity
 @Table(name = "movimentacao_caixa")

@@ -1,4 +1,4 @@
-package service;
+package org.conexaoestetika.services;
 
 import model.ItemVenda;
 import repository.ItemVendaRepository;

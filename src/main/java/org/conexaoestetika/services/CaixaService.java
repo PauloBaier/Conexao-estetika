@@ -1,4 +1,4 @@
-package service;
+package org.conexaoestetika.services;
 
 import model.Caixa;
 import model.enums.StatusCaixa;
@@ -41,12 +41,12 @@ public class CaixaService {
 
         if(agora.isBefore(caixa.getDataAbertura())){
             throw new IllegalArgumentException("Data de abertura invalida!");
-            
+
         }
         caixa.setDataFechamento(agora);
         caixa.setStatus(StatusCaixa.FECHADO);
         repository.atualizar(caixa);
-        
+
     }
 
     public Caixa buscar(Long id) {

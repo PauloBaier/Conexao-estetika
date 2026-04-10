@@ -1,8 +1,8 @@
-package repository;
+package org.conexaoestetika.repositories;
 
 import Config.HibernateConfig;
 import jakarta.persistence.EntityManager;
-import model.MovimentacaoCaixa;
+import org.conexaoestetika.models.MovimentacaoCaixa;
 
 import java.util.List;
 

@@ -1,8 +1,7 @@
-package service;
+package org.conexaoestetika.services;
 
 import Config.HibernateConfig;
 import jakarta.persistence.EntityManager;
-import model.*;
 import model.enums.StatusConta;
 
 import java.time.LocalDate;

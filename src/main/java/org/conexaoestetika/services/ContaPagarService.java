@@ -1,4 +1,4 @@
-package service;
+package org.conexaoestetika.services;
 
 import model.ContaPagar;
 import repository.ContaPagarRepository;

@@ -1,8 +1,8 @@
-package service;
+package org.conexaoestetika.services;
 
-import model.MovimentacaoCaixa;
-import model.enums.TipoMovimento;
-import repository.MovimentacaoCaixaRepository;
+import org.conexaoestetika.models.MovimentacaoCaixa;
+import org.conexaoestetika.models.enums.TipoMovimento;
+import org.conexaoestetika.repositories.MovimentacaoCaixaRepository;
 import model.enums.StatusCaixa;
 import model.Caixa;
 
