@@ -3,8 +3,8 @@ package org.conexaoestetika.models;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.*;
+import org.conexaoestetika.repositories.FornecedorRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -33,9 +33,7 @@ public class Produto {  //atributos
     )
     private List<Fornecedor> fornecedores;
 
-    public Produto(){
-        this.fornecedores = new ArrayList<>();
-    };
+    public Produto(){};
 
     //constructor
     public Produto(String nome, double precoCompra, double precoVenda, int quantidadeEstoque, int estoqueMinimo, Categoria categoria, List<Fornecedor>fornecedores) {

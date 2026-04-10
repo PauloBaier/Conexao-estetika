@@ -2,17 +2,14 @@ package org.conexaoestetika.services;
 
 import org.conexaoestetika.models.Fornecedor;
 import org.conexaoestetika.repositories.FornecedorRepository;
-import org.conexaoestetika.repositories.ProdutoRepository;
 
 import java.util.List;
 
 public class FornecedorService {
     FornecedorRepository fornecedorRepository;
-    ProdutoRepository produtoRepository;
 
-    public FornecedorService(FornecedorRepository fornecedorRepository, ProdutoRepository produtoRepository) {
+    public FornecedorService(FornecedorRepository fornecedorRepository) {
         this.fornecedorRepository = fornecedorRepository;
-        this.produtoRepository = produtoRepository;
     }
 
     public void salvar(Fornecedor fornecedor) {
@@ -37,9 +34,6 @@ public class FornecedorService {
         }
         if (buscarPorId(fornecedor.getId()) == null) {
             throw new IllegalArgumentException("ERRO: Fornecedor não existente!");
-        }
-        if(produtoRepository.cadastroFornecedorEstaSendoUsado(fornecedor.getId())){
-            throw new RuntimeException("ERRO: Cadastro não pode ser excluido pois está sendo usado por Produtos!");
         }
 
         fornecedorRepository.delete(fornecedor);
