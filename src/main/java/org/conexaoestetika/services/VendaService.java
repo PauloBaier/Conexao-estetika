@@ -1,5 +1,8 @@
 package org.conexaoestetika.services;
 
+import org.conexaoestetika.repositories.CustomizerFactory;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class VendaService {
@@ -46,5 +49,64 @@ public class VendaService {
 
     public void deletar(Long id) {
         vendaRepository.deletar(id);
+    }
+
+    public static class RelatorioService {
+
+        private CustomizerFactory.RelatorioRepository repository;
+        private ClienteRepository clienteRepo;
+        private FornecedorRepository fornecedorRepo;
+        private ProdutoRepository produtoRepo;
+        private VendaRepository vendaRepo;
+
+        public RelatorioService(CustomizerFactory.RelatorioRepository repository, ClienteRepository clienteRepo,
+                                FornecedorRepository fornecedorRepo, ProdutoRepository produtoRepo,
+                                VendaRepository vendaRepo) {
+            this.repository = repository;
+            this.clienteRepo = clienteRepo;
+            this.fornecedorRepo = fornecedorRepo;
+            this.produtoRepo = produtoRepo;
+            this.vendaRepo = vendaRepo;
+        }
+
+        public void gerarRelatorioFinal(Relatorio relatorio, Caixa caixa) {
+            // Validação Básica
+            if (caixa == null) throw new RuntimeException("Caixa não informado!");
+
+            // Cálculos Automáticos baseados nas Movimentações do Caixa
+            double entradas = 0;
+            double saidas = 0;
+
+            if (caixa.getMovimentacoes() != null) {
+                for (MovimentacaoCaixa mov : caixa.getMovimentacoes()) {
+                    if (mov.getTipo() == TipoMovimento.ENTRADA) {
+                        entradas += mov.getValor();
+                    } else {
+                        saidas += mov.getValor();
+                    }
+                }
+            }
+
+            relatorio.setCaixa(caixa);
+            relatorio.setDataRelatorio(LocalDateTime.now());
+            relatorio.setTotalEntradaCaixa(entradas);
+            relatorio.setTotalSaidaCaixa(saidas);
+            relatorio.setSaldoCaixa(caixa.getValorAbertura() + entradas - saidas);
+
+
+            relatorio.setTotalClientes(clienteRepo.listar().size());
+            relatorio.setTotalFornecedores(fornecedorRepo.listar().size());
+            relatorio.setTotalProdutos(produtoRepo.listar().size());
+
+            repository.salvar(relatorio);
+        }
+
+        public List<Relatorio> listar() {
+            return repository.listar();
+        }
+
+        public void deletar(Long id) {
+            repository.deletar(id);
+        }
     }
 }
