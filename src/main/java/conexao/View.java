@@ -33,6 +33,7 @@ public class View {
             System.out.println("4 - Financeiro");
             System.out.println("5 - Caixa");
             System.out.println("6 - Relatórios");
+            System.out.println("7 - Listar");
             System.out.println("0 - Sair");
 
             int opcao;
@@ -51,6 +52,7 @@ public class View {
                 case 4 -> menuFinanceiro(contaReceberService, contaPagarService, financeiroService, caixaService);
                 case 5 -> menuCaixa(caixaService, movimentacaoCaixaService);
                 case 6 -> menuRelatorios(relatorio, produtoService);
+                case 7 -> menuListar(clienteService, fornecedorService, produtoService);
                 case 0 -> {
                     System.out.println("Encerrando sistema...");
                     HibernateConfig.close();
@@ -241,6 +243,39 @@ public class View {
             case 0 -> {
             }
             default -> System.out.println("Opção inválida!");
+        }
+    }
+
+    public static void menuListar(
+            ClienteService clienteService,
+            FornecedorService fornecedorService,
+            ProdutoService produtoService
+    ) {
+        while (true) {
+            System.out.println("\n===== MENU LISTAGEM =====");
+            System.out.println("1 - Listar Clientes");
+            System.out.println("2 - Listar Fornecedores");
+            System.out.println("3 - Listar Produtos");
+            System.out.println("0 - Voltar");
+
+            int opcao;
+
+            try {
+                opcao = Integer.parseInt(sc.nextLine());
+            } catch (Exception e) {
+                printEntradaInvalida();
+                continue;
+            }
+
+            switch (opcao) {
+                case 1 -> listarCliente(clienteService);
+                case 2 -> listarFornecedor(fornecedorService);
+                case 3 -> listarProduto(produtoService);
+                case 0 -> {
+                    return;
+                }
+                default -> System.out.println("Opção inválida!");
+            }
         }
     }
 
