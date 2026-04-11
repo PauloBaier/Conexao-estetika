@@ -75,6 +75,12 @@ public class View {
         System.out.println("2 - Fornecedor");
         System.out.println("3 - Produto");
         System.out.println("4 - Categoria");
+        System.out.println("5 - Atualizar Cliente");
+        System.out.println("6 - Atualizar Fornecedor");
+        System.out.println("7 - Atualizar Produto");
+        System.out.println("5 - Remover Cliente");
+        System.out.println("5 - Remover Fornecedor");
+        System.out.println("5 - Remover Produto");
 
         System.out.println("0 - Voltar");
 
