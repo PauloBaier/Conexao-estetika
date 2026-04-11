@@ -2,14 +2,13 @@ package conexao;
 
 import Config.FlyWayConfig;
 import Config.HibernateConfig;
-import model.*;
-import service.*;
-import repository.*;
-import jakarta.persistence.*;
+import repositories.*;
+import services.*;
 
 import static conexao.Main.*;
 
 public class View {
+
     public static void menuPrincipal(
             ClienteService clienteService,
             EnderecoService enderecoService,
@@ -22,11 +21,11 @@ public class View {
             CaixaService caixaService,
             MovimentacaoCaixaService movimentacaoCaixaService,
             RelatorioLocal relatorio,
-            CategoriaService categoriaService
+            CategoriaService categoriaService,
+            EntradaEstoqueService entradaEstoqueService
     ) {
 
         while (true) {
-
             System.out.println("\n========== SISTEMA ==========");
             System.out.println("1 - Cadastros");
             System.out.println("2 - Vendas");
@@ -46,24 +45,17 @@ public class View {
             }
 
             switch (opcao) {
-
                 case 1 -> menuCadastros(clienteService, enderecoService, fornecedorService, produtoService, categoriaService);
-
-                case 2 -> novaVenda(clienteService, produtoService, vendaService);
-
-                case 3 -> menuEstoque(produtoService, fornecedorService);
-
-                case 4 -> menuFinanceiro(contaReceberService, contaPagarService, financeiroService, caixaService, movimentacaoCaixaService);
-
+                case 2 -> menuVendas(clienteService, produtoService, vendaService);
+                case 3 -> menuEstoque(produtoService, fornecedorService, entradaEstoqueService);
+                case 4 -> menuFinanceiro(contaReceberService, contaPagarService, financeiroService, caixaService);
                 case 5 -> menuCaixa(caixaService, movimentacaoCaixaService);
-
-                case 6 -> menuRelatorios(relatorio);
-
+                case 6 -> menuRelatorios(relatorio, produtoService);
                 case 0 -> {
                     System.out.println("Encerrando sistema...");
+                    HibernateConfig.close();
                     return;
                 }
-
                 default -> System.out.println("Opção inválida!");
             }
         }
@@ -75,21 +67,37 @@ public class View {
             FornecedorService fornecedorService,
             ProdutoService produtoService,
             CategoriaService categoriaService
-    ){
-
+    ) {
         System.out.println("\n===== CADASTROS =====");
         System.out.println("1 - Cliente");
         System.out.println("2 - Fornecedor");
         System.out.println("3 - Produto");
-        System.out.printf("4 - Categoria");
+        System.out.println("4 - Categoria");
 
-        int op = Integer.parseInt(sc.nextLine());
+        System.out.println("0 - Voltar");
+
+        int op;
+        try {
+            op = Integer.parseInt(sc.nextLine());
+        } catch (Exception e) {
+            printEntradaInvalida();
+            return;
+        }
 
         switch (op) {
             case 1 -> cadastroCliente(clienteService, enderecoService);
             case 2 -> cadastroFornecedor(fornecedorService);
             case 3 -> cadastroProduto(produtoService, fornecedorService, categoriaService);
             case 4 -> cadastroCategoria(categoriaService);
+            case 5 -> atualizarCliente(clienteService);
+            case 6->  atualizarFornecedor(fornecedorService);
+            case 7 -> atualizarProduto(produtoService, categoriaService, fornecedorService);
+            case 8 -> removerCliente(clienteService);
+            case 9 -> removerFornecedor(fornecedorService);
+            case 10 -> relatoriotodosProdutos(produtoService);
+            case 0 -> {
+            }
+            default -> System.out.println("Opção inválida!");
         }
     }
 
@@ -98,9 +106,7 @@ public class View {
             ProdutoService produtoService,
             VendaService vendaService
     ) {
-
         while (true) {
-
             System.out.println("\n===== VENDAS =====");
             System.out.println("1 - Nova venda");
             System.out.println("0 - Voltar");
@@ -115,31 +121,39 @@ public class View {
             }
 
             switch (op) {
-
                 case 1 -> novaVenda(clienteService, produtoService, vendaService);
-
                 case 0 -> {
                     return;
                 }
-
                 default -> System.out.println("Opção inválida!");
             }
         }
     }
 
-    public static void menuEstoque(ProdutoService produtoService, FornecedorService fornecedorService) {
-
+    public static void menuEstoque(
+            ProdutoService produtoService,
+            FornecedorService fornecedorService,
+            EntradaEstoqueService entradaEstoqueService
+    ) {
         System.out.println("\n===== ESTOQUE =====");
         System.out.println("1 - Listar produtos");
         System.out.println("2 - Entrada de produtos");
+        System.out.println("0 - Voltar");
 
-        int op = Integer.parseInt(sc.nextLine());
+        int op;
+        try {
+            op = Integer.parseInt(sc.nextLine());
+        } catch (Exception e) {
+            printEntradaInvalida();
+            return;
+        }
 
         switch (op) {
-
             case 1 -> relatoriotodosProdutos(produtoService);
-
-            case 2 -> entradaDeProdutos(produtoService, fornecedorService);
+            case 2 -> entradaDeProdutos(produtoService, fornecedorService, entradaEstoqueService);
+            case 0 -> {
+            }
+            default -> System.out.println("Opção inválida!");
         }
     }
 
@@ -147,25 +161,27 @@ public class View {
             ContaReceberService contaReceberService,
             ContaPagarService contaPagarService,
             FinanceiroService financeiroService,
-            CaixaService caixaService,
-            MovimentacaoCaixaService movimentacaoCaixaService
+            CaixaService caixaService
     ) {
-
         System.out.println("\n===== FINANCEIRO =====");
         System.out.println("1 - Contas a receber");
         System.out.println("2 - Contas a pagar");
+        System.out.println("0 - Voltar");
 
-        int op = Integer.parseInt(sc.nextLine());
+        int op;
+        try {
+            op = Integer.parseInt(sc.nextLine());
+        } catch (Exception e) {
+            printEntradaInvalida();
+            return;
+        }
 
         switch (op) {
-
-            case 1 -> contasReceber(contaReceberService,
-                    new Caixa(), // se necessário ou buscar ativo
-                    financeiroService);
-
-            case 2 -> contasPagar(contaPagarService,
-                    new Caixa(),
-                    financeiroService);
+            case 1 -> contasReceber(contaReceberService, caixaService, financeiroService);
+            case 2 -> contasPagar(contaPagarService, caixaService, financeiroService);
+            case 0 -> {
+            }
+            default -> System.out.println("Opção inválida!");
         }
     }
 
@@ -173,93 +189,101 @@ public class View {
             CaixaService caixaService,
             MovimentacaoCaixaService movimentacaoCaixaService
     ) {
-
         System.out.println("\n===== CAIXA =====");
         System.out.println("1 - Abrir caixa");
         System.out.println("2 - Fechar caixa");
         System.out.println("3 - Movimentar caixa");
         System.out.println("4 - Ver saldo");
+        System.out.println("0 - Voltar");
 
-        int op = Integer.parseInt(sc.nextLine());
+        int op;
+        try {
+            op = Integer.parseInt(sc.nextLine());
+        } catch (Exception e) {
+            printEntradaInvalida();
+            return;
+        }
 
         switch (op) {
-
             case 1 -> abrirCaixa(caixaService);
-
-            case 2 -> {
-                System.out.print("ID do caixa: ");
-                Long id = Long.parseLong(sc.nextLine());
-                fecharCaixa(caixaService, id);
+            case 2 -> fecharCaixa(caixaService);
+            case 3 -> movimentarCaixa(movimentacaoCaixaService, caixaService);
+            case 4 -> verSaldo(movimentacaoCaixaService, caixaService);
+            case 0 -> {
             }
-
-            case 3 -> {
-                System.out.print("ID do caixa: ");
-                Long id = Long.parseLong(sc.nextLine());
-                Caixa caixa = caixaService.buscar(id);
-                movimentarCaixa(movimentacaoCaixaService, caixa);
-            }
-
-            case 4 -> {
-                System.out.print("ID do caixa: ");
-                Long id = Long.parseLong(sc.nextLine());
-                Caixa caixa = caixaService.buscar(id);
-                verSaldo(movimentacaoCaixaService, caixa);
-            }
+            default -> System.out.println("Opção inválida!");
         }
     }
 
-    public static void menuRelatorios(RelatorioLocal relatorio) {
-
+    public static void menuRelatorios(RelatorioLocal relatorio, ProdutoService produtoService) {
         System.out.println("\n===== RELATÓRIOS =====");
         System.out.println("1 - Contas a receber");
         System.out.println("2 - Contas a pagar");
         System.out.println("3 - Contas vencidas");
         System.out.println("4 - Estoque baixo");
+        System.out.println("5 - Todos os produtos");
+        System.out.println("0 - Voltar");
 
-        int op = Integer.parseInt(sc.nextLine());
+        int op;
+        try {
+            op = Integer.parseInt(sc.nextLine());
+        } catch (Exception e) {
+            printEntradaInvalida();
+            return;
+        }
 
         switch (op) {
-
             case 1 -> relatorioContasReceber(relatorio);
-
             case 2 -> relatorioContasPagar(relatorio);
-
             case 3 -> relatorioContasVencidas(relatorio);
-
             case 4 -> relatorioEstoqueBaixo(relatorio);
+            case 5 -> relatoriotodosProdutos(produtoService);
+            case 0 -> {
+            }
+            default -> System.out.println("Opção inválida!");
         }
     }
 
     public static void main(String[] args) {
-
         FlyWayConfig.migrate();
-
-        // aqui você instancia seus services
-        EntityManager em = HibernateConfig.getEntityManager();
 
         ClienteRepository clienteRepository = new ClienteRepository();
         EnderecoRepository enderecoRepository = new EnderecoRepository();
-        FornecedorRepository fornecedorRepository = new FornecedorRepository(em);
-        ProdutoRepository produtoRepository = new ProdutoRepository(em);
+        FornecedorRepository fornecedorRepository = new FornecedorRepository();
+        ProdutoRepository produtoRepository = new ProdutoRepository();
         VendaRepository vendaRepository = new VendaRepository();
         ContaReceberRepository contaReceberRepository = new ContaReceberRepository();
         ContaPagarRepository contaPagarRepository = new ContaPagarRepository();
         CaixaRepository caixaRepository = new CaixaRepository();
         MovimentacaoCaixaRepository movimentacaoCaixaRepository = new MovimentacaoCaixaRepository();
         CategoriaRepository categoriaRepository = new CategoriaRepository();
+        ItemVendaRepository itemVendaRepository = new ItemVendaRepository();
 
         ClienteService clienteService = new ClienteService(clienteRepository);
         EnderecoService enderecoService = new EnderecoService(enderecoRepository, clienteRepository);
         FornecedorService fornecedorService = new FornecedorService(fornecedorRepository);
         ProdutoService produtoService = new ProdutoService(produtoRepository);
-        VendaService vendaService = new VendaService(vendaRepository);
+        CaixaService caixaService = new CaixaService(caixaRepository);
         ContaReceberService contaReceberService = new ContaReceberService(contaReceberRepository);
         ContaPagarService contaPagarService = new ContaPagarService(contaPagarRepository);
-        CaixaService caixaService = new CaixaService(caixaRepository);
-        MovimentacaoCaixaService movimentacaoCaixaService = new MovimentacaoCaixaService(movimentacaoCaixaRepository);
-        FinanceiroService financeiroService = new FinanceiroService(contaReceberService, contaPagarService, movimentacaoCaixaService);
-        RelatorioLocal relatorio = new RelatorioLocal();
+        MovimentacaoCaixaService movimentacaoCaixaService =
+                new MovimentacaoCaixaService(movimentacaoCaixaRepository, caixaRepository);
+        FinanceiroService financeiroService =
+                new FinanceiroService(contaReceberService, contaPagarService, movimentacaoCaixaService);
         CategoriaService categoriaService = new CategoriaService(categoriaRepository);
+        ItemVendaService itemVendaService =
+                new ItemVendaService(itemVendaRepository, produtoService, vendaRepository);
+        VendaService vendaService =
+                new VendaService(
+                        vendaRepository,
+                        caixaService,
+                        itemVendaService,
+                        contaReceberService,
+                        movimentacaoCaixaService
+                );
+        EntradaEstoqueService entradaEstoqueService =
+                new EntradaEstoqueService(produtoService, contaPagarService);
+        RelatorioLocal relatorio = new RelatorioLocal();
 
         menuPrincipal(
                 clienteService,
@@ -273,8 +297,8 @@ public class View {
                 caixaService,
                 movimentacaoCaixaService,
                 relatorio,
-                categoriaService
+                categoriaService,
+                entradaEstoqueService
         );
     }
-
 }

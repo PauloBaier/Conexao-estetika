@@ -1,14 +1,13 @@
 package Config;
 
 import org.flywaydb.core.Flyway;
-import jakarta.persistence.*;
 
 public class FlyWayConfig {
-    public static void migrate() {
 
+    public static void migrate() {
         Flyway flyway = Flyway.configure()
                 .dataSource(
-                        "jdbc:postgresql://localhost:5432/conexao",
+                        "jdbc:postgresql://localhost:5432/conexaoestetica",
                         "postgres",
                         "1234"
                 )
@@ -17,6 +16,6 @@ public class FlyWayConfig {
 
         flyway.migrate();
 
-        System.out.println("Migration executada!");
+        System.out.println("Migração executada com sucesso!");
     }
 }
