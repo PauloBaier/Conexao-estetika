@@ -1,4 +1,4 @@
-package org.conexaoestetika;
+package org.conexaoestetika.models;
 
 import java.time.LocalDate;
 

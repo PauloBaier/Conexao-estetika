@@ -1,6 +1,10 @@
 package org.conexaoestetika;
-import java.text.Normalizer;
-import java.time.LocalDateTime;
+import org.conexaoestetika.models.*;
+import org.conexaoestetika.models.enums.FiltroStatus;
+import org.conexaoestetika.models.enums.FormaPagamento;
+import org.conexaoestetika.models.enums.StatusVenda;
+import org.conexaoestetika.services.Sistema;
+
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.InputMismatchException;

@@ -1,4 +1,6 @@
-package org.conexaoestetika;
+package org.conexaoestetika.models;
+
+import org.conexaoestetika.IIdentificador;
 
 public abstract class Pessoa implements IIdentificador {
     private int id;
