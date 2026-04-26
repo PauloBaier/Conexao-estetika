@@ -5,81 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2f7d4fd6-e0f8-43be-b480-26f1c4d3772c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/repositories/CaixaRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/repositories/CategoriaRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/repositories/ClienteRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/repositories/EnderecoRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/repositories/FornecedorRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/repositories/IRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/repositories/MovimentacaoCaixaRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/repositories/ProdutoRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/services/CaixaService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/services/CategoriaService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/services/ClienteService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/services/ContaPagarService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/services/ContaReceberService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/services/EntradaEstoqueService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/services/FinanceiroService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/services/FornecedorService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/services/ItemVendaService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/services/MovimentacaoCaixaService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/services/ProdutoService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/services/VendaService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/db/migration/V8__create_banco.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/db/migration/V9__CORRECOES..sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Config/FlyWayConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Config/FlyWayConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Config/HibernateConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Config/HibernateConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/conexao/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/conexao/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/conexao/View.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/conexao/View.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/Caixa.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/Caixa.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/Categoria.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/Categoria.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/Cliente.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/Cliente.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/ContaPagar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/ContaPagar.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/ContaReceber.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/ContaReceber.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/Endereco.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/Endereco.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/Fornecedor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/Fornecedor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/ItemVenda.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/ItemVenda.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/MovimentacaoCaixa.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/MovimentacaoCaixa.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/Produto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/Produto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/Venda.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/Venda.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/enums/FormaPagamento.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/enums/FormaPagamento.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/enums/StatusCaixa.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/enums/StatusCaixa.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/enums/StatusConta.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/enums/StatusConta.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/enums/StatusVenda.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/enums/StatusVenda.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/enums/TipoMovimento.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/enums/TipoMovimento.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/repository/CaixaRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/repository/CategoriaRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/repository/ClienteRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/repository/ContaPagarRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/repositories/ContaPagarRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/repository/ContaReceberRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/repositories/ContaReceberRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/repository/EnderecoRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/repository/FornecedorRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/repository/IRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/repository/ItemVendaRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/repositories/ItemVendaRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/repository/MovimentacaoCaixaRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/repository/ProdutoRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/repository/VendaRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/repositories/VendaRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/service/CaixaService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/service/CategoriaService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/service/ClienteService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/service/ContaPagarService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/service/ContaReceberService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/service/EnderecoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/services/EnderecoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/service/EntradaEstoqueService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/service/FinanceiroService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/service/FornecedorService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/service/ItemVendaService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/service/MovimentacaoCaixaService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/service/ProdutoService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/service/RelatorioLocal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/services/RelatorioLocal.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/service/VendaService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/db/migration/V1_cerate_banco.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/db/migration/V2__create_banco.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/db/migration/V3__altertable.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/db/migration/V4__altertable_vendas.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/db/migration/V5__adicionadocampo.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/db/migration/V6__MUDARBANCO.SQL" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -97,18 +24,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "CristianoSgarbossa"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;CristianoSgarbossa&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/PauloBaier/Conexao-estetika.git",
-    "accountId": "ebc9f1e9-4e80-4acb-9c17-77da30681056"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/PauloBaier/Conexao-estetika.git&quot;,
+    &quot;accountId&quot;: &quot;ebc9f1e9-4e80-4acb-9c17-77da30681056&quot;
   }
-}]]></component>
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
 }</component>
@@ -124,7 +51,7 @@
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "git-widget-placeholder": "correcoes",
+    "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
     "onboarding.tips.debug.path": "C:/Users/Admin/Downloads/JAVA/Conexao/src/main/java/com/Estudo/Main.java"
   }
