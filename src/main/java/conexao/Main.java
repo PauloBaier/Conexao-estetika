@@ -56,6 +56,7 @@ public class Main {
     }
 
     public static void cadastroEndereco(EnderecoService enderecoService, Long clienteId) {
+    try {
         Endereco endereco = new Endereco();
 
         System.out.print("Rua: ");
@@ -71,6 +72,11 @@ public class Main {
         endereco.setCep(sc.nextLine());
 
         enderecoService.cadastrarEndereco(endereco, clienteId);
+        System.out.println("Endereço cadastrado com sucesso!");
+        
+        } catch (Exception e) {
+            System.out.println("Erro ao cadastrar endereço: " + e.getMessage());
+        }
     }
 
     // Cadastro Fornecedor
