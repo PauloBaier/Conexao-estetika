@@ -3,14 +3,11 @@ CREATE TABLE usuarios (
   nome VARCHAR(100) NOT NULL,
   email VARCHAR(254) NOT NULL UNIQUE,
   senha VARCHAR(255) NOT NULL,
-  perfil VARCHAR(20) NOT NULL CHECK (perfil IN ('gerente', 'vendedor', 'administrador')),
+  perfil VARCHAR(20) NOT NULL CHECK (perfil IN ('gerente', 'funcionario', 'administrador')),
   ativo BOOLEAN NOT NULL DEFAULT true,
   criado_em TIMESTAMPTZ DEFAULT now()
 );
 
--- Quem adicionou/atualizou o produto no estoque
-ALTER TABLE produtos
-ADD COLUMN fk_usuarios_id INT REFERENCES usuarios(id);
 
 -- Quem abriu/fechou o caixa
 ALTER TABLE caixa
