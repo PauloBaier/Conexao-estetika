@@ -32,11 +32,15 @@ public class Caixa {
     @OneToMany(mappedBy = "caixa", cascade = CascadeType.ALL)
     private List<MovimentacaoCaixa> movimentacoes;
 
+    @ManyToOne
+    @JoinColumn(name = "fk_usuario_id", nullable = false)
+    private Usuario usuario;
+
     public Caixa() {
     }
 
     public Caixa(Long id, LocalDate dataAbertura, double valorAbertura, double saldoAtual,
-                 LocalDate dataFechamento, StatusCaixa status, List<MovimentacaoCaixa> movimentacoes) {
+                 LocalDate dataFechamento, StatusCaixa status, List<MovimentacaoCaixa> movimentacoes, Usuario usuario) {
         this.id = id;
         this.dataAbertura = dataAbertura;
         this.valorAbertura = valorAbertura;
@@ -44,6 +48,7 @@ public class Caixa {
         this.dataFechamento = dataFechamento;
         this.status = status;
         this.movimentacoes = movimentacoes;
+        this.usuario = usuario;
     }
 
     public Long getId() {
@@ -100,5 +105,13 @@ public class Caixa {
 
     public void setMovimentacoes(List<MovimentacaoCaixa> movimentacoes) {
         this.movimentacoes = movimentacoes;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 }

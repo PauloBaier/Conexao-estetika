@@ -36,11 +36,15 @@ public class Venda {
     @OneToMany(mappedBy = "venda", orphanRemoval = true)
     private List<ItemVenda> itens = new ArrayList<>();
 
+    @ManyToOne
+    @JoinColumn(name = "fk_usuario_id", nullable = false)
+    private Usuario usuario;
+
     public Venda() {
     }
 
     public Venda(Long id, LocalDate data, double valorTotal, StatusVenda status,
-                 FormaPagamento formaPagamento, Cliente cliente, List<ItemVenda> itens) {
+                 FormaPagamento formaPagamento, Cliente cliente, List<ItemVenda> itens,  Usuario usuario) {
         this.id = id;
         this.data = data;
         this.valorTotal = valorTotal;
@@ -107,6 +111,14 @@ public class Venda {
         for (ItemVenda item : this.itens) {
             item.setVenda(this);
         }
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     public void adicionarItem(Produto produto, int quantidade) {
