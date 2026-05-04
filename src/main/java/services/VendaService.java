@@ -20,19 +20,23 @@ public class VendaService {
     private final ItemVendaService itemVendaService;
     private final ContaReceberService contaReceberService;
     private final MovimentacaoCaixaService movimentacaoCaixaService;
+     private final UsuarioRepository usuarioRepository;
 
     public VendaService(
             VendaRepository vendaRepository,
             CaixaService caixaService,
             ItemVendaService itemVendaService,
             ContaReceberService contaReceberService,
-            MovimentacaoCaixaService movimentacaoCaixaService
+            MovimentacaoCaixaService movimentacaoCaixaService,
+            UsuarioService usuarioService,
     ) {
         this.vendaRepository = vendaRepository;
         this.caixaService = caixaService;
         this.itemVendaService = itemVendaService;
         this.contaReceberService = contaReceberService;
         this.movimentacaoCaixaService = movimentacaoCaixaService;
+        this.usuarioService = usuarioService;
+        
     }
 
     public void cadastrar(Venda venda) {
