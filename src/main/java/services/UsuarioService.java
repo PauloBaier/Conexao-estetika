@@ -8,8 +8,11 @@ import java.util.List;
 
 public class UsuarioService {
 
-    private UsuarioRepository usuarioRepository = new UsuarioRepository();
+    private final UsuarioRepository usuarioRepository;
 
+    public UsuarioService(UsuarioRepository usuarioRepository) {
+    this.usuarioRepository = usuarioRepository;
+    }
     public void cadastrarUsuario(Usuario usuario) {
         validarUsuario(usuario);
 
