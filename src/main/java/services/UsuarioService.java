@@ -8,7 +8,9 @@ import java.util.List;
 
 public class UsuarioService {
 
-    private final UsuarioRepository usuarioRepository;
+    private final UsuarioRepository (UsuarioRepository usuarioRepository){
+        this.usuarioRepository = usuarioRepository;
+    }
 
    
     public void cadastrarUsuario(Usuario usuario) {
