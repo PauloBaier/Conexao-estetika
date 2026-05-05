@@ -57,6 +57,9 @@ public class VendaService {
         if (venda.getUsuario().getId() == null || venda.getUsuario().getId() <= 0) {
             throw new IllegalArgumentException("Usuário responsável pela venda inválido.");
         }
+        if (venda.getUsuario().getPerfil() == null) {
+             throw new IllegalArgumentException("Usuário responsável precisa ter um perfil."); //aq
+}
 
         if (!venda.getUsuario().isAtivo()) {
             throw new IllegalArgumentException("Usuário responsável pela venda está inativo.");
@@ -128,7 +131,7 @@ public class VendaService {
             mov.setValor(venda.getValorTotal());
             mov.setDescricao("Recebimento da venda ID " + venda.getId());
 
-            movimentacaoCaixaService.registrarMovimentacao(mov);
+        movimentacaoCaixaService.registrarMovimentacao(mov, venda.getUsuario());
 
         } else if (venda.getStatus() == StatusVenda.PENDENTE) {
             ContaReceber conta = new ContaReceber();

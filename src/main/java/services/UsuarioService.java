@@ -10,9 +10,7 @@ public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
 
-    public UsuarioService(UsuarioRepository usuarioRepository) {
-    this.usuarioRepository = usuarioRepository;
-    }
+   
     public void cadastrarUsuario(Usuario usuario) {
         validarUsuario(usuario);
 
@@ -93,7 +91,7 @@ public class UsuarioService {
             throw new IllegalArgumentException("A senha deve ter pelo menos 6 caracteres.");
         }
 
-        if (usuario.getPerfil() == null || usuario.getPerfil().trim().isEmpty()) {
+        if (usuario.getPerfil() == null) {
             throw new IllegalArgumentException("Perfil do usuário é obrigatório.");
         }
     }

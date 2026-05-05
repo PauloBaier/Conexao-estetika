@@ -1,7 +1,6 @@
 package repositories;
 import Config.HibernateConfig;
 import jakarta.persistence.EntityManager;
-import models.Produto;
 import models.Usuario;
 
 import java.util.List;

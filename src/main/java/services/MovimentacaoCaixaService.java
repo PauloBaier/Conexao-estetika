@@ -6,7 +6,8 @@ import models.enums.StatusCaixa;
 import models.enums.TipoMovimento;
 import repositories.CaixaRepository;
 import repositories.MovimentacaoCaixaRepository;
-
+import models.Usuario;
+import models.enums.TipoUsuario;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -20,7 +21,8 @@ public class MovimentacaoCaixaService {
         this.caixaRepository = caixaRepository;
     }
 
-    public void registrarMovimentacao(MovimentacaoCaixa mov) {
+    public void registrarMovimentacao(MovimentacaoCaixa mov, Usuario usuario) {
+        validarPermissaoUsuario(usuario);
         validarMovimentacao(mov);
 
         Caixa caixa = caixaRepository.buscarPorId(mov.getCaixa().getId());
@@ -148,4 +150,22 @@ public class MovimentacaoCaixaService {
             throw new IllegalArgumentException("Data da movimentação não pode ser no futuro!");
         }
     }
+    private void validarPermissaoUsuario(Usuario usuario) {
+    if (usuario == null) {
+        throw new IllegalArgumentException("Usuário é obrigatório para movimentar o caixa.");
+    }
+
+    if (usuario.getPerfil() == null) {
+        throw new IllegalArgumentException("Usuário precisa ter perfil definido.");
+    }
+
+    if (!usuario.isAtivo()) {
+        throw new IllegalArgumentException("Usuário inativo não pode movimentar o caixa.");
+    }
+
+    if (usuario.getPerfil() != TipoUsuario.ADMINISTRADOR &&
+        usuario.getPerfil() != TipoUsuario.GERENTE) {
+        throw new IllegalArgumentException("Apenas administrador ou gerente podem movimentar o caixa.");
+    }
+}
 }

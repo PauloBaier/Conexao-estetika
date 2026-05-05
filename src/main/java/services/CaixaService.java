@@ -1,7 +1,9 @@
 package services;
 
 import models.Caixa;
+import models.Usuario;
 import models.enums.StatusCaixa;
+import models.enums.TipoUsuario;
 import repositories.CaixaRepository;
 
 import java.time.LocalDate;
@@ -15,7 +17,9 @@ public class CaixaService {
         this.repository = repository;
     }
 
-    public void abrirCaixa(Caixa caixa) {
+    public void abrirCaixa(Caixa caixa, Usuario usuario) {
+        validarPermissaoCaixa(usuario);
+
         Caixa existente = repository.buscarCaixaAberto();
 
         if (existente != null) {
@@ -38,7 +42,9 @@ public class CaixaService {
         repository.salvar(caixa);
     }
 
-    public void fecharCaixa() {
+    public void fecharCaixa(Usuario usuario) {
+        validarPermissaoCaixa(usuario);
+
         Caixa caixa = repository.buscarCaixaAberto();
 
         if (caixa == null) {
@@ -78,5 +84,25 @@ public class CaixaService {
 
     public Caixa buscarCaixaAberto() {
         return repository.buscarCaixaAberto();
+    }
+
+    // 🔥 REGRA DE NEGÓCIO (IMPORTANTE)
+    private void validarPermissaoCaixa(Usuario usuario) {
+        if (usuario == null) {
+            throw new IllegalArgumentException("Usuário responsável pelo caixa é obrigatório.");
+        }
+
+        if (usuario.getPerfil() == null) {
+            throw new IllegalArgumentException("Usuário precisa ter perfil definido.");
+        }
+
+        if (!usuario.isAtivo()) {
+            throw new IllegalArgumentException("Usuário inativo não pode operar o caixa.");
+        }
+
+        if (usuario.getPerfil() != TipoUsuario.ADMINISTRADOR &&
+            usuario.getPerfil() != TipoUsuario.GERENTE) {
+            throw new IllegalArgumentException("Apenas administrador ou gerente podem operar o caixa.");
+        }
     }
 }

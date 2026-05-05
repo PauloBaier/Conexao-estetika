@@ -20,6 +20,8 @@ public class Main {
     public static void main(String[] args) {
 
         FlyWayConfig.migrate();
+    Usuario usuarioLogado = criarUsuarioLogado();
+
     }
 
     // Cadastro Cliente
@@ -939,7 +941,7 @@ public class Main {
                     return;
                 }
 
-                financeiroService.receberConta(conta, caixa);
+               financeiroService.receberConta(conta, caixa, usuarioLogado);
 
                 System.out.println("Conta marcada como paga!");
                 break;
@@ -1001,7 +1003,7 @@ public class Main {
                     return;
                 }
 
-                financeiroService.pagarConta(conta, caixa);
+                financeiroService.pagarConta(conta, caixa, usuarioLogado);
 
                 System.out.println("Conta paga com sucesso!");
                 break;
@@ -1327,7 +1329,7 @@ public class Main {
 
 
 
-    public static void abrirCaixa(CaixaService caixaService) {
+    public static void abrirCaixa(CaixaService caixaService, Usuario usuarioLogado){
         try {
             Caixa caixa = new Caixa();
 
@@ -1336,7 +1338,7 @@ public class Main {
 
             caixa.setValorAbertura(valor);
 
-            caixaService.abrirCaixa(caixa);
+            caixaService.abrirCaixa(caixa, usuarioLogado);
 
             System.out.println("Caixa aberto com sucesso!");
 
@@ -1345,17 +1347,23 @@ public class Main {
         }
     }
 
-    public static void fecharCaixa(CaixaService caixaService) {
+    public static void fecharCaixa(CaixaService caixaService, Usuario usuarioLogado) {
         try {
-            caixaService.fecharCaixa();
+            caixaService.fecharCaixa(usuarioLogado);
             System.out.println("Caixa fechado com sucesso!");
 
         } catch (Exception e) {
             System.out.println("Erro ao fechar caixa: " + e.getMessage());
         }
     }
+    public static Usuario criarUsuarioLogado() {
+        Usuario usuario = new Usuario();
+        usuario.setPerfil(models.enums.TipoUsuario.ADMINISTRADOR);
+        usuario.setAtivo(true);
+        return usuario;
+}
 
-    public static void movimentarCaixa(MovimentacaoCaixaService service, CaixaService caixaService) {
+    public static void movimentarCaixa(MovimentacaoCaixaService service, CaixaService caixaService,  Usuario usuarioLogado) {
         try {
             Caixa caixa = caixaService.buscarCaixaAberto();
 
@@ -1386,7 +1394,7 @@ public class Main {
 
             mov.setCaixa(caixa);
 
-            service.registrarMovimentacao(mov);
+            service.registrarMovimentacao(mov, usuarioLogado);
 
             System.out.println("Movimentação registrada!");
 

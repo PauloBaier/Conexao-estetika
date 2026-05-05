@@ -1,4 +1,4 @@
-package main.java.models.enums;
+package models.enums;
 
 public enum TipoUsuario {
   GERENTE,

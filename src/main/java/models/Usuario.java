@@ -1,7 +1,9 @@
 package models;
+
 import java.time.LocalDate;
 
 import jakarta.persistence.*;
+import models.enums.TipoUsuario;
 
 @Entity
 @Table(name = "usuarios")
@@ -22,7 +24,7 @@ public class Usuario {
 
     @Enumerated(EnumType.STRING)
     @Column (name = "perfil", nullable = false)
-    private String perfil;
+    private TipoUsuario perfil;
 
     @Column (name = "ativo", nullable = false)
     private boolean ativo;
@@ -34,7 +36,7 @@ public class Usuario {
     public Usuario() {
     }
 
-    public Usuario(Long id, String nome, String email, String senha, String perfil, boolean ativo, LocalDate criado_em) {
+    public Usuario(Long id, String nome, String email, String senha, TipoUsuario perfil, boolean ativo, LocalDate criado_em) {
         this.id = id;
         this.nome = nome;
         this.email = email;
@@ -76,11 +78,11 @@ public class Usuario {
         this.senha = senha;
     }
 
-    public String getPerfil() {
+    public TipoUsuario getPerfil() {
         return perfil;
     }
 
-    public void setPerfil(String perfil) {
+    public void setPerfil(TipoUsuario perfil) {
         this.perfil = perfil;
     }
 
@@ -99,5 +101,4 @@ public class Usuario {
     public void setCriado_em(LocalDate criado_em) {
         this.criado_em = criado_em;
     }
-
 }
