@@ -8,11 +8,12 @@ import java.util.List;
 
 public class UsuarioService {
 
-    private final UsuarioRepository (UsuarioRepository usuarioRepository){
+    private final UsuarioRepository usuarioRepository;
+
+    public UsuarioService(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
     }
 
-   
     public void cadastrarUsuario(Usuario usuario) {
         validarUsuario(usuario);
 
@@ -70,6 +71,31 @@ public class UsuarioService {
 
     public List<Usuario> listarTodos() {
         return usuarioRepository.listarTodos();
+    }
+
+    public Usuario autenticar(String email, String senha) {
+        if (email == null || email.trim().isEmpty()) {
+            throw new IllegalArgumentException("Email é obrigatório.");
+        }
+        if (senha == null || senha.trim().isEmpty()) {
+            throw new IllegalArgumentException("Senha é obrigatória.");
+        }
+
+        Usuario usuario = usuarioRepository.buscarPorEmail(email.trim());
+
+        if (usuario == null) {
+            throw new IllegalArgumentException("Usuário não encontrado.");
+        }
+
+        if (!usuario.isAtivo()) {
+            throw new IllegalArgumentException("Usuário inativo.");
+        }
+
+        if (!usuario.getSenha().equals(senha)) {
+            throw new IllegalArgumentException("Senha incorreta.");
+        }
+
+        return usuario;
     }
 
     private void validarUsuario(Usuario usuario) {

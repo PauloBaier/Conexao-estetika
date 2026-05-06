@@ -80,4 +80,18 @@ public class UsuarioRepository implements IRepository<Usuario>{
             em.close();
         }
     }
+
+    public Usuario buscarPorEmail(String email) {
+        EntityManager em = HibernateConfig.getEntityManager();
+        try {
+            List<Usuario> resultado = em.createQuery(
+                    "SELECT u FROM Usuario u WHERE u.email = :email", Usuario.class)
+                    .setParameter("email", email)
+                    .setMaxResults(1)
+                    .getResultList();
+            return resultado.isEmpty() ? null : resultado.get(0);
+        } finally {
+            em.close();
+        }
+    }
 }

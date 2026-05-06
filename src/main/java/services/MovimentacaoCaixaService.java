@@ -163,8 +163,8 @@ public class MovimentacaoCaixaService {
         throw new IllegalArgumentException("Usuário inativo não pode movimentar o caixa.");
     }
 
-    if (usuario.getPerfil() != TipoUsuario.ADMINISTRADOR &&
-        usuario.getPerfil() != TipoUsuario.GERENTE) {
+    TipoUsuario perfil = usuario.getPerfil();
+    if (perfil != TipoUsuario.ADMINISTRADOR && perfil != TipoUsuario.GERENTE) {
         throw new IllegalArgumentException("Apenas administrador ou gerente podem movimentar o caixa.");
     }
 }

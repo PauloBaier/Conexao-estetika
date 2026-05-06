@@ -7,11 +7,13 @@ public class FlyWayConfig {
     public static void migrate() {
         Flyway flyway = Flyway.configure()
                 .dataSource(
-                        "jdbc:postgresql://localhost:5432/conexaoestetica",
-                        "postgres",
-                        "1234"
+                        "jdbc:postgresql://localhost:3600/conexaoestetica",
+                        "admin",
+                        "admin"
                 )
                 .baselineOnMigrate(true)
+                .baselineVersion("4")
+                .validateOnMigrate(false)
                 .load();
 
         flyway.migrate();

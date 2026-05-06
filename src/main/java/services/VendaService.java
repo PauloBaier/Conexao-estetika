@@ -20,7 +20,7 @@ public class VendaService {
     private final ItemVendaService itemVendaService;
     private final ContaReceberService contaReceberService;
     private final MovimentacaoCaixaService movimentacaoCaixaService;
-     private final UsuarioRepository usuarioRepository;
+     private final UsuarioService usuarioService;
 
     public VendaService(
             VendaRepository vendaRepository,
@@ -28,7 +28,7 @@ public class VendaService {
             ItemVendaService itemVendaService,
             ContaReceberService contaReceberService,
             MovimentacaoCaixaService movimentacaoCaixaService,
-            UsuarioService usuarioService,
+            UsuarioService usuarioService
     ) {
         this.vendaRepository = vendaRepository;
         this.caixaService = caixaService;
@@ -131,7 +131,7 @@ public class VendaService {
             mov.setValor(venda.getValorTotal());
             mov.setDescricao("Recebimento da venda ID " + venda.getId());
 
-        movimentacaoCaixaService.registrarMovimentacao(mov, venda.getUsuario());
+            movimentacaoCaixaService.registrarMovimentacao(mov, venda.getUsuario());
 
         } else if (venda.getStatus() == StatusVenda.PENDENTE) {
             ContaReceber conta = new ContaReceber();

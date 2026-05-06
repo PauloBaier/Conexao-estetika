@@ -86,7 +86,7 @@ public class CaixaService {
         return repository.buscarCaixaAberto();
     }
 
-    // 🔥 REGRA DE NEGÓCIO (IMPORTANTE)
+ 
     private void validarPermissaoCaixa(Usuario usuario) {
         if (usuario == null) {
             throw new IllegalArgumentException("Usuário responsável pelo caixa é obrigatório.");
@@ -100,8 +100,9 @@ public class CaixaService {
             throw new IllegalArgumentException("Usuário inativo não pode operar o caixa.");
         }
 
-        if (usuario.getPerfil() != TipoUsuario.ADMINISTRADOR &&
-            usuario.getPerfil() != TipoUsuario.GERENTE) {
+        if (!TipoUsuario.ADMINISTRADOR.name().equals(usuario.getPerfil()) &&
+            !TipoUsuario.GERENTE.name().equals(usuario.getPerfil())) {
+
             throw new IllegalArgumentException("Apenas administrador ou gerente podem operar o caixa.");
         }
     }
