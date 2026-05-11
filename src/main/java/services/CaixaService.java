@@ -100,8 +100,8 @@ public class CaixaService {
             throw new IllegalArgumentException("Usuário inativo não pode operar o caixa.");
         }
 
-        if (!TipoUsuario.ADMINISTRADOR.name().equals(usuario.getPerfil()) &&
-            !TipoUsuario.GERENTE.name().equals(usuario.getPerfil())) {
+        if (usuario.getPerfil() != TipoUsuario.ADMINISTRADOR &&
+            usuario.getPerfil() != TipoUsuario.GERENTE) {
 
             throw new IllegalArgumentException("Apenas administrador ou gerente podem operar o caixa.");
         }

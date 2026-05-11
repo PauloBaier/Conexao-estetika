@@ -40,6 +40,7 @@ public class MovimentacaoCaixaService {
         }
 
         mov.setCaixa(caixa);
+        mov.setUsuario(usuario);
 
         if (mov.getDataMovimentacao() == null) {
             mov.setDataMovimentacao(LocalDateTime.now());

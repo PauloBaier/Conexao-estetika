@@ -5,6 +5,7 @@ import Config.HibernateConfig;
 import repositories.*;
 import services.*;
 import models.*;
+import models.enums.*;
 
 import static conexao.Main.*;
 
@@ -24,19 +25,27 @@ public class View {
             RelatorioLocal relatorio,
             CategoriaService categoriaService,
             EntradaEstoqueService entradaEstoqueService,
-            UsuarioService usuarioService
+            UsuarioService usuarioService,
+            Usuario usuarioLogado
     ) {
+        // variável local mutável para permitir troca de usuário na sessão
+        Usuario usuarioAtual = usuarioLogado;
 
         while (true) {
+            TipoUsuario perfil = usuarioAtual.getPerfil();
+
             System.out.println("\n========== SISTEMA ==========");
+            System.out.println("Logado como: " + usuarioAtual.getNome() + " [" + perfil + "]");
+            System.out.println("------------------------------");
             System.out.println("1 - Cadastros");
             System.out.println("2 - Vendas");
             System.out.println("3 - Estoque");
-            System.out.println("4 - Financeiro");
-            System.out.println("5 - Caixa");
-            System.out.println("6 - Relatórios");
-            System.out.println("7 - Listar");
+            System.out.println("4 - Relatórios");
+            System.out.println("5 - Listar");
+            System.out.println("6 - Financeiro");
+            System.out.println("7 - Caixa");
             System.out.println("8 - Usuários");
+            System.out.println("9 - Trocar usuário");
             System.out.println("0 - Sair");
 
             int opcao;
@@ -50,13 +59,22 @@ public class View {
 
             switch (opcao) {
                 case 1 -> menuCadastros(clienteService, enderecoService, fornecedorService, produtoService, categoriaService);
-                case 2 -> menuVendas(clienteService, produtoService, vendaService, usuarioService);
+                case 2 -> menuVendas(clienteService, produtoService, vendaService, usuarioAtual);
                 case 3 -> menuEstoque(produtoService, fornecedorService, entradaEstoqueService);
-                case 4 -> menuFinanceiro(contaReceberService, contaPagarService, financeiroService, caixaService, usuarioService);
-                case 5 -> menuCaixa(caixaService, movimentacaoCaixaService, usuarioService);
-                case 6 -> menuRelatorios(relatorio, produtoService);
-                case 7 -> menuListar(clienteService, fornecedorService, produtoService);
-                case 8 -> menuUsuarios(usuarioService);
+                case 4 -> menuRelatorios(relatorio, produtoService);
+                case 5 -> menuListar(clienteService, fornecedorService, produtoService);
+                case 6 -> menuFinanceiro(contaReceberService, contaPagarService, financeiroService, caixaService, usuarioAtual, usuarioService);
+                case 7 -> menuCaixa(caixaService, movimentacaoCaixaService, usuarioAtual, usuarioService);
+                case 8 -> menuUsuarios(usuarioService, usuarioAtual);
+                case 9 -> {
+                    Usuario novoUsuario = fazerLogin(usuarioService);
+                    if (novoUsuario != null) {
+                        usuarioAtual = novoUsuario;
+                        System.out.println("Usuário alterado com sucesso!");
+                    } else {
+                        System.out.println("Login falhou. Usuário anterior mantido.");
+                    }
+                }
                 case 0 -> {
                     System.out.println("Encerrando sistema...");
                     HibernateConfig.close();
@@ -117,7 +135,7 @@ public class View {
             ClienteService clienteService,
             ProdutoService produtoService,
             VendaService vendaService,
-            UsuarioService usuarioService
+            Usuario usuarioLogado
     ) {
         while (true) {
             System.out.println("\n===== VENDAS =====");
@@ -134,7 +152,7 @@ public class View {
             }
 
             switch (op) {
-                case 1 -> novaVenda(clienteService, produtoService, vendaService, usuarioService);
+                case 1 -> novaVenda(clienteService, produtoService, vendaService, usuarioLogado);
                 case 0 -> {
                     return;
                 }
@@ -175,8 +193,20 @@ public class View {
             ContaPagarService contaPagarService,
             FinanceiroService financeiroService,
             CaixaService caixaService,
+            Usuario usuarioLogado,
             UsuarioService usuarioService
     ) {
+        // Se for FUNCIONARIO, exige autenticação de GERENTE ou ADMINISTRADOR
+        Usuario usuarioOp = usuarioLogado;
+        TipoUsuario perfil = usuarioLogado.getPerfil();
+        if (perfil == TipoUsuario.FUNCIONARIO) {
+            System.out.println("Acesso restrito. Autentique com GERENTE ou ADMINISTRADOR:");
+            usuarioOp = autenticarGerente(usuarioService);
+            if (usuarioOp == null) return;
+        }
+
+        final Usuario usuarioFinal = usuarioOp;
+
         System.out.println("\n===== FINANCEIRO =====");
         System.out.println("1 - Contas a receber");
         System.out.println("2 - Contas a pagar");
@@ -191,8 +221,8 @@ public class View {
         }
 
         switch (op) {
-            case 1 -> contasReceber(contaReceberService, caixaService, financeiroService, usuarioService);
-            case 2 -> contasPagar(contaPagarService, caixaService, financeiroService, usuarioService);
+            case 1 -> contasReceber(contaReceberService, caixaService, financeiroService, usuarioFinal);
+            case 2 -> contasPagar(contaPagarService, caixaService, financeiroService, usuarioFinal);
             case 0 -> {
             }
             default -> System.out.println("Opção inválida!");
@@ -202,8 +232,20 @@ public class View {
     public static void menuCaixa(
             CaixaService caixaService,
             MovimentacaoCaixaService movimentacaoCaixaService,
+            Usuario usuarioLogado,
             UsuarioService usuarioService
     ) {
+        // Se for FUNCIONARIO, exige autenticação de GERENTE ou ADMINISTRADOR
+        Usuario usuarioOp = usuarioLogado;
+        TipoUsuario perfil = usuarioLogado.getPerfil();
+        if (perfil == TipoUsuario.FUNCIONARIO) {
+            System.out.println("Acesso restrito. Autentique com GERENTE ou ADMINISTRADOR:");
+            usuarioOp = autenticarGerente(usuarioService);
+            if (usuarioOp == null) return;
+        }
+
+        final Usuario usuarioFinal = usuarioOp;
+
         System.out.println("\n===== CAIXA =====");
         System.out.println("1 - Abrir caixa");
         System.out.println("2 - Fechar caixa");
@@ -220,10 +262,10 @@ public class View {
         }
 
         switch (op) {
-            case 1 -> abrirCaixa(caixaService, usuarioService);
-            case 2 -> fecharCaixa(caixaService, usuarioService);
-            case 3 -> movimentarCaixa(movimentacaoCaixaService, caixaService, usuarioService);
-            case 4 -> verSaldo(movimentacaoCaixaService, caixaService, usuarioService);
+            case 1 -> abrirCaixa(caixaService, usuarioFinal);
+            case 2 -> fecharCaixa(caixaService, usuarioFinal);
+            case 3 -> movimentarCaixa(movimentacaoCaixaService, caixaService, usuarioFinal);
+            case 4 -> verSaldo(movimentacaoCaixaService, caixaService, usuarioFinal);
             case 0 -> {
             }
             default -> System.out.println("Opção inválida!");
@@ -327,11 +369,19 @@ public class View {
 
         // Se não houver nenhum usuário cadastrado, obriga o cadastro do primeiro
         if (usuarioService.listarTodos().isEmpty()) {
-            System.out.println("========================================");
+            System.out.println("\n========================================");
             System.out.println("  Nenhum usuário encontrado no sistema.");
             System.out.println("  Cadastre o primeiro administrador.");
             System.out.println("========================================");
             cadastrarPrimeiroUsuario(usuarioService);
+        }
+
+        // Login único de sessão
+        Usuario usuarioLogado = fazerLogin(usuarioService);
+        if (usuarioLogado == null) {
+            System.out.println("Sistema encerrado.");
+            HibernateConfig.close();
+            return;
         }
 
         menuPrincipal(
@@ -348,7 +398,8 @@ public class View {
                 relatorio,
                 categoriaService,
                 entradaEstoqueService,
-                usuarioService
+                usuarioService,
+                usuarioLogado
         );
     }
 }

@@ -850,19 +850,15 @@ public class Main {
         return true;
     }
 
-    public static void novaVenda(ClienteService clienteService, ProdutoService produtoService, VendaService vendaService, UsuarioService usuarioService) {
+    public static void novaVenda(ClienteService clienteService, ProdutoService produtoService, VendaService vendaService, Usuario usuarioLogado) {
         try {
             System.out.println("=== NOVA VENDA ===");
-
-            // Qualquer usuário ativo pode realizar vendas
-            Usuario usuario = autenticarVenda(usuarioService);
-            if (usuario == null) return;
 
             Cliente cliente = adicionarClienteVenda(clienteService);
 
             Venda venda = new Venda();
             venda.setCliente(cliente);
-            venda.setUsuario(usuario);
+            venda.setUsuario(usuarioLogado);
             venda.setData(LocalDate.now());
             venda.setStatus(StatusVenda.PENDENTE);
             venda.setValorTotal(0);
@@ -897,7 +893,7 @@ public class Main {
             ContaReceberService contaReceberService,
             CaixaService caixaService,
             FinanceiroService financeiroService,
-            UsuarioService usuarioService
+            Usuario usuarioLogado
     ) {
         System.out.println("\n===== CONTAS A RECEBER =====");
 
@@ -943,10 +939,7 @@ public class Main {
                     return;
                 }
 
-                Usuario usuario = autenticarCaixa(usuarioService);
-                if (usuario == null) return;
-
-                financeiroService.receberConta(conta, caixa, usuario);
+                financeiroService.receberConta(conta, caixa, usuarioLogado);
 
                 System.out.println("Conta marcada como paga!");
                 break;
@@ -964,7 +957,7 @@ public class Main {
             ContaPagarService contaPagarService,
             CaixaService caixaService,
             FinanceiroService financeiroService,
-            UsuarioService usuarioService
+            Usuario usuarioLogado
     ) {
         System.out.println("\n===== CONTAS A PAGAR =====");
 
@@ -1009,10 +1002,7 @@ public class Main {
                     return;
                 }
 
-                Usuario usuario = autenticarCaixa(usuarioService);
-                if (usuario == null) return;
-
-                financeiroService.pagarConta(conta, caixa, usuario);
+                financeiroService.pagarConta(conta, caixa, usuarioLogado);
 
                 System.out.println("Conta paga com sucesso!");
                 break;
@@ -1338,19 +1328,16 @@ public class Main {
 
 
 
-    public static void abrirCaixa(CaixaService caixaService, UsuarioService usuarioService) {
+    public static void abrirCaixa(CaixaService caixaService, Usuario usuarioLogado) {
         try {
-            Usuario usuario = autenticarCaixa(usuarioService);
-            if (usuario == null) return;
-
             Caixa caixa = new Caixa();
-            caixa.setUsuario(usuario);
+            caixa.setUsuario(usuarioLogado);
 
             System.out.print("Valor de abertura: ");
             double valor = Double.parseDouble(sc.nextLine());
             caixa.setValorAbertura(valor);
 
-            caixaService.abrirCaixa(caixa, usuario);
+            caixaService.abrirCaixa(caixa, usuarioLogado);
 
             System.out.println("Caixa aberto com sucesso!");
 
@@ -1359,12 +1346,9 @@ public class Main {
         }
     }
 
-    public static void fecharCaixa(CaixaService caixaService, UsuarioService usuarioService) {
+    public static void fecharCaixa(CaixaService caixaService, Usuario usuarioLogado) {
         try {
-            Usuario usuario = autenticarCaixa(usuarioService);
-            if (usuario == null) return;
-
-            caixaService.fecharCaixa(usuario);
+            caixaService.fecharCaixa(usuarioLogado);
             System.out.println("Caixa fechado com sucesso!");
 
         } catch (Exception e) {
@@ -1376,21 +1360,28 @@ public class Main {
     // -------------------------------------------------------
 
     /**
-     * Pede email + senha e retorna o Usuario autenticado pelo banco.
-     * Retorna null se o usuário cancelar ou errar 3 vezes.
+     * Autentica e valida que o usuário tem perfil ADMINISTRADOR ou GERENTE.
+     * Usado quando um FUNCIONARIO tenta acessar área restrita.
      */
-    public static Usuario autenticarUsuario(UsuarioService usuarioService) {
+    public static Usuario autenticarGerente(UsuarioService usuarioService) {
         int tentativas = 0;
         while (tentativas < 3) {
             try {
-                System.out.println("===== AUTENTICAÇÃO =====");
+                System.out.println("\n===== AUTENTICAÇÃO RESTRITA =====");
                 System.out.print("Email: ");
                 String email = sc.nextLine().trim();
 
                 System.out.print("Senha: ");
                 String senha = sc.nextLine();
 
-                return usuarioService.autenticar(email, senha);
+                Usuario usuario = usuarioService.autenticar(email, senha);
+
+                if (usuario.getPerfil() == TipoUsuario.FUNCIONARIO) {
+                    throw new IllegalArgumentException("Perfil FUNCIONÁRIO não tem permissão para esta operação.");
+                }
+
+                System.out.println("Autenticado como: " + usuario.getNome() + " [" + usuario.getPerfil() + "]");
+                return usuario;
 
             } catch (Exception e) {
                 tentativas++;
@@ -1398,38 +1389,41 @@ public class Main {
                         + " (" + tentativas + "/3 tentativas)");
             }
         }
-        System.out.println("Número máximo de tentativas atingido.");
+        System.out.println("Número máximo de tentativas atingido. Acesso negado.");
         return null;
     }
 
     /**
-     * Autentica e valida que o usuário tem perfil ADMINISTRADOR ou GERENTE.
-     * Usado para operações de caixa.
+     * Login único de sessão — pede email + senha no início do sistema.
+     * Retorna null após 3 tentativas falhas (encerra o sistema).
      */
-    public static Usuario autenticarCaixa(UsuarioService usuarioService) {
-        Usuario usuario = autenticarUsuario(usuarioService);
-        if (usuario == null) return null;
+    public static Usuario fazerLogin(UsuarioService usuarioService) {
+        int tentativas = 0;
+        while (tentativas < 3) {
+            try {
+                System.out.println("\n========== LOGIN ==========");
+                System.out.print("Email: ");
+                String email = sc.nextLine().trim();
 
-        TipoUsuario perfil = usuario.getPerfil();
-        if (perfil != TipoUsuario.ADMINISTRADOR && perfil != TipoUsuario.GERENTE) {
-            System.out.println("Acesso negado! Apenas ADMINISTRADOR ou GERENTE podem operar o caixa.");
-            return null;
+                System.out.print("Senha: ");
+                String senha = sc.nextLine();
+
+                Usuario usuario = usuarioService.autenticar(email, senha);
+                System.out.println("\nBem-vindo, " + usuario.getNome() + "! [" + usuario.getPerfil() + "]");
+                return usuario;
+
+            } catch (Exception e) {
+                tentativas++;
+                System.out.println("Login inválido: " + e.getMessage()
+                        + " (" + tentativas + "/3 tentativas)");
+            }
         }
-        return usuario;
+        System.out.println("Número máximo de tentativas atingido.");
+        return null;
     }
 
-    /**
-     * Autentica e valida que o usuário pode realizar vendas (todos os perfis ativos).
-     */
-    public static Usuario autenticarVenda(UsuarioService usuarioService) {
-        return autenticarUsuario(usuarioService);
-    }
-
-    public static void movimentarCaixa(MovimentacaoCaixaService service, CaixaService caixaService, UsuarioService usuarioService) {
+    public static void movimentarCaixa(MovimentacaoCaixaService service, CaixaService caixaService, Usuario usuarioLogado) {
         try {
-            Usuario usuario = autenticarCaixa(usuarioService);
-            if (usuario == null) return;
-
             Caixa caixa = caixaService.buscarCaixaAberto();
 
             if (caixa == null) {
@@ -1459,7 +1453,7 @@ public class Main {
 
             mov.setCaixa(caixa);
 
-            service.registrarMovimentacao(mov, usuario);
+            service.registrarMovimentacao(mov, usuarioLogado);
 
             System.out.println("Movimentação registrada!");
 
@@ -1468,11 +1462,8 @@ public class Main {
         }
     }
 
-    public static void verSaldo(MovimentacaoCaixaService service, CaixaService caixaService, UsuarioService usuarioService) {
+    public static void verSaldo(MovimentacaoCaixaService service, CaixaService caixaService, Usuario usuarioLogado) {
         try {
-            Usuario usuario = autenticarCaixa(usuarioService);
-            if (usuario == null) return;
-
             Caixa caixa = caixaService.buscarCaixaAberto();
 
             if (caixa == null) {
@@ -1493,28 +1484,24 @@ public class Main {
     // MENU USUÁRIOS
     // -------------------------------------------------------
 
-    public static void menuUsuarios(UsuarioService usuarioService) {
-        // Apenas ADMINISTRADOR ou GERENTE podem acessar o menu de usuários
-        System.out.println("===== USUÁRIOS =====");
-        System.out.println("É necessário autenticar para acessar este menu.");
-
-        Usuario solicitante = autenticarUsuario(usuarioService);
-        if (solicitante == null) return;
-
-        TipoUsuario perfil = solicitante.getPerfil();
-
-        if (perfil != TipoUsuario.ADMINISTRADOR && perfil != TipoUsuario.GERENTE) {
-            System.out.println("Acesso negado! Apenas ADMINISTRADOR ou GERENTE podem gerenciar usuários.");
-            return;
+    public static void menuUsuarios(UsuarioService usuarioService, Usuario usuarioLogado) {
+        // Se for FUNCIONARIO, exige autenticação de GERENTE ou ADMINISTRADOR
+        Usuario usuarioOp = usuarioLogado;
+        if (usuarioLogado.getPerfil() == TipoUsuario.FUNCIONARIO) {
+            System.out.println("Acesso restrito. Autentique com GERENTE ou ADMINISTRADOR:");
+            usuarioOp = autenticarGerente(usuarioService);
+            if (usuarioOp == null) return;
         }
 
+        TipoUsuario perfil = usuarioOp.getPerfil();
+        final Usuario solicitante = usuarioOp;
+
         while (true) {
-            System.out.println("===== MENU USUÁRIOS =====");
+            System.out.println("\n===== MENU USUÁRIOS =====");
             System.out.println("1 - Cadastrar usuário");
             System.out.println("2 - Listar usuários");
             System.out.println("3 - Desativar usuário");
 
-            // Só ADMINISTRADOR pode alterar perfil
             if (perfil == TipoUsuario.ADMINISTRADOR) {
                 System.out.println("4 - Alterar perfil de usuário");
             }
