@@ -5,7 +5,7 @@
 <hibernate-configuration>
     <session-factory>
         <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
-        <property name="hibernate.connection.url">jdbc:postgresql://localhost:3600/nomedobanco</property>//nao esquecer de colocar o nome do banco de dados aqui
+        <property name="hibernate.connection.url">jdbc:postgresql://localhost:3600/conexaoestetica</property>
         <property name="hibernate.connection.username">admin</property>
         <property name="hibernate.connection.password">admin</property>
 
@@ -13,7 +13,6 @@
         <property name="hibernate.format_sql">true</property>
         <property name="hibernate.hbm2ddl.auto">update</property>
 
-        // tem que ser feito o mapping de cada modelo
         <mapping class="org.paulobaiergithub.entity.Produto"/>
         <mapping class="org.paulobaiergithub.entity.Endereco"/>
         <mapping class="org.paulobaiergithub.entity.Usuario"/>
