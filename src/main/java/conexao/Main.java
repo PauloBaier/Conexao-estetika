@@ -6,10 +6,7 @@ import java.time.LocalDate;
 import java.util.List;
 import Config.FlyWayConfig;
 import models.*;
-import models.enums.FormaPagamento;
-import models.enums.StatusConta;
-import models.enums.StatusVenda;
-import models.enums.TipoMovimento;
+import models.enums.*;
 import services.*;
 
 public class Main {
@@ -18,8 +15,9 @@ public class Main {
     static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
-
         FlyWayConfig.migrate();
+        // O login é feito pontualmente nas operações protegidas.
+        // Este main é utilizado apenas para inicialização do Flyway.
     }
 
     // Cadastro Cliente
@@ -56,6 +54,7 @@ public class Main {
     }
 
     public static void cadastroEndereco(EnderecoService enderecoService, Long clienteId) {
+    try {
         Endereco endereco = new Endereco();
 
         System.out.print("Rua: ");
@@ -71,6 +70,11 @@ public class Main {
         endereco.setCep(sc.nextLine());
 
         enderecoService.cadastrarEndereco(endereco, clienteId);
+        System.out.println("Endereço cadastrado com sucesso!");
+        
+        } catch (Exception e) {
+            System.out.println("Erro ao cadastrar endereço: " + e.getMessage());
+        }
     }
 
     // Cadastro Fornecedor
@@ -846,7 +850,7 @@ public class Main {
         return true;
     }
 
-    public static void novaVenda(ClienteService clienteService, ProdutoService produtoService, VendaService vendaService) {
+    public static void novaVenda(ClienteService clienteService, ProdutoService produtoService, VendaService vendaService, Usuario usuarioLogado) {
         try {
             System.out.println("=== NOVA VENDA ===");
 
@@ -854,6 +858,7 @@ public class Main {
 
             Venda venda = new Venda();
             venda.setCliente(cliente);
+            venda.setUsuario(usuarioLogado);
             venda.setData(LocalDate.now());
             venda.setStatus(StatusVenda.PENDENTE);
             venda.setValorTotal(0);
@@ -887,7 +892,8 @@ public class Main {
     public static void contasReceber(
             ContaReceberService contaReceberService,
             CaixaService caixaService,
-            FinanceiroService financeiroService
+            FinanceiroService financeiroService,
+            Usuario usuarioLogado
     ) {
         System.out.println("\n===== CONTAS A RECEBER =====");
 
@@ -933,7 +939,7 @@ public class Main {
                     return;
                 }
 
-                financeiroService.receberConta(conta, caixa);
+                financeiroService.receberConta(conta, caixa, usuarioLogado);
 
                 System.out.println("Conta marcada como paga!");
                 break;
@@ -950,7 +956,8 @@ public class Main {
     public static void contasPagar(
             ContaPagarService contaPagarService,
             CaixaService caixaService,
-            FinanceiroService financeiroService
+            FinanceiroService financeiroService,
+            Usuario usuarioLogado
     ) {
         System.out.println("\n===== CONTAS A PAGAR =====");
 
@@ -995,7 +1002,7 @@ public class Main {
                     return;
                 }
 
-                financeiroService.pagarConta(conta, caixa);
+                financeiroService.pagarConta(conta, caixa, usuarioLogado);
 
                 System.out.println("Conta paga com sucesso!");
                 break;
@@ -1321,16 +1328,16 @@ public class Main {
 
 
 
-    public static void abrirCaixa(CaixaService caixaService) {
+    public static void abrirCaixa(CaixaService caixaService, Usuario usuarioLogado) {
         try {
             Caixa caixa = new Caixa();
+            caixa.setUsuario(usuarioLogado);
 
             System.out.print("Valor de abertura: ");
             double valor = Double.parseDouble(sc.nextLine());
-
             caixa.setValorAbertura(valor);
 
-            caixaService.abrirCaixa(caixa);
+            caixaService.abrirCaixa(caixa, usuarioLogado);
 
             System.out.println("Caixa aberto com sucesso!");
 
@@ -1339,17 +1346,83 @@ public class Main {
         }
     }
 
-    public static void fecharCaixa(CaixaService caixaService) {
+    public static void fecharCaixa(CaixaService caixaService, Usuario usuarioLogado) {
         try {
-            caixaService.fecharCaixa();
+            caixaService.fecharCaixa(usuarioLogado);
             System.out.println("Caixa fechado com sucesso!");
 
         } catch (Exception e) {
             System.out.println("Erro ao fechar caixa: " + e.getMessage());
         }
+    }   
+    // -------------------------------------------------------
+    // AUTENTICAÇÃO
+    // -------------------------------------------------------
+
+    /**
+     * Autentica e valida que o usuário tem perfil ADMINISTRADOR ou GERENTE.
+     * Usado quando um FUNCIONARIO tenta acessar área restrita.
+     */
+    public static Usuario autenticarGerente(UsuarioService usuarioService) {
+        int tentativas = 0;
+        while (tentativas < 3) {
+            try {
+                System.out.println("\n===== AUTENTICAÇÃO RESTRITA =====");
+                System.out.print("Email: ");
+                String email = sc.nextLine().trim();
+
+                System.out.print("Senha: ");
+                String senha = sc.nextLine();
+
+                Usuario usuario = usuarioService.autenticar(email, senha);
+
+                if (usuario.getPerfil() == TipoUsuario.FUNCIONARIO) {
+                    throw new IllegalArgumentException("Perfil FUNCIONÁRIO não tem permissão para esta operação.");
+                }
+
+                System.out.println("Autenticado como: " + usuario.getNome() + " [" + usuario.getPerfil() + "]");
+                return usuario;
+
+            } catch (Exception e) {
+                tentativas++;
+                System.out.println("Erro: " + e.getMessage()
+                        + " (" + tentativas + "/3 tentativas)");
+            }
+        }
+        System.out.println("Número máximo de tentativas atingido. Acesso negado.");
+        return null;
     }
 
-    public static void movimentarCaixa(MovimentacaoCaixaService service, CaixaService caixaService) {
+    /**
+     * Login único de sessão — pede email + senha no início do sistema.
+     * Retorna null após 3 tentativas falhas (encerra o sistema).
+     */
+    public static Usuario fazerLogin(UsuarioService usuarioService) {
+        int tentativas = 0;
+        while (tentativas < 3) {
+            try {
+                System.out.println("\n========== LOGIN ==========");
+                System.out.print("Email: ");
+                String email = sc.nextLine().trim();
+
+                System.out.print("Senha: ");
+                String senha = sc.nextLine();
+
+                Usuario usuario = usuarioService.autenticar(email, senha);
+                System.out.println("\nBem-vindo, " + usuario.getNome() + "! [" + usuario.getPerfil() + "]");
+                return usuario;
+
+            } catch (Exception e) {
+                tentativas++;
+                System.out.println("Login inválido: " + e.getMessage()
+                        + " (" + tentativas + "/3 tentativas)");
+            }
+        }
+        System.out.println("Número máximo de tentativas atingido.");
+        return null;
+    }
+
+    public static void movimentarCaixa(MovimentacaoCaixaService service, CaixaService caixaService, Usuario usuarioLogado) {
         try {
             Caixa caixa = caixaService.buscarCaixaAberto();
 
@@ -1380,7 +1453,7 @@ public class Main {
 
             mov.setCaixa(caixa);
 
-            service.registrarMovimentacao(mov);
+            service.registrarMovimentacao(mov, usuarioLogado);
 
             System.out.println("Movimentação registrada!");
 
@@ -1389,7 +1462,7 @@ public class Main {
         }
     }
 
-    public static void verSaldo(MovimentacaoCaixaService service, CaixaService caixaService) {
+    public static void verSaldo(MovimentacaoCaixaService service, CaixaService caixaService, Usuario usuarioLogado) {
         try {
             Caixa caixa = caixaService.buscarCaixaAberto();
 
@@ -1404,6 +1477,248 @@ public class Main {
 
         } catch (Exception e) {
             System.out.println("Erro ao consultar saldo: " + e.getMessage());
+        }
+    }
+
+    // -------------------------------------------------------
+    // MENU USUÁRIOS
+    // -------------------------------------------------------
+
+    public static void menuUsuarios(UsuarioService usuarioService, Usuario usuarioLogado) {
+        // Se for FUNCIONARIO, exige autenticação de GERENTE ou ADMINISTRADOR
+        Usuario usuarioOp = usuarioLogado;
+        if (usuarioLogado.getPerfil() == TipoUsuario.FUNCIONARIO) {
+            System.out.println("Acesso restrito. Autentique com GERENTE ou ADMINISTRADOR:");
+            usuarioOp = autenticarGerente(usuarioService);
+            if (usuarioOp == null) return;
+        }
+
+        TipoUsuario perfil = usuarioOp.getPerfil();
+        final Usuario solicitante = usuarioOp;
+
+        while (true) {
+            System.out.println("\n===== MENU USUÁRIOS =====");
+            System.out.println("1 - Cadastrar usuário");
+            System.out.println("2 - Listar usuários");
+            System.out.println("3 - Desativar usuário");
+
+            if (perfil == TipoUsuario.ADMINISTRADOR) {
+                System.out.println("4 - Alterar perfil de usuário");
+            }
+
+            System.out.println("0 - Voltar");
+
+            int op;
+            try {
+                op = Integer.parseInt(sc.nextLine());
+            } catch (Exception e) {
+                printEntradaInvalida();
+                continue;
+            }
+
+            switch (op) {
+                case 1 -> cadastrarUsuario(usuarioService, solicitante);
+                case 2 -> listarUsuarios(usuarioService);
+                case 3 -> desativarUsuario(usuarioService, solicitante);
+                case 4 -> {
+                    if (perfil == TipoUsuario.ADMINISTRADOR) {
+                        alterarPerfilUsuario(usuarioService);
+                    } else {
+                        System.out.println("Opção inválida!");
+                    }
+                }
+                case 0 -> { return; }
+                default -> System.out.println("Opção inválida!");
+            }
+        }
+    }
+
+    public static void cadastrarUsuario(UsuarioService usuarioService, Usuario solicitante) {
+        try {
+            System.out.println("===== CADASTRAR USUÁRIO =====");
+
+            Usuario novo = new Usuario();
+
+            System.out.print("Nome: ");
+            novo.setNome(sc.nextLine());
+
+            System.out.print("Email: ");
+            novo.setEmail(sc.nextLine());
+
+            System.out.print("Senha (mínimo 6 caracteres): ");
+            novo.setSenha(sc.nextLine());
+
+            // GERENTE só pode cadastrar FUNCIONARIO
+            // ADMINISTRADOR pode cadastrar qualquer perfil
+            if (solicitante.getPerfil() == TipoUsuario.GERENTE) {
+                novo.setPerfil(TipoUsuario.FUNCIONARIO);
+                System.out.println("Perfil definido automaticamente: FUNCIONÁRIO");
+            } else {
+                System.out.println("Perfil:");
+                System.out.println("1 - Administrador");
+                System.out.println("2 - Gerente");
+                System.out.println("3 - Funcionário");
+
+                int opcao;
+                try {
+                    opcao = Integer.parseInt(sc.nextLine());
+                } catch (Exception e) {
+                    System.out.println("Opção inválida! Cadastro cancelado.");
+                    return;
+                }
+
+                switch (opcao) {
+                    case 1 -> novo.setPerfil(TipoUsuario.ADMINISTRADOR);
+                    case 2 -> novo.setPerfil(TipoUsuario.GERENTE);
+                    case 3 -> novo.setPerfil(TipoUsuario.FUNCIONARIO);
+                    default -> {
+                        System.out.println("Perfil inválido! Cadastro cancelado.");
+                        return;
+                    }
+                }
+            }
+
+            usuarioService.cadastrarUsuario(novo);
+            System.out.println("Usuário cadastrado com sucesso!");
+
+        } catch (Exception e) {
+            System.out.println("Erro ao cadastrar usuário: " + e.getMessage());
+        }
+    }
+
+    public static void listarUsuarios(UsuarioService usuarioService) {
+        List<Usuario> usuarios = usuarioService.listarTodos();
+
+        if (usuarios.isEmpty()) {
+            System.out.println("Nenhum usuário cadastrado.");
+            return;
+        }
+
+        System.out.println("===== LISTA DE USUÁRIOS =====");
+        for (Usuario u : usuarios) {
+            System.out.println(
+                "ID: " + u.getId()
+                + " | Nome: " + u.getNome()
+                + " | Email: " + u.getEmail()
+                + " | Perfil: " + u.getPerfil()
+                + " | Ativo: " + (u.isAtivo() ? "Sim" : "Não")
+                + " | Criado em: " + u.getCriado_em()
+            );
+        }
+    }
+
+    public static void desativarUsuario(UsuarioService usuarioService, Usuario solicitante) {
+        try {
+            listarUsuarios(usuarioService);
+
+            System.out.print("Digite o ID do usuário para desativar (0 para cancelar): ");
+            Long id = Long.parseLong(sc.nextLine());
+
+            if (id == 0) return;
+
+            if (id.equals(solicitante.getId())) {
+                System.out.println("Você não pode desativar seu próprio usuário!");
+                return;
+            }
+
+            // GERENTE só pode desativar FUNCIONARIO
+            if (solicitante.getPerfil() == TipoUsuario.GERENTE) {
+                Usuario alvo = usuarioService.buscarPorId(id);
+                if (alvo == null) {
+                    System.out.println("Usuário não encontrado.");
+                    return;
+                }
+                if (alvo.getPerfil() != TipoUsuario.FUNCIONARIO) {
+                    System.out.println("Acesso negado! Gerente só pode desativar funcionários.");
+                    return;
+                }
+            }
+
+            usuarioService.desativarUsuario(id);
+            System.out.println("Usuário desativado com sucesso!");
+
+        } catch (NumberFormatException e) {
+            System.out.println("ID inválido!");
+        } catch (Exception e) {
+            System.out.println("Erro ao desativar usuário: " + e.getMessage());
+        }
+    }
+
+    public static void alterarPerfilUsuario(UsuarioService usuarioService) {
+        try {
+            listarUsuarios(usuarioService);
+
+            System.out.print("Digite o ID do usuário para alterar perfil (0 para cancelar): ");
+            Long id = Long.parseLong(sc.nextLine());
+
+            if (id == 0) return;
+
+            Usuario usuario = usuarioService.buscarPorId(id);
+            if (usuario == null) {
+                System.out.println("Usuário não encontrado.");
+                return;
+            }
+
+            System.out.println("Perfil atual: " + usuario.getPerfil());
+            System.out.println("Novo perfil:");
+            System.out.println("1 - Administrador");
+            System.out.println("2 - Gerente");
+            System.out.println("3 - Funcionário");
+
+            int opcao;
+            try {
+                opcao = Integer.parseInt(sc.nextLine());
+            } catch (Exception e) {
+                System.out.println("Opção inválida!");
+                return;
+            }
+
+            switch (opcao) {
+                case 1 -> usuario.setPerfil(TipoUsuario.ADMINISTRADOR);
+                case 2 -> usuario.setPerfil(TipoUsuario.GERENTE);
+                case 3 -> usuario.setPerfil(TipoUsuario.FUNCIONARIO);
+                default -> {
+                    System.out.println("Perfil inválido!");
+                    return;
+                }
+            }
+
+            usuarioService.atualizarUsuario(usuario);
+            System.out.println("Perfil alterado com sucesso!");
+
+        } catch (NumberFormatException e) {
+            System.out.println("ID inválido!");
+        } catch (Exception e) {
+            System.out.println("Erro ao alterar perfil: " + e.getMessage());
+        }
+    }
+
+    public static void cadastrarPrimeiroUsuario(UsuarioService usuarioService) {
+        while (true) {
+            try {
+                System.out.println("===== CADASTRO DO PRIMEIRO USUÁRIO =====");
+
+                Usuario usuario = new Usuario();
+
+                System.out.print("Nome: ");
+                usuario.setNome(sc.nextLine());
+
+                System.out.print("Email: ");
+                usuario.setEmail(sc.nextLine());
+
+                System.out.print("Senha (mínimo 6 caracteres): ");
+                usuario.setSenha(sc.nextLine());
+
+                usuario.setPerfil(TipoUsuario.ADMINISTRADOR);
+
+                usuarioService.cadastrarUsuario(usuario);
+
+                System.out.println("Administrador cadastrado com sucesso! Bem-vindo ao sistema.");
+                return;
+
+            } catch (Exception e) {
+                System.out.println("Erro: " + e.getMessage() + " Tente novamente.");
+            }
         }
     }
 

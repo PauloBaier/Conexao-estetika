@@ -29,17 +29,22 @@ public class MovimentacaoCaixa {
     @Column(name = "data_movimentacao", nullable = false)
     private LocalDateTime dataMovimentacao;
 
+    @ManyToOne
+    @JoinColumn(name = "fk_usuario_id", nullable = false)
+    private Usuario usuario;
+
     public MovimentacaoCaixa() {
     }
 
     public MovimentacaoCaixa(Long id, Caixa caixa, TipoMovimento tipo, double valor,
-                             String descricao, LocalDateTime dataMovimentacao) {
+                             String descricao, LocalDateTime dataMovimentacao, Usuario usuario) {
         this.id = id;
         this.caixa = caixa;
         this.tipo = tipo;
         this.valor = valor;
         this.descricao = descricao;
         this.dataMovimentacao = dataMovimentacao;
+        this.usuario = usuario;
     }
 
     public Long getId() {
@@ -88,5 +93,13 @@ public class MovimentacaoCaixa {
 
     public void setDataMovimentacao(LocalDateTime dataMovimentacao) {
         this.dataMovimentacao = dataMovimentacao;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 }
