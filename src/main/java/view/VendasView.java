@@ -1,6 +1,5 @@
-package com.conexao.view;
+package view;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class VendasView extends JPanel{

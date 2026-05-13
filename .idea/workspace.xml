@@ -5,8 +5,28 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2f7d4fd6-e0f8-43be-b480-26f1c4d3772c" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/models/enums/TipoUsuario.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/view/FinanceiroPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/conexao/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/conexao/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/view/MenuPrincipalView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/view/MenuPrincipalView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/view/VendasView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/view/VendasView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/conexao/IIdentificador.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/conexao/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/conexao/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/conexao/View.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/conexao/View.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/models/enums/FormaPagamento.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/models/enums/FormaPagamento.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/models/enums/StatusCaixa.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/models/enums/StatusCaixa.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/models/enums/StatusConta.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/models/enums/StatusConta.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/models/enums/StatusVenda.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/models/enums/StatusVenda.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/models/enums/TipoMovimento.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/models/enums/TipoMovimento.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/repositories/ItemVendaRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/repositories/ItemVendaRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/services/CategoriaService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/services/EntradaEstoqueService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/EntradaEstoqueService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/services/FinanceiroService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/FinanceiroService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/services/RelatorioLocal.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/services/VendaService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/VendaService.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,18 +64,34 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.Main.executor": "Run",
-    "Application.View.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "onboarding.tips.debug.path": "C:/Users/Admin/Downloads/JAVA/Conexao/src/main/java/com/Estudo/Main.java"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;Application.View.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;ViewMenuPrincipal&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;onboarding.tips.debug.path&quot;: &quot;C:/Users/Admin/Downloads/JAVA/Conexao/src/main/java/com/Estudo/Main.java&quot;
   }
-}]]></component>
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\paulo\IdeaProjects\ConexaoEstetika\Conexao-estetika\src\main\java\models\enums" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-2fc7cc6b9a17-intellij.indexing.shared.core-IU-253.30387.90" />
+      </set>
+    </attachedChunks>
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="2f7d4fd6-e0f8-43be-b480-26f1c4d3772c" name="Changes" comment="" />

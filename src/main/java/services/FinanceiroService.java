@@ -4,6 +4,7 @@ import models.Caixa;
 import models.ContaPagar;
 import models.ContaReceber;
 import models.MovimentacaoCaixa;
+import models.Usuario;
 import models.enums.StatusCaixa;
 import models.enums.StatusConta;
 import models.enums.TipoMovimento;
@@ -26,7 +27,7 @@ public class FinanceiroService {
         this.movimentacaoService = movimentacaoService;
     }
 
-    public void receberConta(ContaReceber conta, Caixa caixa) {
+    public void receberConta(ContaReceber conta, Caixa caixa, Usuario usuario) {
         if (conta == null) {
             throw new IllegalArgumentException("Conta a receber inválida.");
         }
@@ -53,10 +54,10 @@ public class FinanceiroService {
         mov.setValor(conta.getValor());
         mov.setDescricao("Recebimento de conta ID " + conta.getId());
 
-        movimentacaoService.registrarMovimentacao(mov);
+        movimentacaoService.registrarMovimentacao(mov, usuario);
     }
 
-    public void pagarConta(ContaPagar conta, Caixa caixa) {
+    public void pagarConta(ContaPagar conta, Caixa caixa, Usuario usuario) {
         if (conta == null) {
             throw new IllegalArgumentException("Conta a pagar inválida.");
         }
@@ -87,6 +88,6 @@ public class FinanceiroService {
         mov.setValor(conta.getValor());
         mov.setDescricao("Pagamento de conta ID " + conta.getId());
 
-        movimentacaoService.registrarMovimentacao(mov);
+        movimentacaoService.registrarMovimentacao(mov, usuario);
     }
 }

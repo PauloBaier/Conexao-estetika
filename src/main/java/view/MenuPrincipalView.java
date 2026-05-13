@@ -1,8 +1,26 @@
-package com.conexao.view;
+package view;
+
+import models.Usuario;
+import services.CaixaService;
+import services.ContaPagarService;
+import services.ContaReceberService;
+import services.FinanceiroService;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class MenuPrincipalView extends JFrame{
+    public static final java.awt.Color CONTENT_BG = new java.awt.Color(238, 238, 238);
+    public static final java.awt.Color WHITE = java.awt.Color.WHITE;
+    public static final java.awt.Color TEXT_DARK = new java.awt.Color(33, 33, 33);
+    public static final java.awt.Color TEXT_MUTED = new java.awt.Color(117, 117, 117);
+    public static final java.awt.Color ACCENT_DARK = new java.awt.Color(31, 111, 95);
+    public static final java.awt.Color BORDER_COLOR = new java.awt.Color(210, 210, 210);
+
+    public static final java.awt.Font FONT_TITLE = new java.awt.Font("Arial", java.awt.Font.BOLD, 24);
+    public static final java.awt.Font FONT_BTN = new java.awt.Font("Arial", java.awt.Font.BOLD, 14);
+    public static final java.awt.Font FONT_SMALL = new java.awt.Font("Arial", java.awt.Font.PLAIN, 12);
+
     private javax.swing.JButton btnCadastros;
     private javax.swing.JButton btnFinanceiro;
     private javax.swing.JButton btnRelatorio;
@@ -14,7 +32,24 @@ public class MenuPrincipalView extends JFrame{
     private javax.swing.JPanel pnlCardsContainer;
     private java.awt.CardLayout cardContainerLayout;
 
-    public MenuPrincipalView(){
+    private Usuario usuarioLogado;
+    private final ContaPagarService contaPagarService;
+    private final ContaReceberService contaReceberService;
+    private final FinanceiroService financeiroService;
+    private final CaixaService caixaService;
+
+    public MenuPrincipalView(Usuario usuarioLogado,
+                             ContaPagarService contaPagarService,
+                             ContaReceberService contaReceberService,
+                             FinanceiroService financeiroService,
+                             CaixaService caixaService){
+
+        this.usuarioLogado       = usuarioLogado;
+        this.contaPagarService   = contaPagarService;
+        this.contaReceberService = contaReceberService;
+        this.financeiroService   = financeiroService;
+        this.caixaService        = caixaService;
+
         pnlBackground = new javax.swing.JPanel();
         pnlBarraLateral = new javax.swing.JPanel();
         btnVenda = new javax.swing.JButton();
@@ -114,6 +149,7 @@ public class MenuPrincipalView extends JFrame{
         pnlCardsContainer.setLayout(cardContainerLayout);
 
         pnlCardsContainer.add(new VendasView(), "telaVenda");
+        pnlCardsContainer.add(new FinanceiroPanel(usuarioLogado, contaPagarService, contaReceberService, financeiroService, caixaService), "telaFinanceiro");
 
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -139,10 +175,45 @@ public class MenuPrincipalView extends JFrame{
     }                                            
 
     private void btnFinanceiroActionPerformed(java.awt.event.ActionEvent evt) {                                              
-        // TODO add your handling code here:
+        cardContainerLayout.show(pnlCardsContainer, "telaFinanceiro");
     }                                             
 
     private void btnRelatorioActionPerformed(java.awt.event.ActionEvent evt) {                                             
         // TODO add your handling code here:
-    }                                    
+    }
+
+    public static void setupTable(JTable table) {
+        table.setRowHeight(28);
+        table.setFont(FONT_SMALL);
+        table.getTableHeader().setFont(FONT_BTN);
+        table.getTableHeader().setBackground(CONTENT_BG);
+        table.getTableHeader().setForeground(TEXT_DARK);
+        table.setGridColor(BORDER_COLOR);
+        table.setSelectionBackground(new java.awt.Color(200, 230, 220));
+        table.setSelectionForeground(TEXT_DARK);
+        table.setShowGrid(true);
+        table.setFillsViewportHeight(true);
+    }
+
+    public static JButton createAccentButton(String text) {
+        JButton btn = new JButton(text);
+        btn.setBackground(ACCENT_DARK);
+        btn.setForeground(WHITE);
+        btn.setFont(FONT_SMALL);
+        btn.setBorderPainted(false);
+        btn.setFocusPainted(false);
+        btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        return btn;
+    }
+
+    public static JButton createOutlineButton(String text) {
+        JButton btn = new JButton(text);
+        btn.setBackground(WHITE);
+        btn.setForeground(ACCENT_DARK);
+        btn.setFont(FONT_SMALL);
+        btn.setBorder(BorderFactory.createLineBorder(ACCENT_DARK));
+        btn.setFocusPainted(false);
+        btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        return btn;
+    }
 }
