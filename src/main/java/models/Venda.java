@@ -52,6 +52,7 @@ public class Venda {
         this.formaPagamento = formaPagamento;
         this.cliente = cliente;
         this.itens = (itens != null) ? itens : new ArrayList<>();
+        this.usuario = usuario;
     }
 
     public Long getId() {

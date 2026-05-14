@@ -6,60 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="2f7d4fd6-e0f8-43be-b480-26f1c4d3772c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Config/FlyWayConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Config/FlyWayConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/conexao/FinanceiroPanel.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/conexao/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/conexao/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/conexao/View.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/view/FinanceiroPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/view/FinanceiroPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/models/Venda.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/Venda.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/view/MenuPrincipalView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/view/MenuPrincipalView.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/view/VendasView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/view/VendasView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Config/FlyWayConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Config/FlyWayConfig.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Config/HibernateConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Config/HibernateConfig.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/META-INF/persistence.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/conexao/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/conexao/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/models/Caixa.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/models/Caixa.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/models/Categoria.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/models/Categoria.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/models/Cliente.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/models/Cliente.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/models/ContaPagar.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/models/ContaPagar.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/models/ContaReceber.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/models/ContaReceber.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/models/Endereco.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/models/Endereco.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/models/Fornecedor.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/models/Fornecedor.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/models/ItemVenda.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/models/ItemVenda.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/models/MovimentacaoCaixa.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/models/MovimentacaoCaixa.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/models/Produto.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/models/Produto.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/models/Venda.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/models/Venda.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/models/enums/FormaPagamento.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/models/enums/FormaPagamento.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/models/enums/StatusCaixa.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/models/enums/StatusCaixa.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/models/enums/StatusConta.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/models/enums/StatusConta.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/models/enums/StatusVenda.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/models/enums/StatusVenda.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/models/enums/TipoMovimento.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/models/enums/TipoMovimento.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/repositories/CaixaRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/repositories/CaixaRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/repositories/CategoriaRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/repositories/CategoriaRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/repositories/ClienteRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/repositories/ClienteRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/repositories/ContaPagarRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/repositories/ContaPagarRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/repositories/ContaReceberRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/repositories/ContaReceberRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/repositories/EnderecoRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/repositories/EnderecoRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/repositories/FornecedorRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/repositories/FornecedorRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/repositories/IRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/repositories/IRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/repositories/ItemVendaRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/repositories/ItemVendaRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/repositories/MovimentacaoCaixaRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/repositories/MovimentacaoCaixaRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/repositories/ProdutoRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/repositories/ProdutoRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/repositories/VendaRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/repositories/VendaRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/services/CaixaService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/CaixaService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/services/CategoriaService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/CategoriaService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/services/ClienteService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/ClienteService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/services/ContaPagarService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/ContaPagarService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/services/ContaReceberService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/ContaReceberService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/services/EnderecoService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/EnderecoService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/services/EntradaEstoqueService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/EntradaEstoqueService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/services/FinanceiroService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/FinanceiroService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/services/FornecedorService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/FornecedorService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/services/ItemVendaService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/ItemVendaService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/services/MovimentacaoCaixaService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/MovimentacaoCaixaService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/services/ProdutoService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/ProdutoService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/services/RelatorioLocal.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/RelatorioLocal.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/services/VendaService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/VendaService.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

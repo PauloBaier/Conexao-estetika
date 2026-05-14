@@ -1,13 +1,25 @@
 package view;
 
-import services.CaixaService;
-import services.VendaService;
+import models.Caixa;
+import models.Usuario;
+import models.Venda;
+import models.enums.StatusVenda;
+import services.*;
 
 import javax.swing.JPanel;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDate;
 
 public class VendasView extends JPanel{
+    private Venda vendaAtual;
+
     private VendaService vendaService;
     private CaixaService caixaService;
+    private ClienteService clienteService;
+    private ProdutoService produtoService;
+    private UsuarioService usuarioService;
+    private Usuario usuarioLogado;
 
     private javax.swing.JLabel Titulo;
     private javax.swing.JButton btnAbrirCaixa;
@@ -29,11 +41,26 @@ public class VendasView extends JPanel{
     private javax.swing.JTable tblItenVenda;
     private javax.swing.JTextField txtCliente;
     private javax.swing.JTextField txtProduto;
-    private javax.swing.JTextField txtUsuario;  
+    private javax.swing.JTextField txtUsuario;
+
+
     
-    public VendasView(VendaService vendaService, CaixaService caixaService){
+    public VendasView(VendaService vendaService,
+                      CaixaService caixaService,
+                      ClienteService clienteService,
+                      ProdutoService produtoService,
+                      UsuarioService usuarioService,
+                      Usuario usuarioLogado
+                      ){
         this.vendaService = vendaService;
         this.caixaService = caixaService;
+        this.clienteService = clienteService;
+        this.produtoService = produtoService;
+        this.usuarioService = usuarioService;
+        this.usuarioLogado = usuarioLogado;
+
+
+        Caixa caixaAtual;
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -83,6 +110,7 @@ public class VendasView extends JPanel{
         btnNovaVenda.setText("Nova Venda");
         btnNovaVenda.setBorderPainted(false);
         btnNovaVenda.setPreferredSize(new java.awt.Dimension(100, 34));
+        btnNovaVenda.addActionListener(this::btnNovaVendaActionPerfomed);
 
         btnAbrirCaixa.setBackground(new java.awt.Color(47, 160, 132));
         btnAbrirCaixa.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -90,6 +118,7 @@ public class VendasView extends JPanel{
         btnAbrirCaixa.setText("Abrir Caixa");
         btnAbrirCaixa.setBorderPainted(false);
         btnAbrirCaixa.setPreferredSize(new java.awt.Dimension(120, 34));
+        btnAbrirCaixa.addActionListener(this::btnAbrirCaixaActionPerfomed);
 
         btnFecharCaixa.setBackground(new java.awt.Color(47, 160, 132));
         btnFecharCaixa.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -97,6 +126,7 @@ public class VendasView extends JPanel{
         btnFecharCaixa.setText("Fechar Caixa");
         btnFecharCaixa.setBorderPainted(false);
         btnFecharCaixa.setPreferredSize(new java.awt.Dimension(120, 34));
+        btnFecharCaixa.addActionListener(this::btnFecharCaixaActionPerfomed);
 
         btnSuprimento.setBackground(new java.awt.Color(47, 160, 132));
         btnSuprimento.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -291,9 +321,49 @@ public class VendasView extends JPanel{
                     .addComponent(btnFinalizarVenda, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
+
+        caixaAtual = caixaService.buscarCaixaAberto();
+        if(caixaAtual == null){
+            btnNovaVenda.setEnabled(false);
+            btnFecharCaixa.setEnabled(false);
+            btnSangria.setEnabled(false);
+            btnSuprimento.setEnabled(false);
+            btnFinalizarVenda.setEnabled(false);
+        }
+        else{
+            btnNovaVenda.setEnabled(true);
+            btnAbrirCaixa.setEnabled(false);
+            btnFecharCaixa.setEnabled(true);
+            btnSangria.setEnabled(true);
+            btnSuprimento.setEnabled(true);
+            btnFinalizarVenda.setEnabled(false);
+        }
     }
 
-    private void txtClienteActionPerformed(java.awt.event.ActionEvent evt) {                                           
+    private void btnNovaVendaActionPerfomed(java.awt.event.ActionEvent evt){
+
+        vendaAtual = new Venda();
+        vendaAtual.setUsuario(usuarioLogado);
+        vendaAtual.setStatus(StatusVenda.PENDENTE);
+        vendaAtual.setValorTotal(0);
+
+        btnNovaVenda.setEnabled(false);
+        btnFinalizarVenda.setEnabled(true);
+        txtUsuario.setText("ID: " + usuarioLogado.getId() + "Nome: " + usuarioLogado.getNome());
+        lblSubtotaValor.setText("" + vendaAtual.getValorTotal());
+    }
+
+    private void btnAbrirCaixaActionPerfomed(java.awt.event.ActionEvent evt){
+        // Abertura de caixa
+        // Falta fazer a tela de abertura
+        // e verificação de usuário
+    }
+
+    private void btnFecharCaixaActionPerfomed(java.awt.event.ActionEvent evt){
+
+    }
+
+    private void txtClienteActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
     } 
 }

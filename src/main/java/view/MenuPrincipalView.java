@@ -1,10 +1,7 @@
 package view;
 
 import models.Usuario;
-import services.CaixaService;
-import services.ContaPagarService;
-import services.ContaReceberService;
-import services.FinanceiroService;
+import services.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -42,7 +39,9 @@ public class MenuPrincipalView extends JFrame{
                              ContaPagarService contaPagarService,
                              ContaReceberService contaReceberService,
                              FinanceiroService financeiroService,
-                             CaixaService caixaService){
+                             CaixaService caixaService,
+                             VendaService vendaService
+                             ){
 
         this.usuarioLogado       = usuarioLogado;
         this.contaPagarService   = contaPagarService;
@@ -148,7 +147,7 @@ public class MenuPrincipalView extends JFrame{
         cardContainerLayout = new java.awt.CardLayout();
         pnlCardsContainer.setLayout(cardContainerLayout);
 
-        pnlCardsContainer.add(new VendasView(), "telaVenda");
+        pnlCardsContainer.add(new VendasView(vendaService, caixaService), "telaVenda");
         pnlCardsContainer.add(new FinanceiroPanel(usuarioLogado, contaPagarService, contaReceberService, financeiroService, caixaService), "telaFinanceiro");
 
         javax.swing.GroupLayout pnlBackgroundLayout = new javax.swing.GroupLayout(pnlBackground);
