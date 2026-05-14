@@ -117,10 +117,11 @@ public class AberturaCaixaDialog extends JDialog {
 
         pack();
 
+        setLocationRelativeTo(null);
         setVisible(true);
     }
 
-    public void btnConfirmarActionPerfomed(java.awt.event.ActionEvent evt){
+    private void btnConfirmarActionPerfomed(java.awt.event.ActionEvent evt){
         this.caixa.setDataAbertura(LocalDate.now());
         this.caixa.setValorAbertura(((Number)txtValorAbertura.getValue()).doubleValue());
         this.caixa.setSaldoAtual(((Number)txtValorAbertura.getValue()).doubleValue());
@@ -130,7 +131,7 @@ public class AberturaCaixaDialog extends JDialog {
         dispose();
     }
 
-    public void btnCancelarActionPerfomed(java.awt.event.ActionEvent evt){
+    private void btnCancelarActionPerfomed(java.awt.event.ActionEvent evt){
         caixa = null;
 
         dispose();

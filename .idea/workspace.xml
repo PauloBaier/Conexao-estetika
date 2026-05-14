@@ -5,21 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2f7d4fd6-e0f8-43be-b480-26f1c4d3772c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/View/AberturaCaixaDialog.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/View/AberturaCaixaDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/View/AberturaCaixaDialog.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/View/MenuPrincipalView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/View/MenuPrincipalView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/View/MovimentacaoCaixaDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/View/MovimentacaoCaixaDialog.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/View/VendasView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/View/VendasView.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/conexao/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/conexao/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/models/Caixa.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/Caixa.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/models/MovimentacaoCaixa.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/MovimentacaoCaixa.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/view/FinanceiroPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/View/FinanceiroPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/view/MenuPrincipalView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/View/MenuPrincipalView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/view/VendasView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/View/VendasView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/db/migration/V1__arrumando_banco.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/db/migration/V1__arrumando_banco.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/db/migration/V2__create_banco.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/db/migration/V2__create_banco.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/db/migration/V9__create_table_users.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/db/migration/V4__create_table_users.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/conexao/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/conexao/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/models/Caixa.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/models/Caixa.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/models/MovimentacaoCaixa.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/models/MovimentacaoCaixa.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/models/Venda.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/models/Venda.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,6 +41,9 @@
     &quot;accountId&quot;: &quot;ebc9f1e9-4e80-4acb-9c17-77da30681056&quot;
   }
 }</component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
 }</component>

@@ -47,8 +47,11 @@ public class Main {
                                                         vendaService,
                                                         clienteService,
                                                         produtoService,
-                                                        usuarioService
+                                                        usuarioService,
+                                                        movimentacaoCaixaService
         );
+
+        menu.setLocationRelativeTo(null);
         menu.setVisible(true);
     }
 }

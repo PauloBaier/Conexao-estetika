@@ -1,12 +1,15 @@
 package View;
 
 import models.Caixa;
+import models.MovimentacaoCaixa;
 import models.Usuario;
 import models.Venda;
 import models.enums.StatusVenda;
+import models.enums.TipoMovimento;
 import services.*;
 
 import javax.swing.*;
+import java.time.LocalDateTime;
 
 public class VendasView extends JPanel{
     private Venda vendaAtual;
@@ -18,6 +21,7 @@ public class VendasView extends JPanel{
     private ProdutoService produtoService;
     private UsuarioService usuarioService;
     private Usuario usuarioLogado;
+    private MovimentacaoCaixaService movimentacaoCaixaService;
 
     private javax.swing.JLabel Titulo;
     private javax.swing.JButton btnAbrirCaixa;
@@ -41,6 +45,8 @@ public class VendasView extends JPanel{
     private javax.swing.JTextField txtProduto;
     private javax.swing.JTextField txtUsuario;
 
+    java.awt.Frame framePai;
+
 
     
     public VendasView(VendaService vendaService,
@@ -48,7 +54,8 @@ public class VendasView extends JPanel{
                       ClienteService clienteService,
                       ProdutoService produtoService,
                       UsuarioService usuarioService,
-                      Usuario usuarioLogado
+                      Usuario usuarioLogado,
+                      MovimentacaoCaixaService movimentacaoCaixaService
                       ){
         this.vendaService = vendaService;
         this.caixaService = caixaService;
@@ -56,6 +63,7 @@ public class VendasView extends JPanel{
         this.produtoService = produtoService;
         this.usuarioService = usuarioService;
         this.usuarioLogado = usuarioLogado;
+        this.movimentacaoCaixaService = movimentacaoCaixaService;
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -78,6 +86,7 @@ public class VendasView extends JPanel{
         txtProduto = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblItenVenda = new javax.swing.JTable();
+
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -129,6 +138,7 @@ public class VendasView extends JPanel{
         btnSuprimento.setText("Suprimento");
         btnSuprimento.setBorderPainted(false);
         btnSuprimento.setPreferredSize(new java.awt.Dimension(120, 34));
+        btnSuprimento.addActionListener(this::btnSuprimentoActionPerfomed);
 
         btnSangria.setBackground(new java.awt.Color(47, 160, 132));
         btnSangria.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -136,6 +146,7 @@ public class VendasView extends JPanel{
         btnSangria.setText("Sangria");
         btnSangria.setBorderPainted(false);
         btnSangria.setPreferredSize(new java.awt.Dimension(120, 34));
+        btnSangria.addActionListener(this::btnSangriaActionPerfomed);
 
         lblSubtotal.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
         lblSubtotal.setForeground(new java.awt.Color(31, 111, 95));
@@ -317,6 +328,9 @@ public class VendasView extends JPanel{
                 .addContainerGap())
         );
 
+        java.awt.Window win = javax.swing.SwingUtilities.getWindowAncestor(this);
+        framePai = (win instanceof java.awt.Frame) ? (java.awt.Frame) win : null;
+
         caixaAtual = caixaService.buscarCaixaAberto();
         if(caixaAtual == null){
             btnNovaVenda.setEnabled(false);
@@ -357,8 +371,6 @@ public class VendasView extends JPanel{
         //Login
 
         //Abrir Tela de Abertura(requisitar valor);
-        java.awt.Window win = javax.swing.SwingUtilities.getWindowAncestor(this);
-        java.awt.Frame framePai = (win instanceof java.awt.Frame) ? (java.awt.Frame) win : null;
         AberturaCaixaDialog aberturaCaixaDialog = new AberturaCaixaDialog(framePai, true, usuarioLogado);
 
         if((caixaAtual = aberturaCaixaDialog.getCaixa()) == null){
@@ -390,6 +402,58 @@ public class VendasView extends JPanel{
         }
         else{
             JOptionPane.showMessageDialog(null, "Caixa já está FECHADO!");
+        }
+    }
+
+    private void btnSangriaActionPerfomed(java.awt.event.ActionEvent evt){
+        MovimentacaoCaixaDialog movimentacaoCaixaDialog = new MovimentacaoCaixaDialog(framePai, true, TipoMovimento.SAIDA);
+        Double valorSagria = movimentacaoCaixaDialog.getValor();
+        String descricao = movimentacaoCaixaDialog.getDescricao();
+
+
+        System.out.println(valorSagria + " " + descricao);
+
+        if(valorSagria != null && descricao != null){
+            MovimentacaoCaixa mov = new MovimentacaoCaixa();
+
+            mov.setCaixa(caixaAtual);
+            mov.setTipo(TipoMovimento.SAIDA);
+            mov.setValor(valorSagria);
+            mov.setDescricao(descricao);
+            mov.setDataMovimentacao(LocalDateTime.now());
+            mov.setUsuario(usuarioLogado);
+
+            movimentacaoCaixaService.registrarMovimentacao(mov, usuarioLogado);
+
+            JOptionPane.showMessageDialog(framePai, "SANGRIA lançada com sucesso!");
+        }
+        else{
+            JOptionPane.showMessageDialog(framePai, "Operação Cancelada!");
+        }
+
+    }
+
+    private void btnSuprimentoActionPerfomed(java.awt.event.ActionEvent evt){
+        MovimentacaoCaixaDialog movimentacaoCaixaDialog = new MovimentacaoCaixaDialog(framePai, true, TipoMovimento.ENTRADA);
+        Double valorSagria = movimentacaoCaixaDialog.getValor();
+        String descricao = movimentacaoCaixaDialog.getDescricao();
+
+        if(valorSagria != null && descricao != null){
+            MovimentacaoCaixa mov = new MovimentacaoCaixa();
+
+            mov.setCaixa(caixaAtual);
+            mov.setTipo(TipoMovimento.ENTRADA);
+            mov.setValor(valorSagria);
+            mov.setDescricao(descricao);
+            mov.setDataMovimentacao(LocalDateTime.now());
+            mov.setUsuario(usuarioLogado);
+
+            movimentacaoCaixaService.registrarMovimentacao(mov, usuarioLogado);
+
+            JOptionPane.showMessageDialog(framePai, "SUPRIMENTO lançada com sucesso!");
+        }
+        else{
+            JOptionPane.showMessageDialog(framePai, "Operação Cancelada!");
         }
     }
 
