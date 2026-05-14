@@ -23,6 +23,7 @@ public class Main {
         FinanceiroService financeiroService = new FinanceiroService(contaReceberService, contaPagarService, movimentacaoCaixaService);
         CaixaService caixaService = new CaixaService(new CaixaRepository());
 
+        System.setProperty("sun.java2d.uiScale", "1.0");
 
         //FlyWayConfig.migrate();
         MenuPrincipalView menu = new MenuPrincipalView(usuarioLogado, contaPagarService, contaReceberService, financeiroService, caixaService);

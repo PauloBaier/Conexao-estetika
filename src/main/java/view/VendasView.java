@@ -1,8 +1,14 @@
 package view;
 
+import services.CaixaService;
+import services.VendaService;
+
 import javax.swing.JPanel;
 
 public class VendasView extends JPanel{
+    private VendaService vendaService;
+    private CaixaService caixaService;
+
     private javax.swing.JLabel Titulo;
     private javax.swing.JButton btnAbrirCaixa;
     private javax.swing.JButton btnFecharCaixa;
@@ -25,7 +31,10 @@ public class VendasView extends JPanel{
     private javax.swing.JTextField txtProduto;
     private javax.swing.JTextField txtUsuario;  
     
-    public VendasView(){
+    public VendasView(VendaService vendaService, CaixaService caixaService){
+        this.vendaService = vendaService;
+        this.caixaService = caixaService;
+
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         Titulo = new javax.swing.JLabel();
