@@ -1,4 +1,4 @@
-package view;
+package View;
 
 import models.*;
 import models.enums.*;

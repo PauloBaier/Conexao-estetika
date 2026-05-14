@@ -3,7 +3,7 @@ CREATE TABLE usuarios (
   nome VARCHAR(100) NOT NULL,
   email VARCHAR(254) NOT NULL UNIQUE,
   senha VARCHAR(255) NOT NULL,
-  perfil VARCHAR(20) NOT NULL CHECK (perfil IN ('gerente', 'funcionario', 'administrador')),
+  perfil VARCHAR(20) NOT NULL CHECK (perfil IN ('GERENTE', 'FUNCIONARIO', 'ADMINISTRADOR')),
   ativo BOOLEAN NOT NULL DEFAULT true,
   criado_em TIMESTAMPTZ DEFAULT now()
 );

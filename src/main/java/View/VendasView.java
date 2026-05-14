@@ -1,4 +1,4 @@
-package view;
+package View;
 
 import models.Caixa;
 import models.Usuario;
@@ -6,13 +6,11 @@ import models.Venda;
 import models.enums.StatusVenda;
 import services.*;
 
-import javax.swing.JPanel;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.chrono.ChronoLocalDate;
+import javax.swing.*;
 
 public class VendasView extends JPanel{
     private Venda vendaAtual;
+    private Caixa caixaAtual;
 
     private VendaService vendaService;
     private CaixaService caixaService;
@@ -58,9 +56,6 @@ public class VendasView extends JPanel{
         this.produtoService = produtoService;
         this.usuarioService = usuarioService;
         this.usuarioLogado = usuarioLogado;
-
-
-        Caixa caixaAtual;
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -337,6 +332,7 @@ public class VendasView extends JPanel{
             btnSangria.setEnabled(true);
             btnSuprimento.setEnabled(true);
             btnFinalizarVenda.setEnabled(false);
+            caixaAtual = caixaService.buscarCaixaAberto();
         }
     }
 
@@ -357,10 +353,44 @@ public class VendasView extends JPanel{
         // Abertura de caixa
         // Falta fazer a tela de abertura
         // e verificação de usuário
+
+        //Login
+
+        //Abrir Tela de Abertura(requisitar valor);
+        java.awt.Window win = javax.swing.SwingUtilities.getWindowAncestor(this);
+        java.awt.Frame framePai = (win instanceof java.awt.Frame) ? (java.awt.Frame) win : null;
+        AberturaCaixaDialog aberturaCaixaDialog = new AberturaCaixaDialog(framePai, true, usuarioLogado);
+
+        if((caixaAtual = aberturaCaixaDialog.getCaixa()) == null){
+            JOptionPane.showMessageDialog(null, "Caixa está fechado!");
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "Caixa ABERTO com sucesso!");
+            btnNovaVenda.setEnabled(true);
+            btnAbrirCaixa.setEnabled(false);
+            btnFecharCaixa.setEnabled(true);
+            btnSangria.setEnabled(true);
+            btnSuprimento.setEnabled(true);
+
+            caixaService.abrirCaixa(caixaAtual, usuarioLogado);
+        }
     }
 
     private void btnFecharCaixaActionPerfomed(java.awt.event.ActionEvent evt){
+        if(caixaService.buscarCaixaAberto() != null){
+            caixaService.fecharCaixa(usuarioLogado);
 
+            btnNovaVenda.setEnabled(false);
+            btnAbrirCaixa.setEnabled(true);
+            btnFecharCaixa.setEnabled(false);
+            btnSangria.setEnabled(false);
+            btnSuprimento.setEnabled(false);
+
+            JOptionPane.showMessageDialog(null, "Caixa FECHADO com sucesso!");
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "Caixa já está FECHADO!");
+        }
     }
 
     private void txtClienteActionPerformed(java.awt.event.ActionEvent evt) {

@@ -1,4 +1,4 @@
-package view;
+package View;
 
 import models.Usuario;
 import services.*;
@@ -34,13 +34,19 @@ public class MenuPrincipalView extends JFrame{
     private final ContaReceberService contaReceberService;
     private final FinanceiroService financeiroService;
     private final CaixaService caixaService;
+    private final ClienteService clienteService;
+    private final ProdutoService produtoService;
+    private final UsuarioService usuarioService;
 
     public MenuPrincipalView(Usuario usuarioLogado,
                              ContaPagarService contaPagarService,
                              ContaReceberService contaReceberService,
                              FinanceiroService financeiroService,
                              CaixaService caixaService,
-                             VendaService vendaService
+                             VendaService vendaService,
+                             ClienteService clienteService,
+                             ProdutoService produtoService,
+                             UsuarioService usuarioService
                              ){
 
         this.usuarioLogado       = usuarioLogado;
@@ -48,6 +54,9 @@ public class MenuPrincipalView extends JFrame{
         this.contaReceberService = contaReceberService;
         this.financeiroService   = financeiroService;
         this.caixaService        = caixaService;
+        this.clienteService      = clienteService;
+        this.produtoService      = produtoService;
+        this.usuarioService      = usuarioService;
 
         pnlBackground = new javax.swing.JPanel();
         pnlBarraLateral = new javax.swing.JPanel();
@@ -147,7 +156,7 @@ public class MenuPrincipalView extends JFrame{
         cardContainerLayout = new java.awt.CardLayout();
         pnlCardsContainer.setLayout(cardContainerLayout);
 
-        pnlCardsContainer.add(new VendasView(vendaService, caixaService), "telaVenda");
+        pnlCardsContainer.add(new VendasView(vendaService, caixaService, clienteService, produtoService, usuarioService, usuarioLogado), "telaVenda");
         pnlCardsContainer.add(new FinanceiroPanel(usuarioLogado, contaPagarService, contaReceberService, financeiroService, caixaService), "telaFinanceiro");
 
         javax.swing.GroupLayout pnlBackgroundLayout = new javax.swing.GroupLayout(pnlBackground);
