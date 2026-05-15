@@ -71,6 +71,14 @@ public class ClienteService {
         return repository.buscarPorId(id);
     }
 
+    public List<Cliente> buscarPorNome(String nome) {
+        if (nome == null || nome.isEmpty()) {
+            throw new RuntimeException("Nome inválido.");
+        }
+
+        return repository.buscarPorNome(nome.trim());
+    }
+
     public List<Cliente> listar() {
         return repository.listar();
     }
