@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+package View;
+>>>>>>> ViewMenuPrincipal
 import models.Usuario;
 import services.UsuarioService;
 
@@ -374,4 +378,8 @@ public class LoginView extends JFrame {
             }
         });
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> ViewMenuPrincipal

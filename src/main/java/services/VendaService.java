@@ -1,10 +1,6 @@
 package services;
 
-import models.Caixa;
-import models.ContaReceber;
-import models.ItemVenda;
-import models.MovimentacaoCaixa;
-import models.Venda;
+import models.*;
 import models.enums.StatusConta;
 import models.enums.StatusVenda;
 import models.enums.TipoMovimento;
@@ -39,6 +35,19 @@ public class VendaService {
         
     }
 
+    public void cancelar(Venda venda) {
+        if (venda == null) {
+            throw new IllegalArgumentException("Venda inválida.");
+        }
+
+        if (venda.getId() == null) {
+            // Venda ainda não foi salva — apenas descarta localmente
+            return;
+        }
+
+        itemVendaService.cancelarVenda(venda.getId());
+    }
+
     public void cadastrar(Venda venda) {
         if (venda == null) {
             throw new IllegalArgumentException("Venda inválida.");
@@ -59,7 +68,7 @@ public class VendaService {
         }
         if (venda.getUsuario().getPerfil() == null) {
              throw new IllegalArgumentException("Usuário responsável precisa ter um perfil."); //aq
-}
+        }
 
         if (!venda.getUsuario().isAtivo()) {
             throw new IllegalArgumentException("Usuário responsável pela venda está inativo.");
@@ -67,10 +76,6 @@ public class VendaService {
 
         if (venda.getData() == null) {
             venda.setData(LocalDate.now());
-        }
-
-        if (venda.getCliente() == null) {
-            throw new IllegalArgumentException("A venda precisa estar vinculada a um cliente.");
         }
 
         if (venda.getItens() == null || venda.getItens().isEmpty()) {
@@ -190,5 +195,17 @@ public class VendaService {
         }
 
         vendaRepository.deletar(id);
+    }
+
+    public int quantidadeEmVenda(Venda vendaAtual, Produto produto){
+        int quantidade = 0;
+
+        for(ItemVenda item:vendaAtual.getItens()){
+            if((long)produto.getId() == (long)item.getProduto().getId()){
+                quantidade += item.getQuantidade();
+            }
+        }
+
+        return quantidade;
     }
 }

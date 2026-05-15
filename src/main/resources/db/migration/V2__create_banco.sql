@@ -1,13 +1,8 @@
-
--- TIPOS ENUM
-
 CREATE TYPE status_venda AS ENUM ('PENDENTE', 'PAGO', 'CANCELADO');
 CREATE TYPE forma_pagamento AS ENUM ('DINHEIRO', 'CARTAO', 'PIX');
 CREATE TYPE status_caixa AS ENUM ('ABERTO', 'FECHADO');
 CREATE TYPE tipo_movimento AS ENUM ('ENTRADA', 'SAIDA');
 CREATE TYPE status_conta AS ENUM ('PENDENTE', 'PAGO', 'CANCELADO');
-
-
 
 -- TABELA CLIENTES
 

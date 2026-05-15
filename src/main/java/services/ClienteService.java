@@ -71,6 +71,14 @@ public class ClienteService {
         return repository.buscarPorId(id);
     }
 
+    public List<Cliente> buscarPorNome(String nome) {
+        if (nome == null || nome.isEmpty()) {
+            throw new RuntimeException("Nome inválido.");
+        }
+
+        return repository.buscarPorNome(nome.trim());
+    }
+
     public List<Cliente> listar() {
         return repository.listar();
     }
@@ -109,8 +117,9 @@ public class ClienteService {
             throw new RuntimeException("O email é obrigatório e deve ser válido.");
         }
 
-        if (cliente.getCpf() == null || cliente.getCpf().trim().length() != 11) {
-            throw new RuntimeException("O CPF é obrigatório e deve ter 11 números.");
+        if (cliente.getCpf() == null || cliente.getCpf().trim().length() != 11
+                || !cliente.getCpf().trim().matches("\\d{11}")) {
+            throw new RuntimeException("O CPF é obrigatório e deve ter exatamente 11 dígitos numéricos.");
         }
     }
 }

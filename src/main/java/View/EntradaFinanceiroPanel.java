@@ -17,6 +17,10 @@ public class EntradaFinanceiroPanel extends JPanel {
     private final ProdutoService produtoService;
     private final FornecedorService fornecedorService;
     private final EntradaEstoqueService entradaEstoqueService;
+<<<<<<< HEAD
+=======
+    private final Runnable onVoltar;
+>>>>>>> ViewMenuPrincipal
 
     private final DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
@@ -25,9 +29,25 @@ public class EntradaFinanceiroPanel extends JPanel {
             FornecedorService fornecedorService,
             EntradaEstoqueService entradaEstoqueService
     ) {
+<<<<<<< HEAD
         this.produtoService        = produtoService;
         this.fornecedorService     = fornecedorService;
         this.entradaEstoqueService = entradaEstoqueService;
+=======
+        this(produtoService, fornecedorService, entradaEstoqueService, null);
+    }
+
+    public EntradaFinanceiroPanel(
+            ProdutoService produtoService,
+            FornecedorService fornecedorService,
+            EntradaEstoqueService entradaEstoqueService,
+            Runnable onVoltar
+    ) {
+        this.produtoService        = produtoService;
+        this.fornecedorService     = fornecedorService;
+        this.entradaEstoqueService = entradaEstoqueService;
+        this.onVoltar              = onVoltar;
+>>>>>>> ViewMenuPrincipal
 
         setLayout(new BorderLayout());
         setBackground(MenuPrincipalView.CONTENT_BG);
@@ -58,6 +78,15 @@ public class EntradaFinanceiroPanel extends JPanel {
 
         header.add(title, BorderLayout.WEST);
 
+<<<<<<< HEAD
+=======
+        if (onVoltar != null) {
+            JButton btnVoltar = MenuPrincipalView.createOutlineButton("← Voltar");
+            btnVoltar.addActionListener(e -> onVoltar.run());
+            header.add(btnVoltar, BorderLayout.EAST);
+        }
+
+>>>>>>> ViewMenuPrincipal
         panel.add(header,          BorderLayout.NORTH);
         panel.add(buildFormulario(), BorderLayout.CENTER);
 
@@ -286,4 +315,8 @@ public class EntradaFinanceiroPanel extends JPanel {
     private void showWarning(String msg) {
         JOptionPane.showMessageDialog(this, msg, "Aviso", JOptionPane.WARNING_MESSAGE);
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> ViewMenuPrincipal

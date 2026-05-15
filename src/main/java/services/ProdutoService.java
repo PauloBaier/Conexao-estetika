@@ -1,7 +1,6 @@
 package services;
 
-import models.Fornecedor;
-import models.Produto;
+import models.*;
 import repositories.ProdutoRepository;
 
 import java.util.List;
@@ -51,6 +50,14 @@ public class ProdutoService {
         }
 
         return produtoRepository.buscarPorId(id);
+    }
+
+    public List<Produto> buscarPorNome(String nome) {
+        if (nome == null || nome.isEmpty()) {
+            throw new RuntimeException("Nome inválido.");
+        }
+
+        return produtoRepository.buscarPorNome(nome.trim());
     }
 
     public List<Produto> listarTodos() {
@@ -166,4 +173,17 @@ public class ProdutoService {
             throw new IllegalArgumentException("Categoria é obrigatória!");
         }
     }
+
+    public boolean estoqueSuficiente(Venda vendaAtual, Produto produto, int quantidade, VendaService vendaService){
+
+        quantidade += vendaService.quantidadeEmVenda(vendaAtual, produto);
+
+        if(produto.getQuantidadeEstoque() < quantidade){
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
 }

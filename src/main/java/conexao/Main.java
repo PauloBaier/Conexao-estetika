@@ -1,275 +1,60 @@
 package conexao;
 
-import java.util.ArrayList;
-import java.util.Scanner;
-import java.time.LocalDate;
-import java.util.List;
 import Config.FlyWayConfig;
-import models.*;
-import models.enums.*;
+import models.Usuario;
+import repositories.*;
 import services.*;
+import View.LoginView;
+import View.MenuPrincipalView;
 
 public class Main {
 
-
-    static Scanner sc = new Scanner(System.in);
-
     public static void main(String[] args) {
+
+        VendaRepository vendaRepository = new VendaRepository();
+        UsuarioService usuarioService = new UsuarioService(new UsuarioRepository());
+        ProdutoService produtoService = new ProdutoService(new ProdutoRepository());
+        ContaPagarService contaPagarService = new ContaPagarService(new ContaPagarRepository());
+        ContaReceberService contaReceberService = new ContaReceberService(new ContaReceberRepository());
+        MovimentacaoCaixaService movimentacaoCaixaService = new MovimentacaoCaixaService(new MovimentacaoCaixaRepository(), new CaixaRepository());
+        FinanceiroService financeiroService= new FinanceiroService(contaReceberService, contaPagarService, movimentacaoCaixaService);
+        CaixaService caixaService = new CaixaService(new CaixaRepository());
+        ItemVendaService itemVendaService = new ItemVendaService(new ItemVendaRepository(), produtoService, vendaRepository);
+        VendaService vendaService = new VendaService(vendaRepository, caixaService, itemVendaService, contaReceberService, movimentacaoCaixaService, usuarioService);
+        ClienteService clienteService = new ClienteService(new ClienteRepository());
+        EnderecoService enderecoService = new EnderecoService(new EnderecoRepository(), new ClienteRepository());
+        FornecedorService fornecedorService = new FornecedorService(new FornecedorRepository());
+        CategoriaService categoriaService = new CategoriaService(new CategoriaRepository());
+        EntradaEstoqueService entradaEstoqueService = new EntradaEstoqueService(produtoService, contaPagarService);
+        RelatorioLocal relatorioLocal = new RelatorioLocal();
+
+        System.setProperty("sun.java2d.uiScale", "1.0");
         FlyWayConfig.migrate();
-        // O login é feito pontualmente nas operações protegidas.
-        // Este main é utilizado apenas para inicialização do Flyway.
-    }
 
-    // Cadastro Cliente
-    public static void cadastroCliente(ClienteService clienteService, EnderecoService enderecoService) {
-        try {
-            Cliente cliente = new Cliente();
-
-            System.out.print("Nome: ");
-            cliente.setNome(sc.nextLine());
-
-            System.out.print("Telefone: ");
-            cliente.setTelefone(sc.nextLine());
-
-            System.out.print("Email: ");
-            cliente.setEmail(sc.nextLine());
-
-            System.out.print("CPF (11 números): ");
-            cliente.setCpf(sc.nextLine());
-
-            clienteService.cadastrar(cliente);
-
-            if (cliente.getId() == null || cliente.getId() <= 0) {
-                throw new RuntimeException("Erro ao salvar cliente");
-            }
-
-            System.out.println("\n=== Endereço ===");
-            cadastroEndereco(enderecoService, cliente.getId());
-
-            System.out.println("Cliente cadastrado com sucesso!");
-
-        } catch (Exception e) {
-            System.out.println("Erro ao cadastrar cliente: " + e.getMessage());
-        }
-    }
-
-    public static void cadastroEndereco(EnderecoService enderecoService, Long clienteId) {
-    try {
-        Endereco endereco = new Endereco();
-
-        System.out.print("Rua: ");
-        endereco.setRua(sc.nextLine());
-
-        System.out.print("Bairro: ");
-        endereco.setBairro(sc.nextLine());
-
-        System.out.print("Número: ");
-        endereco.setNumero(sc.nextLine());
-
-        System.out.print("CEP: ");
-        endereco.setCep(sc.nextLine());
-
-        enderecoService.cadastrarEndereco(endereco, clienteId);
-        System.out.println("Endereço cadastrado com sucesso!");
-        
-        } catch (Exception e) {
-            System.out.println("Erro ao cadastrar endereço: " + e.getMessage());
-        }
-    }
-
-    // Cadastro Fornecedor
-    public static void cadastroFornecedor(FornecedorService fornecedorService) {
-        try {
-            System.out.println("=== NOVO FORNECEDOR ===");
-
-            Fornecedor fornecedor = new Fornecedor();
-
-            System.out.print("Nome: ");
-            fornecedor.setNome(sc.nextLine());
-
-            System.out.print("Telefone: ");
-            fornecedor.setTelefone(sc.nextLine());
-
-            System.out.print("Email: ");
-            fornecedor.setEmail(sc.nextLine());
-
-            System.out.print("CNPJ (14 números): ");
-            fornecedor.setCnpj(sc.nextLine());
-
-            System.out.print("Razão Social: ");
-            fornecedor.setRazaoSocial(sc.nextLine());
-
-            fornecedorService.salvar(fornecedor);
-
-            System.out.println("Fornecedor cadastrado com sucesso!");
-
-        } catch (Exception e) {
-            System.out.println("Erro ao cadastrar fornecedor: " + e.getMessage());
-        }
-    }
-
-    public static void cadastroCategoria(CategoriaService categoriaService) {
-        try {
-            Categoria categoria = new Categoria();
-
-            System.out.print("Nome da categoria: ");
-            categoria.setNome(sc.nextLine());
-
-            categoriaService.cadastrar(categoria);
-
-            System.out.println("Categoria cadastrada com sucesso!");
-
-        } catch (Exception e) {
-            System.out.println("Erro ao cadastrar categoria: " + e.getMessage());
-        }
-    }
-
-    public static void cadastroProduto(
-            ProdutoService produtoService,
-            FornecedorService fornecedorService,
-            CategoriaService categoriaService
-    ) {
-        System.out.println("=== NOVO PRODUTO ===");
-        Produto produto = new Produto();
-
-        try {
-            System.out.print("Nome: ");
-            produto.setNome(sc.nextLine());
-
-            System.out.print("Preço de Custo: ");
-            produto.setPrecoCompra(Double.parseDouble(sc.nextLine()));
-
-            System.out.print("Preço de Venda: ");
-            produto.setPrecoVenda(Double.parseDouble(sc.nextLine()));
-
-            System.out.print("Quantidade de Estoque: ");
-            produto.setQuantidadeEstoque(Integer.parseInt(sc.nextLine()));
-
-            System.out.print("Estoque Mínimo: ");
-            produto.setEstoqueMinimo(Integer.parseInt(sc.nextLine()));
-
-            System.out.println("\n=== Escolha Categoria ===");
-            Categoria categoria = escolherCategoria(categoriaService);
-
-            if (categoria == null) {
-                System.out.println("Categoria obrigatória!");
-                return;
-            }
-
-            produto.setCategoria(categoria);
-
-            System.out.println("\n=== Escolha Fornecedor ===");
-            Fornecedor fornecedor = escolherFornecedor(fornecedorService);
-
-            if (fornecedor == null) {
-                System.out.println("Fornecedor obrigatório!");
-                return;
-            }
-
-            produto.adicionarFornecedor(fornecedor);
-
-            produtoService.salvar(produto);
-
-            System.out.println("Produto cadastrado com sucesso!");
-
-        } catch (Exception e) {
-            System.out.println("Erro ao cadastrar produto: " + e.getMessage());
-        }
-    }
-
-
-
-
-    public static Categoria escolherCategoria(CategoriaService categoriaService) {
-        List<Categoria> categorias = categoriaService.listarTodas();
-
-        if (categorias.isEmpty()) {
-            System.out.println("Nenhuma categoria cadastrada!");
-            return null;
-        }
-
-        System.out.println("\n===== LISTA DE CATEGORIAS =====");
-        for (Categoria c : categorias) {
-            System.out.println("ID: " + c.getId() + " | Nome: " + c.getNome());
-        }
-
-        while (true) {
-            try {
-                System.out.print("Digite o ID da categoria: ");
-                Long id = Long.parseLong(sc.nextLine());
-
-                Categoria categoria = categoriaService.buscarPorId(id);
-
-                if (categoria == null) {
-                    System.out.println("Categoria não encontrada!");
-                    continue;
-                }
-
-                return categoria;
-
-            } catch (Exception e) {
-                printEntradaInvalida();
-            }
-        }
-    }
-
-    // Loop que exibe todos os fornecedores e escolhe por id
-    public static Fornecedor escolherFornecedor(FornecedorService fornecedorService) {
-        List<Fornecedor> fornecedores = fornecedorService.listarTodos();
-
-        if (fornecedores.isEmpty()) {
-            System.out.println("Nenhum fornecedor cadastrado!");
-            return null;
-        }
-
-        System.out.println("\n===== LISTA DE FORNECEDORES =====");
-        for (Fornecedor f : fornecedores) {
-            System.out.println("ID: " + f.getId() + " | Nome: " + f.getNome());
-        }
-
-        while (true) {
-            try {
-                System.out.print("Digite o ID do fornecedor: ");
-                long id = Long.parseLong(sc.nextLine());
-
-                Fornecedor fornecedor = fornecedorService.buscarPorId(id);
-
-                if (fornecedor == null) {
-                    System.out.println("Fornecedor não encontrado.");
-                    continue;
-                }
-
-                return fornecedor;
-
-            } catch (Exception e) {
-                printEntradaInvalida();
-            }
-        }
-    }
-
-
-
-
-    // Função para listar todos os clientes cadastrados
-    public static void listarCliente(ClienteService clienteService) {
-        List<Cliente> clientes = clienteService.listarTodos();
-
-        if (clientes.isEmpty()) {
-            System.out.println("Nenhum cliente cadastrado!");
-            return;
-        }
-
-        System.out.println("\n===== LISTA DE CLIENTES =====");
-        for (Cliente c : clientes) {
-            System.out.println(
-                    "ID: " + c.getId() +
-                            " | Nome: " + c.getNome() +
-                            " | Telefone: " + c.getTelefone() +
-                            " | Email: " + c.getEmail() +
-                            " | CPF: " + c.getCpf()
+        // ── Login ────────────────────────────────────────────────────────────
+        new LoginView(usuarioService, usuario -> {
+            MenuPrincipalView menu = new MenuPrincipalView(
+                    usuario,
+                    contaPagarService,
+                    contaReceberService,
+                    financeiroService,
+                    caixaService,
+                    vendaService,
+                    clienteService,
+                    produtoService,
+                    usuarioService,
+                    movimentacaoCaixaService,
+                    enderecoService,
+                    fornecedorService,
+                    categoriaService,
+                    entradaEstoqueService,
+                    relatorioLocal
             );
-        }
+            menu.setLocationRelativeTo(null);
+            menu.setVisible(true);
+        });
     }
+<<<<<<< HEAD
 
     // Função para listar todos os fornecedores cadastrados
     public static void listarFornecedor(FornecedorService fornecedorService) {
@@ -1742,4 +1527,6 @@ public class Main {
     }
 
 
+=======
+>>>>>>> ViewMenuPrincipal
 }

@@ -2,6 +2,7 @@ package repositories;
 
 import Config.HibernateConfig;
 import jakarta.persistence.EntityManager;
+
 import models.Produto;
 
 import java.util.List;
@@ -72,6 +73,15 @@ public class ProdutoRepository {
         EntityManager em = HibernateConfig.getEntityManager();
         try {
             return em.createQuery("SELECT p FROM Produto p", Produto.class).getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
+    public List<Produto> buscarPorNome(String nome) {
+        EntityManager em = HibernateConfig.getEntityManager();
+        try {
+            return em.createQuery("FROM Produto p WHERE LOWER(p.nome) like :nome ", Produto.class).setParameter("nome", "%" + nome.toLowerCase() + "%").getResultList();
         } finally {
             em.close();
         }

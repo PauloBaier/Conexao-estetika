@@ -2,6 +2,7 @@ package services;
 
 import models.Caixa;
 import models.Usuario;
+import models.Venda;
 import models.enums.StatusCaixa;
 import models.enums.TipoUsuario;
 import repositories.CaixaRepository;
@@ -42,13 +43,17 @@ public class CaixaService {
         repository.salvar(caixa);
     }
 
-    public void fecharCaixa(Usuario usuario) {
+    public void fecharCaixa(Usuario usuario, Venda vendaAtual) {
         validarPermissaoCaixa(usuario);
 
         Caixa caixa = repository.buscarCaixaAberto();
 
         if (caixa == null) {
             throw new IllegalArgumentException("Não existe caixa aberto!");
+        }
+
+        if(vendaAtual != null){
+            throw new RuntimeException("O Caixa não pode ser fechado com uma VENDA em aberto!");
         }
 
         caixa.setDataFechamento(LocalDate.now());
@@ -103,7 +108,7 @@ public class CaixaService {
         if (!TipoUsuario.ADMINISTRADOR.name().equals(usuario.getPerfil()) &&
             !TipoUsuario.GERENTE.name().equals(usuario.getPerfil())) {
 
-            throw new IllegalArgumentException("Apenas administrador ou gerente podem operar o caixa.");
+            throw new IllegalArgumentException("Usuário '" + usuario.getNome() + "' não tem permissão para operar o caixa. Apenas Administrador ou Gerente.");
         }
     }
 }

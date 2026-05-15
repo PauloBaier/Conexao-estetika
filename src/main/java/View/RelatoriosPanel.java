@@ -299,4 +299,8 @@ public class RelatoriosPanel extends JPanel {
 
         return panel;
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> ViewMenuPrincipal

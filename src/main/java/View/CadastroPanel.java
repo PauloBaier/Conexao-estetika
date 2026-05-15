@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+package View;
+>>>>>>> ViewMenuPrincipal
 import models.*;
 import services.*;
 
@@ -818,4 +822,8 @@ public class CadastroPanel extends JPanel {
         return JOptionPane.showConfirmDialog(this, msg, "Confirmar",
                 JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> ViewMenuPrincipal
