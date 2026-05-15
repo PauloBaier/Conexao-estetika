@@ -1,8 +1,6 @@
 package services;
 
-import models.Cliente;
-import models.Fornecedor;
-import models.Produto;
+import models.*;
 import repositories.ProdutoRepository;
 
 import java.util.List;
@@ -175,4 +173,17 @@ public class ProdutoService {
             throw new IllegalArgumentException("Categoria é obrigatória!");
         }
     }
+
+    public boolean estoqueSuficiente(Venda vendaAtual, Produto produto, int quantidade, VendaService vendaService){
+
+        quantidade += vendaService.quantidadeEmVenda(vendaAtual, produto);
+
+        if(produto.getQuantidadeEstoque() < quantidade){
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
 }

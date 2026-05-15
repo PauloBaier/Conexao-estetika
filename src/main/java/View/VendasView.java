@@ -1,11 +1,14 @@
 package View;
 
 import models.*;
+import models.enums.FormaPagamento;
 import models.enums.StatusVenda;
 import models.enums.TipoMovimento;
 import services.*;
 
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
@@ -164,6 +167,7 @@ public class VendasView extends JPanel{
         btnFinalizarVenda.setText("Finalizar Venda");
         btnFinalizarVenda.setBorderPainted(false);
         btnFinalizarVenda.setPreferredSize(new java.awt.Dimension(120, 34));
+        btnFinalizarVenda.addActionListener(this::btnFinalizarVendaActionPerfomed);
 
         jPanel1.setBackground(new java.awt.Color(232, 245, 242));
 
@@ -278,6 +282,19 @@ public class VendasView extends JPanel{
             tblItenVenda.getColumnModel().getColumn(4).setResizable(false);
             tblItenVenda.getColumnModel().getColumn(4).setPreferredWidth(20);
         }
+        tblItenVenda.getModel().addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                if(e.getType() == TableModelEvent.UPDATE){
+                    int linhaAlterada = e.getFirstRow();
+                    int coluna = e.getColumn();
+
+                    if(coluna == 2){
+                        quantidadeTabelaAtualizada(linhaAlterada, coluna);
+                    }
+                }
+            }
+        });
 
         btnCancelar.setBackground(new java.awt.Color(47, 160, 132));
         btnCancelar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -498,26 +515,44 @@ public class VendasView extends JPanel{
         int opcao = JOptionPane.showConfirmDialog(null, "Deseja cancelar a venda?", "Cancelar", JOptionPane.YES_NO_OPTION);
 
         if(opcao == JOptionPane.YES_OPTION){
+            if(vendaAtual.getItens().isEmpty()){
+                limparVenda();
+                return;
+            }
+
             vendaAtual.setStatus(StatusVenda.CANCELADO);
 
             vendaService.cadastrar(vendaAtual);
 
-            vendaAtual = null;
+            limparVenda();
+        }
+    }
 
-            btnNovaVenda.setEnabled(true);
-            btnCancelar.setEnabled(false);
-            btnFinalizarVenda.setEnabled(false);
+    private void btnFinalizarVendaActionPerfomed(java.awt.event.ActionEvent evt){
+        PagamentoDialog pagamentoMenu = new PagamentoDialog(framePai, true, vendaAtual.getValorTotal());
+        String formaPagamento = pagamentoMenu.getFormaPagamento();
 
-            DefaultTableModel tableModel = (DefaultTableModel) tblItenVenda.getModel();
-            tableModel.setRowCount(0);
+        if(formaPagamento != null){
+            if(formaPagamento.equals("PAGAMENTO PENDENTE")){
+                vendaAtual.setStatus(StatusVenda.PENDENTE);
+                vendaAtual.setFormaPagamento(null);
+            }
+            if(formaPagamento.equals("DINHEIRO")){
+                vendaAtual.setStatus(StatusVenda.PAGO);
+                vendaAtual.setFormaPagamento(FormaPagamento.DINHEIRO);
+            }
+            if(formaPagamento.equals("CARTAO")){
+                vendaAtual.setStatus(StatusVenda.PAGO);
+                vendaAtual.setFormaPagamento(FormaPagamento.CARTAO);
+            }
+            if(formaPagamento.equals("PIX")){
+                vendaAtual.setStatus(StatusVenda.PAGO);
+                vendaAtual.setFormaPagamento(FormaPagamento.PIX);
+            }
 
-            txtCliente.setText("");
-            txtUsuario.setText("");
+            vendaService.cadastrar(vendaAtual);
 
-            txtCliente.setEnabled(false);
-            txtProduto.setEnabled(false);
-
-            lblSubtotaValor.setText("0,00");
+            limparVenda();
         }
     }
 
@@ -536,7 +571,16 @@ public class VendasView extends JPanel{
         SelecionarProdutosDialog selecionarProdutoMenu = new SelecionarProdutosDialog(framePai, true, produtoService, txtProduto.getText());
         if(selecionarProdutoMenu.getProdutoSelecionado() != null){
             try{
-                vendaAtual.adicionarItem(selecionarProdutoMenu.getProdutoSelecionado(), selecionarProdutoMenu.getQuantidade());
+                Produto produto = selecionarProdutoMenu.getProdutoSelecionado();
+                int quantidade = selecionarProdutoMenu.getQuantidade();
+
+                if(produtoService.estoqueSuficiente(vendaAtual, produto, quantidade, vendaService)){
+                    vendaAtual.adicionarItem(produto, quantidade);
+                }
+                else {
+                    JOptionPane.showMessageDialog(null, "Estoque Insuficiente!");
+                }
+
             }catch (Exception ex){
                 JOptionPane.showMessageDialog(null, ex.getMessage());
             }
@@ -546,6 +590,30 @@ public class VendasView extends JPanel{
         }
         else{
             JOptionPane.showMessageDialog(null, "Nenhum Produto foi selecionado!");
+        }
+    }
+
+    private void quantidadeTabelaAtualizada(int linha, int coluna){
+        int quantidade = (int)tblItenVenda.getValueAt(linha, coluna);
+        Long produtoId = (Long)tblItenVenda.getValueAt(linha, 0);
+        Produto produto = produtoService.buscarPorId(produtoId);
+
+        int contagem = 0;
+
+        for(int i = 0; i < tblItenVenda.getRowCount(); i++){
+            if(tblItenVenda.getValueAt(i, 0) == produtoId){
+                contagem += (int)tblItenVenda.getValueAt(i, 2);
+            }
+        }
+
+        if((contagem + quantidade) <= produto.getQuantidadeEstoque()){
+            vendaAtual.getItens().get(linha).setQuantidade(quantidade);
+            popularTabelaItens();
+            atualizarSubTotal();
+        }else{
+            JOptionPane.showMessageDialog(null, "Estoque Insuficiente!");
+            popularTabelaItens();
+            atualizarSubTotal();
         }
     }
 
@@ -574,5 +642,24 @@ public class VendasView extends JPanel{
         }
 
         lblSubtotaValor.setText("" + soma);
+    }
+
+    private void limparVenda(){
+        vendaAtual = null;
+
+        btnNovaVenda.setEnabled(true);
+        btnCancelar.setEnabled(false);
+        btnFinalizarVenda.setEnabled(false);
+
+        DefaultTableModel tableModel = (DefaultTableModel) tblItenVenda.getModel();
+        tableModel.setRowCount(0);
+
+        txtCliente.setText("");
+        txtUsuario.setText("");
+
+        txtCliente.setEnabled(false);
+        txtProduto.setEnabled(false);
+
+        lblSubtotaValor.setText("0,00");
     }
 }

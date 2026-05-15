@@ -5,21 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2f7d4fd6-e0f8-43be-b480-26f1c4d3772c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/View/SelecionarClienteDialog.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/View/SelecionarProdutosDialog.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/View/PagamentoDialog.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/View/VendasView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/View/VendasView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/models/Venda.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/Venda.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/repositories/ClienteRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/repositories/ClienteRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/repositories/ProdutoRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/repositories/ProdutoRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/services/CaixaService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/services/CaixaService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/services/ClienteService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/services/ClienteService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/services/ItemVendaService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/services/ItemVendaService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/services/ProdutoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/services/ProdutoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/repositories/ClienteRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/repositories/ClienteRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/repositories/ProdutoRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/repositories/ProdutoRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/services/CaixaService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/CaixaService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/services/ClienteService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/ClienteService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/services/ProdutoService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/ProdutoService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/services/VendaService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/services/VendaService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,6 +60,7 @@
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "ViewMenuPrincipal",
+    "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
     "onboarding.tips.debug.path": "C:/Users/Admin/Downloads/JAVA/Conexao/src/main/java/com/Estudo/Main.java"
   }
@@ -123,6 +115,15 @@
             <option name="WATCH_EXIT" value="false" />
           </properties>
           <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/View/VendasView.java</url>
+          <line>595</line>
+          <properties class="View.VendasView" method="quantidadeTabelaAtualizada">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="4" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
