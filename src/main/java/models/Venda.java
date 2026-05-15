@@ -37,7 +37,7 @@ public class Venda {
     private List<ItemVenda> itens = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "fk_usuario_id", nullable = false)
+    @JoinColumn(name = "fk_usuarios_id", nullable = false)
     private Usuario usuario;
 
     public Venda() {

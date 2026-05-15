@@ -1,14 +1,14 @@
 package View;
 
-import models.Caixa;
-import models.MovimentacaoCaixa;
-import models.Usuario;
-import models.Venda;
+import models.*;
 import models.enums.StatusVenda;
 import models.enums.TipoMovimento;
 import services.*;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.time.LocalDateTime;
 
 public class VendasView extends JPanel{
@@ -25,6 +25,7 @@ public class VendasView extends JPanel{
 
     private javax.swing.JLabel Titulo;
     private javax.swing.JButton btnAbrirCaixa;
+    private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnFecharCaixa;
     private javax.swing.JButton btnFinalizarVenda;
     private javax.swing.JButton btnNovaVenda;
@@ -86,6 +87,7 @@ public class VendasView extends JPanel{
         txtProduto = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblItenVenda = new javax.swing.JTable();
+        btnCancelar = new javax.swing.JButton();
 
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -181,11 +183,22 @@ public class VendasView extends JPanel{
         lblProduto.setText("Produto:");
 
         txtUsuario.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtUsuario.setEditable(false);
 
         txtCliente.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         txtCliente.addActionListener(this::txtClienteActionPerformed);
+        txtCliente.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                if(vendaAtual.getCliente() != null) {
+                    String nomeCliente = vendaAtual.getCliente().getNome();
+                    txtCliente.setText(nomeCliente != null ? nomeCliente : "");
+                }
+            }
+        });
 
         txtProduto.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtProduto.addActionListener(this::txtProdutoActionPerformed);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -231,9 +244,6 @@ public class VendasView extends JPanel{
         tblItenVenda.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
             },
             new String [] {
                 "Id", "Nome", "Quantidade", "Preço Un.", "Valor Total"
@@ -269,63 +279,75 @@ public class VendasView extends JPanel{
             tblItenVenda.getColumnModel().getColumn(4).setPreferredWidth(20);
         }
 
+        btnCancelar.setBackground(new java.awt.Color(47, 160, 132));
+        btnCancelar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btnCancelar.setForeground(new java.awt.Color(255, 255, 255));
+        btnCancelar.setText("Cancelar");
+        btnCancelar.setBorderPainted(false);
+        btnCancelar.setPreferredSize(new java.awt.Dimension(120, 34));
+        btnCancelar.addActionListener(this::btnCancelarActionPerfomed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnNovaVenda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(Titulo))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnAbrirCaixa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnFecharCaixa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnSangria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblSubtotal)
-                                .addGap(39, 39, 39)
-                                .addComponent(lblSubtotaValor)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnSuprimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnFinalizarVenda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 606, Short.MAX_VALUE))
-                .addContainerGap(11, Short.MAX_VALUE))
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addGap(21, 21, 21)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                        .addGroup(layout.createSequentialGroup()
+                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                        .addComponent(btnNovaVenda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                        .addComponent(Titulo))
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addComponent(btnAbrirCaixa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addComponent(btnFecharCaixa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addComponent(btnSangria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                        .addGroup(layout.createSequentialGroup()
+                                                                .addComponent(lblSubtotal)
+                                                                .addGap(39, 39, 39)
+                                                                .addComponent(lblSubtotaValor)
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                        .addGroup(layout.createSequentialGroup()
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addComponent(btnSuprimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                .addComponent(btnFinalizarVenda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 606, Short.MAX_VALUE))
+                                .addContainerGap(11, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addComponent(Titulo)
-                .addGap(35, 35, 35)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnNovaVenda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnAbrirCaixa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnFecharCaixa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSangria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSuprimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(12, 12, 12)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 336, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(lblSubtotal)
-                        .addComponent(lblSubtotaValor))
-                    .addComponent(btnFinalizarVenda, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addGap(21, 21, 21)
+                                .addComponent(Titulo)
+                                .addGap(35, 35, 35)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(btnNovaVenda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btnAbrirCaixa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btnFecharCaixa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btnSangria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btnSuprimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(12, 12, 12)
+                                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 336, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(10, 10, 10)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                .addComponent(lblSubtotal)
+                                                .addComponent(lblSubtotaValor))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                .addComponent(btnFinalizarVenda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addContainerGap())
         );
 
         java.awt.Window win = javax.swing.SwingUtilities.getWindowAncestor(this);
@@ -348,6 +370,11 @@ public class VendasView extends JPanel{
             btnFinalizarVenda.setEnabled(false);
             caixaAtual = caixaService.buscarCaixaAberto();
         }
+
+        txtCliente.setEnabled(false);
+        txtProduto.setEnabled(false);
+
+        btnCancelar.setEnabled(false);
     }
 
     private void btnNovaVendaActionPerfomed(java.awt.event.ActionEvent evt){
@@ -359,8 +386,14 @@ public class VendasView extends JPanel{
 
         btnNovaVenda.setEnabled(false);
         btnFinalizarVenda.setEnabled(true);
+        btnCancelar.setEnabled(true);
         txtUsuario.setText("ID: " + usuarioLogado.getId() + "Nome: " + usuarioLogado.getNome());
         lblSubtotaValor.setText("" + vendaAtual.getValorTotal());
+
+        txtCliente.setEnabled(true);
+        txtProduto.setEnabled(true);
+
+        popularTabelaItens();
     }
 
     private void btnAbrirCaixaActionPerfomed(java.awt.event.ActionEvent evt){
@@ -389,19 +422,23 @@ public class VendasView extends JPanel{
     }
 
     private void btnFecharCaixaActionPerfomed(java.awt.event.ActionEvent evt){
-        if(caixaService.buscarCaixaAberto() != null){
-            caixaService.fecharCaixa(usuarioLogado);
+        try{
+            if(caixaService.buscarCaixaAberto() != null){
+                caixaService.fecharCaixa(usuarioLogado, vendaAtual);
 
-            btnNovaVenda.setEnabled(false);
-            btnAbrirCaixa.setEnabled(true);
-            btnFecharCaixa.setEnabled(false);
-            btnSangria.setEnabled(false);
-            btnSuprimento.setEnabled(false);
+                btnNovaVenda.setEnabled(false);
+                btnAbrirCaixa.setEnabled(true);
+                btnFecharCaixa.setEnabled(false);
+                btnSangria.setEnabled(false);
+                btnSuprimento.setEnabled(false);
 
-            JOptionPane.showMessageDialog(null, "Caixa FECHADO com sucesso!");
-        }
-        else{
-            JOptionPane.showMessageDialog(null, "Caixa já está FECHADO!");
+                JOptionPane.showMessageDialog(null, "Caixa FECHADO com sucesso!");
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "Caixa já está FECHADO!");
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null,ex.getMessage());
         }
     }
 
@@ -457,7 +494,85 @@ public class VendasView extends JPanel{
         }
     }
 
+    private void btnCancelarActionPerfomed(java.awt.event.ActionEvent evt){
+        int opcao = JOptionPane.showConfirmDialog(null, "Deseja cancelar a venda?", "Cancelar", JOptionPane.YES_NO_OPTION);
+
+        if(opcao == JOptionPane.YES_OPTION){
+            vendaAtual.setStatus(StatusVenda.CANCELADO);
+
+            vendaService.cadastrar(vendaAtual);
+
+            vendaAtual = null;
+
+            btnNovaVenda.setEnabled(true);
+            btnCancelar.setEnabled(false);
+            btnFinalizarVenda.setEnabled(false);
+
+            DefaultTableModel tableModel = (DefaultTableModel) tblItenVenda.getModel();
+            tableModel.setRowCount(0);
+
+            txtCliente.setText("");
+            txtUsuario.setText("");
+
+            txtCliente.setEnabled(false);
+            txtProduto.setEnabled(false);
+
+            lblSubtotaValor.setText("0,00");
+        }
+    }
+
     private void txtClienteActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-    } 
+        SelecionarClienteDialog selecionarClienteMenu = new SelecionarClienteDialog(framePai, true, clienteService, txtCliente.getText());
+        if(selecionarClienteMenu.getClienteSelecionado() != null){
+            vendaAtual.setCliente(selecionarClienteMenu.getClienteSelecionado());
+            txtCliente.setText(vendaAtual.getCliente().getNome());
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "Nenhum cliente foi selecionado!");
+        }
+    }
+
+    private void txtProdutoActionPerformed(java.awt.event.ActionEvent evt) {
+        SelecionarProdutosDialog selecionarProdutoMenu = new SelecionarProdutosDialog(framePai, true, produtoService, txtProduto.getText());
+        if(selecionarProdutoMenu.getProdutoSelecionado() != null){
+            try{
+                vendaAtual.adicionarItem(selecionarProdutoMenu.getProdutoSelecionado(), selecionarProdutoMenu.getQuantidade());
+            }catch (Exception ex){
+                JOptionPane.showMessageDialog(null, ex.getMessage());
+            }
+
+            popularTabelaItens();
+            atualizarSubTotal();
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "Nenhum Produto foi selecionado!");
+        }
+    }
+
+    private void popularTabelaItens(){
+        DefaultTableModel tableModel = (DefaultTableModel) tblItenVenda.getModel();
+        tableModel.setRowCount(0);
+
+        for (ItemVenda item: vendaAtual.getItens()){
+            Object[] linha = new Object[]{
+                    item.getProduto().getId(),
+                    item.getProduto().getNome(),
+                    item.getQuantidade(),
+                    item.getPrecoUnitario(),
+                    item.getTotalItem()
+            };
+
+            tableModel.addRow(linha);
+        }
+    }
+
+    private void atualizarSubTotal(){
+        double soma = 0;
+
+        for(ItemVenda item: vendaAtual.getItens()){
+            soma += item.getTotalItem();
+        }
+
+        lblSubtotaValor.setText("" + soma);
+    }
 }

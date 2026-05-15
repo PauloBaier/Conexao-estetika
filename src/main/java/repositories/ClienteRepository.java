@@ -76,4 +76,13 @@ public class ClienteRepository {
             em.close();
         }
     }
+
+    public List<Cliente> buscarPorNome(String nome) {
+        EntityManager em = HibernateConfig.getEntityManager();
+        try {
+            return em.createQuery("FROM Cliente c WHERE LOWER(c.nome) like :nome ", Cliente.class).setParameter("nome", "%" + nome.toLowerCase() + "%").getResultList();
+        } finally {
+            em.close();
+        }
+    }
 }

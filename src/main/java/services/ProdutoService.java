@@ -1,5 +1,6 @@
 package services;
 
+import models.Cliente;
 import models.Fornecedor;
 import models.Produto;
 import repositories.ProdutoRepository;
@@ -51,6 +52,14 @@ public class ProdutoService {
         }
 
         return produtoRepository.buscarPorId(id);
+    }
+
+    public List<Produto> buscarPorNome(String nome) {
+        if (nome == null || nome.isEmpty()) {
+            throw new RuntimeException("Nome inválido.");
+        }
+
+        return produtoRepository.buscarPorNome(nome.trim());
     }
 
     public List<Produto> listarTodos() {
