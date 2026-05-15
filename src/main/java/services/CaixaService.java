@@ -108,7 +108,7 @@ public class CaixaService {
         if (usuario.getPerfil() != TipoUsuario.ADMINISTRADOR &&
             usuario.getPerfil() != TipoUsuario.GERENTE) {
 
-            throw new IllegalArgumentException("Apenas administrador ou gerente podem operar o caixa.");
+            throw new IllegalArgumentException("Usuário '" + usuario.getNome() + "' não tem permissão para operar o caixa. Apenas Administrador ou Gerente.");
         }
     }
 }

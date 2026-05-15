@@ -1,7 +1,6 @@
 package View;
 
 import models.Cliente;
-import models.enums.TipoMovimento;
 import services.ClienteService;
 
 import javax.swing.*;
@@ -261,7 +260,7 @@ public class SelecionarClienteDialog extends JDialog {
                     c.getId(),
                     c.getNome(),
                     c.getCpf(),
-                    c.getCpf() == null ? "Não Cadastrado" : c.getCpf()
+                    c.getTelefone() == null ? "Não Cadastrado" : c.getTelefone()
             };
 
             tableModel.addRow(linha);

@@ -14,7 +14,7 @@ import java.util.List;
 public class SelecionarProdutosDialog extends JDialog {
     private ProdutoService produtoService;
     private Produto produtoSelecionado;
-    private int quantidade;
+    private int quantidade = 1;
 
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnPesquisar;
@@ -237,8 +237,13 @@ public class SelecionarProdutosDialog extends JDialog {
         int linhaSelecionada = tblProdutos.getSelectedRow();
 
         if(linhaSelecionada != -1){
+            int qtd = (int)tblProdutos.getModel().getValueAt(linhaSelecionada, 2);
+            if(qtd <= 0){
+                JOptionPane.showMessageDialog(this, "Informe uma quantidade maior que zero!", "Atenção", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
             produtoSelecionado = produtoService.buscarPorId((long)tblProdutos.getModel().getValueAt(linhaSelecionada, 0));
-            quantidade = (int)tblProdutos.getModel().getValueAt(linhaSelecionada, 2);
+            quantidade = qtd;
         }
 
         dispose();
@@ -257,7 +262,7 @@ public class SelecionarProdutosDialog extends JDialog {
             Object[] linha = new Object[]{
                     p.getId(),
                     p.getNome(),
-                    0,
+                    1,
                     p.getQuantidadeEstoque(),
                     p.getPrecoVenda()
             };

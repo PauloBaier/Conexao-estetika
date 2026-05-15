@@ -35,6 +35,19 @@ public class VendaService {
         
     }
 
+    public void cancelar(Venda venda) {
+        if (venda == null) {
+            throw new IllegalArgumentException("Venda inválida.");
+        }
+
+        if (venda.getId() == null) {
+            // Venda ainda não foi salva — apenas descarta localmente
+            return;
+        }
+
+        itemVendaService.cancelarVenda(venda.getId());
+    }
+
     public void cadastrar(Venda venda) {
         if (venda == null) {
             throw new IllegalArgumentException("Venda inválida.");

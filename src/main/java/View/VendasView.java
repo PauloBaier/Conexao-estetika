@@ -34,11 +34,10 @@ public class VendasView extends JPanel{
     private javax.swing.JButton btnNovaVenda;
     private javax.swing.JButton btnSangria;
     private javax.swing.JButton btnSuprimento;
+    private javax.swing.JButton btnSaldoCaixa;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JLabel lblCliente;
     private javax.swing.JLabel lblProduto;
     private javax.swing.JLabel lblSubtotaValor;
@@ -69,14 +68,13 @@ public class VendasView extends JPanel{
         this.usuarioLogado = usuarioLogado;
         this.movimentacaoCaixaService = movimentacaoCaixaService;
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
         Titulo = new javax.swing.JLabel();
         btnNovaVenda = new javax.swing.JButton();
         btnAbrirCaixa = new javax.swing.JButton();
         btnFecharCaixa = new javax.swing.JButton();
         btnSuprimento = new javax.swing.JButton();
         btnSangria = new javax.swing.JButton();
+        btnSaldoCaixa = new javax.swing.JButton();
         lblSubtotal = new javax.swing.JLabel();
         lblSubtotaValor = new javax.swing.JLabel();
         btnFinalizarVenda = new javax.swing.JButton();
@@ -91,22 +89,7 @@ public class VendasView extends JPanel{
         jScrollPane2 = new javax.swing.JScrollPane();
         tblItenVenda = new javax.swing.JTable();
         btnCancelar = new javax.swing.JButton();
-
-
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane1.setViewportView(jTable1);
-
-        setBackground(new java.awt.Color(238, 238, 238));
+setBackground(new java.awt.Color(238, 238, 238));
         setPreferredSize(new java.awt.Dimension(638, 638));
 
         Titulo.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
@@ -152,6 +135,14 @@ public class VendasView extends JPanel{
         btnSangria.setBorderPainted(false);
         btnSangria.setPreferredSize(new java.awt.Dimension(120, 34));
         btnSangria.addActionListener(this::btnSangriaActionPerfomed);
+
+        btnSaldoCaixa.setBackground(new java.awt.Color(31, 111, 95));
+        btnSaldoCaixa.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 12));
+        btnSaldoCaixa.setForeground(new java.awt.Color(255, 255, 255));
+        btnSaldoCaixa.setText("💰 Saldo");
+        btnSaldoCaixa.setBorderPainted(false);
+        btnSaldoCaixa.setPreferredSize(new java.awt.Dimension(110, 34));
+        btnSaldoCaixa.addActionListener(this::btnSaldoCaixaActionPerformed);
 
         lblSubtotal.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
         lblSubtotal.setForeground(new java.awt.Color(31, 111, 95));
@@ -333,7 +324,9 @@ public class VendasView extends JPanel{
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                                         .addGroup(layout.createSequentialGroup()
                                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                .addComponent(btnSuprimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                .addComponent(btnSuprimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addComponent(btnSaldoCaixa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                                 .addComponent(btnFinalizarVenda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
@@ -351,7 +344,8 @@ public class VendasView extends JPanel{
                                         .addComponent(btnAbrirCaixa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(btnFecharCaixa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(btnSangria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(btnSuprimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(btnSuprimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btnSaldoCaixa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(12, 12, 12)
                                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -371,11 +365,14 @@ public class VendasView extends JPanel{
         framePai = (win instanceof java.awt.Frame) ? (java.awt.Frame) win : null;
 
         caixaAtual = caixaService.buscarCaixaAberto();
+
         if(caixaAtual == null){
             btnNovaVenda.setEnabled(false);
+            btnAbrirCaixa.setEnabled(true);
             btnFecharCaixa.setEnabled(false);
             btnSangria.setEnabled(false);
             btnSuprimento.setEnabled(false);
+            btnSaldoCaixa.setEnabled(false);
             btnFinalizarVenda.setEnabled(false);
         }
         else{
@@ -384,6 +381,7 @@ public class VendasView extends JPanel{
             btnFecharCaixa.setEnabled(true);
             btnSangria.setEnabled(true);
             btnSuprimento.setEnabled(true);
+            btnSaldoCaixa.setEnabled(true);
             btnFinalizarVenda.setEnabled(false);
             caixaAtual = caixaService.buscarCaixaAberto();
         }
@@ -392,6 +390,65 @@ public class VendasView extends JPanel{
         txtProduto.setEnabled(false);
 
         btnCancelar.setEnabled(false);
+    }
+
+    /**
+     * Se o usuário logado for FUNCIONÁRIO, abre um diálogo pedindo email e senha
+     * de um ADMIN ou GERENTE para autorizar a operação de caixa.
+     * Retorna o usuário autorizado, ou null se cancelado/inválido.
+     * Se o usuário já for ADMIN/GERENTE, retorna ele mesmo sem pedir credenciais.
+     */
+    private models.Usuario autorizarOperacaoCaixa() {
+        boolean eFuncionario = usuarioLogado.getPerfil() == models.enums.TipoUsuario.FUNCIONARIO;
+
+        if (!eFuncionario) {
+            return usuarioLogado; // ADMIN/GERENTE já tem permissão
+        }
+
+        // Pede credenciais de ADMIN ou GERENTE
+        JTextField tfEmail = new JTextField();
+        JPasswordField tfSenha = new JPasswordField();
+
+        JPanel panel = new JPanel(new java.awt.GridLayout(5, 1, 4, 4));
+        panel.add(new JLabel("Operação requer autorização de Gerente ou Administrador."));
+        panel.add(new JLabel("E-mail:"));
+        panel.add(tfEmail);
+        panel.add(new JLabel("Senha:"));
+        panel.add(tfSenha);
+
+        int resultado = JOptionPane.showConfirmDialog(
+                framePai, panel, "Autorização necessária",
+                JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE
+        );
+
+        if (resultado != JOptionPane.OK_OPTION) return null;
+
+        String email = tfEmail.getText().trim();
+        String senha = new String(tfSenha.getPassword());
+
+        if (email.isEmpty() || senha.isEmpty()) {
+            JOptionPane.showMessageDialog(framePai, "Preencha e-mail e senha.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return null;
+        }
+
+        try {
+            models.Usuario autorizador = usuarioService.autenticar(email, senha);
+
+            if (autorizador.getPerfil() == models.enums.TipoUsuario.FUNCIONARIO) {
+                JOptionPane.showMessageDialog(framePai,
+                        "Usuário '" + autorizador.getNome() + "' não tem permissão para autorizar esta operação.",
+                        "Acesso negado", JOptionPane.ERROR_MESSAGE);
+                return null;
+            }
+
+            return autorizador;
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(framePai,
+                    "Autenticação falhou: " + ex.getMessage(),
+                    "Erro", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
     }
 
     private void btnNovaVendaActionPerfomed(java.awt.event.ActionEvent evt){
@@ -414,40 +471,44 @@ public class VendasView extends JPanel{
     }
 
     private void btnAbrirCaixaActionPerfomed(java.awt.event.ActionEvent evt){
-        // Abertura de caixa
-        // Falta fazer a tela de abertura
-        // e verificação de usuário
+        models.Usuario autorizador = autorizarOperacaoCaixa();
+        if (autorizador == null) return;
 
-        //Login
-
-        //Abrir Tela de Abertura(requisitar valor);
-        AberturaCaixaDialog aberturaCaixaDialog = new AberturaCaixaDialog(framePai, true, usuarioLogado);
+        AberturaCaixaDialog aberturaCaixaDialog = new AberturaCaixaDialog(framePai, true, autorizador);
 
         if((caixaAtual = aberturaCaixaDialog.getCaixa()) == null){
-            JOptionPane.showMessageDialog(null, "Caixa está fechado!");
+            JOptionPane.showMessageDialog(null, "Operação cancelada.");
         }
         else{
+            caixaService.abrirCaixa(caixaAtual, autorizador);
             JOptionPane.showMessageDialog(null, "Caixa ABERTO com sucesso!");
             btnNovaVenda.setEnabled(true);
             btnAbrirCaixa.setEnabled(false);
             btnFecharCaixa.setEnabled(true);
             btnSangria.setEnabled(true);
             btnSuprimento.setEnabled(true);
-
-            caixaService.abrirCaixa(caixaAtual, usuarioLogado);
+            btnSaldoCaixa.setEnabled(true);
         }
     }
 
     private void btnFecharCaixaActionPerfomed(java.awt.event.ActionEvent evt){
+        models.Usuario autorizador = autorizarOperacaoCaixa();
+        if (autorizador == null) return;
+
         try{
             if(caixaService.buscarCaixaAberto() != null){
-                caixaService.fecharCaixa(usuarioLogado, vendaAtual);
+                if(vendaAtual != null && !vendaAtual.getItens().isEmpty()){
+                    JOptionPane.showMessageDialog(framePai, "Finalize ou cancele a venda em andamento antes de fechar o caixa!", "Atenção", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+                caixaService.fecharCaixa(autorizador, vendaAtual);
 
                 btnNovaVenda.setEnabled(false);
                 btnAbrirCaixa.setEnabled(true);
                 btnFecharCaixa.setEnabled(false);
                 btnSangria.setEnabled(false);
                 btnSuprimento.setEnabled(false);
+                btnSaldoCaixa.setEnabled(false);
 
                 JOptionPane.showMessageDialog(null, "Caixa FECHADO com sucesso!");
             }
@@ -455,56 +516,54 @@ public class VendasView extends JPanel{
                 JOptionPane.showMessageDialog(null, "Caixa já está FECHADO!");
             }
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null,ex.getMessage());
+            JOptionPane.showMessageDialog(null, ex.getMessage());
         }
     }
 
     private void btnSangriaActionPerfomed(java.awt.event.ActionEvent evt){
+        models.Usuario autorizador = autorizarOperacaoCaixa();
+        if (autorizador == null) return;
+
         MovimentacaoCaixaDialog movimentacaoCaixaDialog = new MovimentacaoCaixaDialog(framePai, true, TipoMovimento.SAIDA);
-        Double valorSagria = movimentacaoCaixaDialog.getValor();
+        Double valorSangria = movimentacaoCaixaDialog.getValor();
         String descricao = movimentacaoCaixaDialog.getDescricao();
 
-
-        System.out.println(valorSagria + " " + descricao);
-
-        if(valorSagria != null && descricao != null){
+        if(valorSangria != null && descricao != null){
             MovimentacaoCaixa mov = new MovimentacaoCaixa();
-
             mov.setCaixa(caixaAtual);
             mov.setTipo(TipoMovimento.SAIDA);
-            mov.setValor(valorSagria);
+            mov.setValor(valorSangria);
             mov.setDescricao(descricao);
             mov.setDataMovimentacao(LocalDateTime.now());
-            mov.setUsuario(usuarioLogado);
+            mov.setUsuario(autorizador);
 
-            movimentacaoCaixaService.registrarMovimentacao(mov, usuarioLogado);
-
+            movimentacaoCaixaService.registrarMovimentacao(mov, autorizador);
             JOptionPane.showMessageDialog(framePai, "SANGRIA lançada com sucesso!");
         }
         else{
             JOptionPane.showMessageDialog(framePai, "Operação Cancelada!");
         }
-
     }
 
     private void btnSuprimentoActionPerfomed(java.awt.event.ActionEvent evt){
+        models.Usuario autorizador = autorizarOperacaoCaixa();
+        if (autorizador == null) return;
+
         MovimentacaoCaixaDialog movimentacaoCaixaDialog = new MovimentacaoCaixaDialog(framePai, true, TipoMovimento.ENTRADA);
-        Double valorSagria = movimentacaoCaixaDialog.getValor();
+        Double valorSuprimento = movimentacaoCaixaDialog.getValor();
         String descricao = movimentacaoCaixaDialog.getDescricao();
 
-        if(valorSagria != null && descricao != null){
+        if(valorSuprimento != null && descricao != null){
             MovimentacaoCaixa mov = new MovimentacaoCaixa();
-
             mov.setCaixa(caixaAtual);
             mov.setTipo(TipoMovimento.ENTRADA);
-            mov.setValor(valorSagria);
+            mov.setValor(valorSuprimento);
             mov.setDescricao(descricao);
             mov.setDataMovimentacao(LocalDateTime.now());
-            mov.setUsuario(usuarioLogado);
+            mov.setUsuario(autorizador);
 
-            movimentacaoCaixaService.registrarMovimentacao(mov, usuarioLogado);
-
-            JOptionPane.showMessageDialog(framePai, "SUPRIMENTO lançada com sucesso!");
+            movimentacaoCaixaService.registrarMovimentacao(mov, autorizador);
+            JOptionPane.showMessageDialog(framePai, "SUPRIMENTO lançado com sucesso!");
         }
         else{
             JOptionPane.showMessageDialog(framePai, "Operação Cancelada!");
@@ -512,18 +571,20 @@ public class VendasView extends JPanel{
     }
 
     private void btnCancelarActionPerfomed(java.awt.event.ActionEvent evt){
-        int opcao = JOptionPane.showConfirmDialog(null, "Deseja cancelar a venda?", "Cancelar", JOptionPane.YES_NO_OPTION);
+        if(vendaAtual == null){
+            limparVenda();
+            return;
+        }
+
+        int opcao = JOptionPane.showConfirmDialog(framePai, "Deseja cancelar a venda?", "Cancelar", JOptionPane.YES_NO_OPTION);
 
         if(opcao == JOptionPane.YES_OPTION){
-            if(vendaAtual.getItens().isEmpty()){
-                limparVenda();
-                return;
+            try {
+                vendaService.cancelar(vendaAtual);
+                JOptionPane.showMessageDialog(framePai, "Venda cancelada com sucesso!");
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(framePai, "Erro ao cancelar: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             }
-
-            vendaAtual.setStatus(StatusVenda.CANCELADO);
-
-            vendaService.cadastrar(vendaAtual);
-
             limparVenda();
         }
     }
@@ -557,6 +618,7 @@ public class VendasView extends JPanel{
     }
 
     private void txtClienteActionPerformed(java.awt.event.ActionEvent evt) {
+        if(vendaAtual == null) return;
         SelecionarClienteDialog selecionarClienteMenu = new SelecionarClienteDialog(framePai, true, clienteService, txtCliente.getText());
         if(selecionarClienteMenu.getClienteSelecionado() != null){
             vendaAtual.setCliente(selecionarClienteMenu.getClienteSelecionado());
@@ -568,6 +630,7 @@ public class VendasView extends JPanel{
     }
 
     private void txtProdutoActionPerformed(java.awt.event.ActionEvent evt) {
+        if(vendaAtual == null) return;
         SelecionarProdutosDialog selecionarProdutoMenu = new SelecionarProdutosDialog(framePai, true, produtoService, txtProduto.getText());
         if(selecionarProdutoMenu.getProdutoSelecionado() != null){
             try{
@@ -615,6 +678,29 @@ public class VendasView extends JPanel{
             popularTabelaItens();
             atualizarSubTotal();
         }
+    }
+
+    private void btnSaldoCaixaActionPerformed(java.awt.event.ActionEvent evt){
+        Caixa caixa = caixaService.buscarCaixaAberto();
+
+        if(caixa == null){
+            JOptionPane.showMessageDialog(framePai, "Nenhum caixa aberto no momento.", "Saldo do Caixa", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        String mensagem = String.format(
+            "<html><body style='font-family:Arial; padding:8px'>" +
+            "<b style='font-size:14px; color:#1F6F5F'>Saldo do Caixa</b><br><br>" +
+            "&#128176; <b>Saldo Atual:</b>&nbsp; R$ %.2f<br><br>" +
+            "&#128194; <b>Valor de Abertura:</b>&nbsp; R$ %.2f<br><br>" +
+            "&#128197; <b>Aberto em:</b>&nbsp; %s" +
+            "</body></html>",
+            caixa.getSaldoAtual(),
+            caixa.getValorAbertura(),
+            caixa.getDataAbertura() != null ? caixa.getDataAbertura().toString() : "-"
+        );
+
+        JOptionPane.showMessageDialog(framePai, mensagem, "Saldo do Caixa", JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void popularTabelaItens(){

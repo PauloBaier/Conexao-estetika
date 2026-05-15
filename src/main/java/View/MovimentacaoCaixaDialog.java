@@ -49,6 +49,12 @@ public class MovimentacaoCaixaDialog extends JDialog {
 
         txtValor.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getCurrencyInstance())));
         txtValor.setValue(0.00);
+        txtValor.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent e) {
+                javax.swing.SwingUtilities.invokeLater(() -> txtValor.selectAll());
+            }
+        });
 
         btnConfirmar.setBackground(new java.awt.Color(47, 160, 132));
         btnConfirmar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -138,9 +144,18 @@ public class MovimentacaoCaixaDialog extends JDialog {
     }
 
     private void btnConfirmarActionPerfomed(java.awt.event.ActionEvent evt){
-        this.valor = ((Number)txtValor.getValue()).doubleValue();
-        this.descricao = txtDescricao.getText();
-
+        double v = ((Number)txtValor.getValue()).doubleValue();
+        if(v <= 0){
+            JOptionPane.showMessageDialog(this, "Informe um valor maior que zero!", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        String desc = txtDescricao.getText().trim();
+        if(desc.isEmpty()){
+            JOptionPane.showMessageDialog(this, "Informe uma descrição!", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        this.valor = v;
+        this.descricao = desc;
         dispose();
     }
 

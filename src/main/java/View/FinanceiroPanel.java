@@ -16,16 +16,17 @@ public class FinanceiroPanel extends JPanel {
 
     private final Usuario usuarioLogado;
 
-    // Services injetados pelo construtor — sem dependência de MainFrame
     private final ContaPagarService contaPagarService;
     private final ContaReceberService contaReceberService;
     private final FinanceiroService financeiroService;
     private final CaixaService caixaService;
+    private final ProdutoService produtoService;
+    private final FornecedorService fornecedorService;
+    private final EntradaEstoqueService entradaEstoqueService;
 
     private CardLayout cardLayout;
     private JPanel cards;
 
-    // Estado da tela de Entrada — mantido como campos para poder limpar corretamente
     private JTextField fornecedorFieldRef;
     private JTextField produtoFieldRef;
     private DefaultTableModel entradaModelRef;
@@ -38,13 +39,19 @@ public class FinanceiroPanel extends JPanel {
             ContaPagarService contaPagarService,
             ContaReceberService contaReceberService,
             FinanceiroService financeiroService,
-            CaixaService caixaService
+            CaixaService caixaService,
+            ProdutoService produtoService,
+            FornecedorService fornecedorService,
+            EntradaEstoqueService entradaEstoqueService
     ) {
         this.usuarioLogado         = usuarioLogado;
         this.contaPagarService     = contaPagarService;
         this.contaReceberService   = contaReceberService;
         this.financeiroService     = financeiroService;
         this.caixaService          = caixaService;
+        this.produtoService        = produtoService;
+        this.fornecedorService     = fornecedorService;
+        this.entradaEstoqueService = entradaEstoqueService;
 
         setLayout(new BorderLayout());
         setBackground(MenuPrincipalView.CONTENT_BG);
@@ -57,6 +64,8 @@ public class FinanceiroPanel extends JPanel {
         cards = new JPanel(cardLayout);
         cards.setBackground(MenuPrincipalView.CONTENT_BG);
         cards.add(buildListagemCard(), "listagem");
+        cards.add(new EntradaFinanceiroPanel(produtoService, fornecedorService, entradaEstoqueService,
+                () -> cardLayout.show(cards, "listagem")), "entrada");
         add(cards, BorderLayout.CENTER);
         cardLayout.show(cards, "listagem");
     }

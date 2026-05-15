@@ -5,6 +5,7 @@ import models.Usuario;
 import models.enums.StatusCaixa;
 
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -47,6 +48,12 @@ public class AberturaCaixaDialog extends JDialog {
 
         txtValorAbertura.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getCurrencyInstance())));
         txtValorAbertura.setValue(0.00);
+        txtValorAbertura.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent e) {
+                javax.swing.SwingUtilities.invokeLater(() -> txtValorAbertura.selectAll());
+            }
+        });
 
         btnConfirmar.setBackground(new java.awt.Color(47, 160, 132));
         btnConfirmar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -122,12 +129,16 @@ public class AberturaCaixaDialog extends JDialog {
     }
 
     private void btnConfirmarActionPerfomed(java.awt.event.ActionEvent evt){
+        double valorAbertura = ((Number)txtValorAbertura.getValue()).doubleValue();
+        if(valorAbertura < 0){
+            JOptionPane.showMessageDialog(null, "Valor de abertura não pode ser negativo!", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         this.caixa.setDataAbertura(LocalDate.now());
-        this.caixa.setValorAbertura(((Number)txtValorAbertura.getValue()).doubleValue());
-        this.caixa.setSaldoAtual(((Number)txtValorAbertura.getValue()).doubleValue());
+        this.caixa.setValorAbertura(valorAbertura);
+        this.caixa.setSaldoAtual(valorAbertura);
         this.caixa.setUsuario(usuarioLogado);
         this.caixa.setStatus(StatusCaixa.ABERTO);
-
         dispose();
     }
 

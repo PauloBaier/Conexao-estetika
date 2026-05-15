@@ -62,6 +62,12 @@ public class PagamentoDialog extends JDialog {
         txtValorPago.setForeground(new java.awt.Color(30, 30, 30));
         txtValorPago.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getCurrencyInstance())));
         txtValorPago.setValue(0.00);
+        txtValorPago.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent e) {
+                javax.swing.SwingUtilities.invokeLater(() -> txtValorPago.selectAll());
+            }
+        });
         txtValorPago.addActionListener(this::txtValorPagoActionPerformed);
 
         lblValorPago.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
@@ -219,7 +225,7 @@ public class PagamentoDialog extends JDialog {
             txtValorPago.setValue(0.00);
         }
         else{
-            lblTrocoValor.setText("" + (valorPago - valorTotal));
+            lblTrocoValor.setText(String.format("%.2f", (valorPago - valorTotal)));
         }
     }
 
