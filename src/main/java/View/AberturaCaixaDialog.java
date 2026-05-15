@@ -1,16 +1,12 @@
 package View;
 
-import models.Caixa;
 import models.Usuario;
-import models.enums.StatusCaixa;
 
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
-import java.time.LocalDate;
-import java.time.LocalTime;
 
 public class AberturaCaixaDialog extends JDialog {
-    private Caixa caixa;
+    private Double valorAbertura;
     Usuario usuarioLogado;
 
     private javax.swing.JButton btnCancelar;
@@ -23,7 +19,7 @@ public class AberturaCaixaDialog extends JDialog {
     public AberturaCaixaDialog(java.awt.Frame parent, boolean modal, Usuario usuarioLogado){
         super(parent, modal);
 
-        this.caixa = new Caixa();
+        this.valorAbertura = null;
         this.usuarioLogado = usuarioLogado;
 
         pnlBackground = new javax.swing.JPanel();
@@ -129,26 +125,21 @@ public class AberturaCaixaDialog extends JDialog {
     }
 
     private void btnConfirmarActionPerfomed(java.awt.event.ActionEvent evt){
-        double valorAbertura = ((Number)txtValorAbertura.getValue()).doubleValue();
-        if(valorAbertura < 0){
+        double valor = ((Number)txtValorAbertura.getValue()).doubleValue();
+        if(valor < 0){
             JOptionPane.showMessageDialog(null, "Valor de abertura não pode ser negativo!", "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        this.caixa.setDataAbertura(LocalDate.now());
-        this.caixa.setValorAbertura(valorAbertura);
-        this.caixa.setSaldoAtual(valorAbertura);
-        this.caixa.setUsuario(usuarioLogado);
-        this.caixa.setStatus(StatusCaixa.ABERTO);
+        this.valorAbertura = valor;
         dispose();
     }
 
     private void btnCancelarActionPerfomed(java.awt.event.ActionEvent evt){
-        caixa = null;
-
+        this.valorAbertura = null;
         dispose();
     }
 
-    public Caixa getCaixa(){
-        return this.caixa;
+    public Double getValorAbertura(){
+        return this.valorAbertura;
     }
 }

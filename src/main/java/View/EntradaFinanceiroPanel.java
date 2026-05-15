@@ -17,10 +17,7 @@ public class EntradaFinanceiroPanel extends JPanel {
     private final ProdutoService produtoService;
     private final FornecedorService fornecedorService;
     private final EntradaEstoqueService entradaEstoqueService;
-<<<<<<< HEAD
-=======
     private final Runnable onVoltar;
->>>>>>> ViewMenuPrincipal
 
     private final DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
@@ -29,11 +26,6 @@ public class EntradaFinanceiroPanel extends JPanel {
             FornecedorService fornecedorService,
             EntradaEstoqueService entradaEstoqueService
     ) {
-<<<<<<< HEAD
-        this.produtoService        = produtoService;
-        this.fornecedorService     = fornecedorService;
-        this.entradaEstoqueService = entradaEstoqueService;
-=======
         this(produtoService, fornecedorService, entradaEstoqueService, null);
     }
 
@@ -47,7 +39,6 @@ public class EntradaFinanceiroPanel extends JPanel {
         this.fornecedorService     = fornecedorService;
         this.entradaEstoqueService = entradaEstoqueService;
         this.onVoltar              = onVoltar;
->>>>>>> ViewMenuPrincipal
 
         setLayout(new BorderLayout());
         setBackground(MenuPrincipalView.CONTENT_BG);
@@ -60,9 +51,7 @@ public class EntradaFinanceiroPanel extends JPanel {
         add(buildCard(), BorderLayout.CENTER);
     }
 
-    // ─────────────────────────────────────────────
     // CARD PRINCIPAL
-    // ─────────────────────────────────────────────
     private JPanel buildCard() {
 
         JPanel panel = new JPanel(new BorderLayout());
@@ -78,24 +67,19 @@ public class EntradaFinanceiroPanel extends JPanel {
 
         header.add(title, BorderLayout.WEST);
 
-<<<<<<< HEAD
-=======
         if (onVoltar != null) {
             JButton btnVoltar = MenuPrincipalView.createOutlineButton("← Voltar");
             btnVoltar.addActionListener(e -> onVoltar.run());
             header.add(btnVoltar, BorderLayout.EAST);
         }
 
->>>>>>> ViewMenuPrincipal
         panel.add(header,          BorderLayout.NORTH);
         panel.add(buildFormulario(), BorderLayout.CENTER);
 
         return panel;
     }
 
-    // ─────────────────────────────────────────────
     // FORMULÁRIO DE ENTRADA
-    // ─────────────────────────────────────────────
     private JPanel buildFormulario() {
 
         JPanel panel = new JPanel(new BorderLayout(0, 12));
@@ -131,7 +115,7 @@ public class EntradaFinanceiroPanel extends JPanel {
         topFields.add(label("Vencimento (dd/MM/yyyy):"));
         topFields.add(tfVencimento);
 
-        // ── Tabela de itens ───────────────────────
+        // Tabela de itens
         String[] cols = { "Produto", "Quantidade" };
 
         DefaultTableModel itemModel = new DefaultTableModel(cols, 0) {
@@ -196,7 +180,7 @@ public class EntradaFinanceiroPanel extends JPanel {
         itemBtnBar.add(btnAdd);
         itemBtnBar.add(btnRem);
 
-        // ── Botão confirmar ───────────────────────
+        // Botão confirmar 
         JPanel bottomBar = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
         bottomBar.setBackground(MenuPrincipalView.WHITE);
 
@@ -279,7 +263,7 @@ public class EntradaFinanceiroPanel extends JPanel {
 
         bottomBar.add(btnConfirmar);
 
-        // ── Monta layout ──────────────────────────
+        // Monta layout
         JPanel itemArea = new JPanel(new BorderLayout(0, 6));
         itemArea.setBackground(MenuPrincipalView.WHITE);
         itemArea.add(itemBtnBar, BorderLayout.NORTH);
@@ -292,9 +276,6 @@ public class EntradaFinanceiroPanel extends JPanel {
         return panel;
     }
 
-    // ─────────────────────────────────────────────
-    // HELPERS
-    // ─────────────────────────────────────────────
     private JLabel label(String text) {
         JLabel lbl = new JLabel(text);
         lbl.setFont(MenuPrincipalView.FONT_SMALL);
@@ -315,8 +296,4 @@ public class EntradaFinanceiroPanel extends JPanel {
     private void showWarning(String msg) {
         JOptionPane.showMessageDialog(this, msg, "Aviso", JOptionPane.WARNING_MESSAGE);
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> ViewMenuPrincipal

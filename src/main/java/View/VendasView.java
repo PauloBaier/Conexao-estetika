@@ -1,8 +1,6 @@
 package View;
 
 import models.*;
-import models.enums.FormaPagamento;
-import models.enums.StatusVenda;
 import models.enums.TipoMovimento;
 import services.*;
 
@@ -12,7 +10,6 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.time.LocalDateTime;
 
 public class VendasView extends JPanel{
     private Venda vendaAtual;
@@ -453,10 +450,7 @@ setBackground(new java.awt.Color(238, 238, 238));
 
     private void btnNovaVendaActionPerfomed(java.awt.event.ActionEvent evt){
 
-        vendaAtual = new Venda();
-        vendaAtual.setUsuario(usuarioLogado);
-        vendaAtual.setStatus(StatusVenda.PENDENTE);
-        vendaAtual.setValorTotal(0);
+        vendaAtual = vendaService.iniciar(usuarioLogado);
 
         btnNovaVenda.setEnabled(false);
         btnFinalizarVenda.setEnabled(true);
@@ -475,19 +469,25 @@ setBackground(new java.awt.Color(238, 238, 238));
         if (autorizador == null) return;
 
         AberturaCaixaDialog aberturaCaixaDialog = new AberturaCaixaDialog(framePai, true, autorizador);
+        Double valorAbertura = aberturaCaixaDialog.getValorAbertura();
 
-        if((caixaAtual = aberturaCaixaDialog.getCaixa()) == null){
+        if(valorAbertura == null){
             JOptionPane.showMessageDialog(null, "Operação cancelada.");
         }
         else{
-            caixaService.abrirCaixa(caixaAtual, autorizador);
-            JOptionPane.showMessageDialog(null, "Caixa ABERTO com sucesso!");
-            btnNovaVenda.setEnabled(true);
-            btnAbrirCaixa.setEnabled(false);
-            btnFecharCaixa.setEnabled(true);
-            btnSangria.setEnabled(true);
-            btnSuprimento.setEnabled(true);
-            btnSaldoCaixa.setEnabled(true);
+            try {
+                Caixa novoCaixa = caixaService.abrirCaixaComValor(valorAbertura, autorizador);
+                caixaAtual = novoCaixa;
+                JOptionPane.showMessageDialog(null, "Caixa ABERTO com sucesso!");
+                btnNovaVenda.setEnabled(true);
+                btnAbrirCaixa.setEnabled(false);
+                btnFecharCaixa.setEnabled(true);
+                btnSangria.setEnabled(true);
+                btnSuprimento.setEnabled(true);
+                btnSaldoCaixa.setEnabled(true);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(framePai, "Erro ao abrir caixa: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 
@@ -529,16 +529,12 @@ setBackground(new java.awt.Color(238, 238, 238));
         String descricao = movimentacaoCaixaDialog.getDescricao();
 
         if(valorSangria != null && descricao != null){
-            MovimentacaoCaixa mov = new MovimentacaoCaixa();
-            mov.setCaixa(caixaAtual);
-            mov.setTipo(TipoMovimento.SAIDA);
-            mov.setValor(valorSangria);
-            mov.setDescricao(descricao);
-            mov.setDataMovimentacao(LocalDateTime.now());
-            mov.setUsuario(autorizador);
-
-            movimentacaoCaixaService.registrarMovimentacao(mov, autorizador);
-            JOptionPane.showMessageDialog(framePai, "SANGRIA lançada com sucesso!");
+            try {
+                movimentacaoCaixaService.registrarSangria(caixaAtual, valorSangria, descricao, autorizador);
+                JOptionPane.showMessageDialog(framePai, "SANGRIA lançada com sucesso!");
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(framePai, "Erro na sangria: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
         }
         else{
             JOptionPane.showMessageDialog(framePai, "Operação Cancelada!");
@@ -554,16 +550,12 @@ setBackground(new java.awt.Color(238, 238, 238));
         String descricao = movimentacaoCaixaDialog.getDescricao();
 
         if(valorSuprimento != null && descricao != null){
-            MovimentacaoCaixa mov = new MovimentacaoCaixa();
-            mov.setCaixa(caixaAtual);
-            mov.setTipo(TipoMovimento.ENTRADA);
-            mov.setValor(valorSuprimento);
-            mov.setDescricao(descricao);
-            mov.setDataMovimentacao(LocalDateTime.now());
-            mov.setUsuario(autorizador);
-
-            movimentacaoCaixaService.registrarMovimentacao(mov, autorizador);
-            JOptionPane.showMessageDialog(framePai, "SUPRIMENTO lançado com sucesso!");
+            try {
+                movimentacaoCaixaService.registrarSuprimento(caixaAtual, valorSuprimento, descricao, autorizador);
+                JOptionPane.showMessageDialog(framePai, "SUPRIMENTO lançado com sucesso!");
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(framePai, "Erro no suprimento: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
         }
         else{
             JOptionPane.showMessageDialog(framePai, "Operação Cancelada!");
@@ -594,26 +586,14 @@ setBackground(new java.awt.Color(238, 238, 238));
         String formaPagamento = pagamentoMenu.getFormaPagamento();
 
         if(formaPagamento != null){
-            if(formaPagamento.equals("PAGAMENTO PENDENTE")){
-                vendaAtual.setStatus(StatusVenda.PENDENTE);
-                vendaAtual.setFormaPagamento(null);
+            try {
+                vendaService.aplicarPagamento(vendaAtual, formaPagamento);
+                vendaService.cadastrar(vendaAtual);
+                JOptionPane.showMessageDialog(framePai, "Venda finalizada com sucesso!");
+                limparVenda();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(framePai, "Erro ao finalizar venda: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             }
-            if(formaPagamento.equals("DINHEIRO")){
-                vendaAtual.setStatus(StatusVenda.PAGO);
-                vendaAtual.setFormaPagamento(FormaPagamento.DINHEIRO);
-            }
-            if(formaPagamento.equals("CARTAO")){
-                vendaAtual.setStatus(StatusVenda.PAGO);
-                vendaAtual.setFormaPagamento(FormaPagamento.CARTAO);
-            }
-            if(formaPagamento.equals("PIX")){
-                vendaAtual.setStatus(StatusVenda.PAGO);
-                vendaAtual.setFormaPagamento(FormaPagamento.PIX);
-            }
-
-            vendaService.cadastrar(vendaAtual);
-
-            limparVenda();
         }
     }
 

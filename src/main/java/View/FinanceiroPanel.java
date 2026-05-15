@@ -70,9 +70,7 @@ public class FinanceiroPanel extends JPanel {
         cardLayout.show(cards, "listagem");
     }
 
-    // ─────────────────────────────────────────────
     // CARD PRINCIPAL — abas Contas Pagar / Receber
-    // ─────────────────────────────────────────────
     private JPanel buildListagemCard() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(MenuPrincipalView.CONTENT_BG);
@@ -106,9 +104,7 @@ public class FinanceiroPanel extends JPanel {
         return panel;
     }
 
-    // ─────────────────────────────────────────────
     // ABA CONTAS A PAGAR
-    // ─────────────────────────────────────────────
     private JPanel buildContasPagarTab() {
         String[] cols = {"ID", "Fornecedor", "Descrição", "Emissão", "Vencimento", "Valor", "Status", ""};
         DefaultTableModel model = new DefaultTableModel(cols, 0) {
@@ -204,9 +200,7 @@ public class FinanceiroPanel extends JPanel {
         return buildTabLayout(table, refresh);
     }
 
-    // ─────────────────────────────────────────────
     // ABA CONTAS A RECEBER
-    // ─────────────────────────────────────────────
     private JPanel buildContasReceberTab() {
         String[] cols = {"ID", "Cliente", "Descrição", "Emissão", "Vencimento", "Valor", "Status", ""};
         DefaultTableModel model = new DefaultTableModel(cols, 0) {
@@ -303,9 +297,6 @@ public class FinanceiroPanel extends JPanel {
     }
 
 
-    // ─────────────────────────────────────────────
-    // HELPERS
-    // ─────────────────────────────────────────────
     private JPanel buildTabLayout(JTable table, Runnable refresh) {
         JPanel panel = new JPanel(new BorderLayout(0, 8));
         panel.setBackground(MenuPrincipalView.WHITE);

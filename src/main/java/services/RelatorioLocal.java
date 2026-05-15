@@ -10,6 +10,7 @@ import models.Venda;
 import models.enums.StatusConta;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 public class RelatorioLocal {
@@ -162,4 +163,24 @@ public class RelatorioLocal {
                 null
         );
     }
+
+    public List<ContaPagar> contasPagarVencidas() {
+        LocalDate hoje = LocalDate.now();
+        List<ContaPagar> todas = contasPagar(null, null, null);
+        List<ContaPagar> vencidas = new java.util.ArrayList<>();
+
+        for (ContaPagar c : todas) {
+            if (c.getDataVencimento() == null) continue;
+            if (c.getStatus() == StatusConta.PAGO) continue;
+            if (!c.getDataVencimento().isBefore(hoje)) continue;
+            vencidas.add(c);
+        }
+        return vencidas;
+    }
+
+    public long diasEmAtraso(ContaPagar conta) {
+        if (conta.getDataVencimento() == null) return 0;
+        return ChronoUnit.DAYS.between(conta.getDataVencimento(), LocalDate.now());
+    }
+
 }

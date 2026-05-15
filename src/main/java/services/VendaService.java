@@ -39,13 +39,46 @@ public class VendaService {
         if (venda == null) {
             throw new IllegalArgumentException("Venda inválida.");
         }
-
         if (venda.getId() == null) {
-            // Venda ainda não foi salva — apenas descarta localmente
             return;
         }
-
         itemVendaService.cancelarVenda(venda.getId());
+    }
+
+    public Venda iniciar(models.Usuario usuario) {
+        if (usuario == null) {
+            throw new IllegalArgumentException("Usuário obrigatório para iniciar venda.");
+        }
+        Venda venda = new Venda();
+        venda.setUsuario(usuario);
+        venda.setStatus(models.enums.StatusVenda.PENDENTE);
+        venda.setValorTotal(0);
+        return venda;
+    }
+
+    public void aplicarPagamento(Venda venda, String formaPagamentoStr) {
+        if (venda == null) throw new IllegalArgumentException("Venda inválida.");
+        if (formaPagamentoStr == null) throw new IllegalArgumentException("Forma de pagamento obrigatória.");
+        switch (formaPagamentoStr) {
+            case "PAGAMENTO PENDENTE":
+                venda.setStatus(models.enums.StatusVenda.PENDENTE);
+                venda.setFormaPagamento(null);
+                break;
+            case "DINHEIRO":
+                venda.setStatus(models.enums.StatusVenda.PAGO);
+                venda.setFormaPagamento(models.enums.FormaPagamento.DINHEIRO);
+                break;
+            case "CARTAO":
+                venda.setStatus(models.enums.StatusVenda.PAGO);
+                venda.setFormaPagamento(models.enums.FormaPagamento.CARTAO);
+                break;
+            case "PIX":
+                venda.setStatus(models.enums.StatusVenda.PAGO);
+                venda.setFormaPagamento(models.enums.FormaPagamento.PIX);
+                break;
+            default:
+                throw new IllegalArgumentException("Forma de pagamento desconhecida: " + formaPagamentoStr);
+        }
     }
 
     public void cadastrar(Venda venda) {

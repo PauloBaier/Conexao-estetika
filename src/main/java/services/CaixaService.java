@@ -43,6 +43,18 @@ public class CaixaService {
         repository.salvar(caixa);
     }
 
+
+    public Caixa abrirCaixaComValor(double valorAbertura, Usuario usuario) {
+        Caixa caixa = new Caixa();
+        caixa.setValorAbertura(valorAbertura);
+        caixa.setSaldoAtual(valorAbertura);
+        caixa.setDataAbertura(java.time.LocalDate.now());
+        caixa.setStatus(models.enums.StatusCaixa.ABERTO);
+        caixa.setUsuario(usuario);
+        abrirCaixa(caixa, usuario);
+        return caixa;
+    }
+
     public void fecharCaixa(Usuario usuario, Venda vendaAtual) {
         validarPermissaoCaixa(usuario);
 
@@ -105,10 +117,10 @@ public class CaixaService {
             throw new IllegalArgumentException("Usuário inativo não pode operar o caixa.");
         }
 
-        if (!TipoUsuario.ADMINISTRADOR.name().equals(usuario.getPerfil()) &&
-            !TipoUsuario.GERENTE.name().equals(usuario.getPerfil())) {
+        if (usuario.getPerfil() != TipoUsuario.ADMINISTRADOR &&
+            usuario.getPerfil() != TipoUsuario.GERENTE) {
 
-            throw new IllegalArgumentException("Usuário '" + usuario.getNome() + "' não tem permissão para operar o caixa. Apenas Administrador ou Gerente.");
+            throw new IllegalArgumentException("Apenas administrador ou gerente podem operar o caixa.");
         }
     }
 }

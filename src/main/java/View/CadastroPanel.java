@@ -1,7 +1,4 @@
-<<<<<<< HEAD
-=======
 package View;
->>>>>>> ViewMenuPrincipal
 import models.*;
 import services.*;
 
@@ -14,7 +11,7 @@ import java.util.List;
 
 public class CadastroPanel extends JPanel {
 
-    // ── Services ─────────────────────────────────────────────────────────────
+    // Services
     private final ClienteService    clienteService;
     private final EnderecoService   enderecoService;
     private final FornecedorService fornecedorService;
@@ -66,11 +63,10 @@ public class CadastroPanel extends JPanel {
         add(header, BorderLayout.NORTH);
         add(tabs,   BorderLayout.CENTER);
     }
-// aba cliente
+    // aba cliente
     private JPanel buildClienteTab() {
 
         String[] cols = { "ID", "Nome", "Telefone", "E-mail", "CPF" };
-
         DefaultTableModel model = new DefaultTableModel(cols, 0) {
             @Override public boolean isCellEditable(int r, int c) { return false; }
         };
@@ -216,7 +212,7 @@ public class CadastroPanel extends JPanel {
 
         layoutDialog(dlg, form, btnSalvar);
     }
-// fornecedor
+    // fornecedor
     private JPanel buildFornecedorTab() {
 
         String[] cols = { "ID", "Nome", "Telefone", "E-mail", "CNPJ", "Razão Social" };
@@ -468,7 +464,7 @@ public class CadastroPanel extends JPanel {
         styleCombo(cbFornecedor);
 
         JPanel form = buildForm(
-                "Nome *",            fNome,
+                "Nome *",  fNome,
                 "Preço de Compra *", fCompra,
                 "Preço de Venda *",  fVenda,
                 "Qtd. Estoque *",    fEstoque,
@@ -580,7 +576,7 @@ public class CadastroPanel extends JPanel {
 
         layoutDialog(dlg, form, btnSalvar);
     }
-// categoria
+    // categoria
     private JPanel buildCategoriaTab() {
 
         String[] cols = { "ID", "Nome" };
@@ -822,8 +818,4 @@ public class CadastroPanel extends JPanel {
         return JOptionPane.showConfirmDialog(this, msg, "Confirmar",
                 JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> ViewMenuPrincipal

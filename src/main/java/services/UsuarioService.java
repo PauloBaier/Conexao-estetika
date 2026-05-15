@@ -123,4 +123,12 @@ public class UsuarioService {
             throw new IllegalArgumentException("Perfil do usuário é obrigatório.");
         }
     }
+
+    public Usuario autenticarComLimiteTentativas(String email, String senha, int tentativaAtual, int maxTentativas) {
+        if (tentativaAtual >= maxTentativas) {
+            throw new IllegalStateException("Número máximo de tentativas atingido. Acesso bloqueado.");
+        }
+        return autenticar(email, senha);
+    }
+
 }

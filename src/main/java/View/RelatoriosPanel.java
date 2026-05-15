@@ -8,7 +8,6 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class RelatoriosPanel extends JPanel {
@@ -170,23 +169,14 @@ public class RelatoriosPanel extends JPanel {
 
         Runnable refresh = () -> {
             model.setRowCount(0);
-            LocalDate hoje = LocalDate.now();
-
-            for (ContaPagar c : relatorio.contasPagar(null, null, null)) {
-                if (c.getDataVencimento() == null) continue;
-                if (c.getStatus() == StatusConta.PAGO)      continue;
-                if (!c.getDataVencimento().isBefore(hoje))  continue;
-
-                long dias = java.time.temporal.ChronoUnit.DAYS
-                        .between(c.getDataVencimento(), hoje);
-
+            for (ContaPagar c : relatorio.contasPagarVencidas()) {
                 model.addRow(new Object[]{
                         c.getId(),
                         c.getFornecedor() != null ? c.getFornecedor().getNome() : "-",
                         c.getDescricao(),
                         c.getDataEmissao().format(fmt),
                         c.getDataVencimento().format(fmt),
-                        dias + " dias",
+                        relatorio.diasEmAtraso(c) + " dias",
                         String.format("R$ %.2f", c.getValor()),
                         c.getStatus().name()
                 });
@@ -299,8 +289,4 @@ public class RelatoriosPanel extends JPanel {
 
         return panel;
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> ViewMenuPrincipal

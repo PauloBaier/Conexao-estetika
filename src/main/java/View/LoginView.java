@@ -1,7 +1,4 @@
-<<<<<<< HEAD
-=======
 package View;
->>>>>>> ViewMenuPrincipal
 import models.Usuario;
 import services.UsuarioService;
 
@@ -331,6 +328,8 @@ public class LoginView extends JFrame {
     }
 
     //  Lógica de login 
+    private static final int MAX_TENTATIVAS = 3;
+
     private void realizarLogin() {
         String email = emailField.getText().trim();
         String senha = new String(senhaField.getPassword());
@@ -341,19 +340,18 @@ public class LoginView extends JFrame {
         }
 
         try {
-            Usuario usuario = usuarioService.autenticar(email, senha);
+            Usuario usuario = usuarioService.autenticarComLimiteTentativas(email, senha, tentativas, MAX_TENTATIVAS);
             dispose();
             onLoginSuccess.onSuccess(usuario);
+        } catch (IllegalStateException ex) {
+            JOptionPane.showMessageDialog(this,
+                    ex.getMessage(),
+                    "Acesso bloqueado",
+                    JOptionPane.ERROR_MESSAGE);
+            System.exit(0);
         } catch (Exception ex) {
             tentativas++;
-            if (tentativas >= 3) {
-                JOptionPane.showMessageDialog(this,
-                        "Número máximo de tentativas atingido. Sistema encerrado.",
-                        "Acesso bloqueado",
-                        JOptionPane.ERROR_MESSAGE);
-                System.exit(0);
-            }
-            mostrarErro("Credenciais inválidas. Tentativa " + tentativas + "/3.");
+            mostrarErro("Credenciais inválidas. Tentativa " + tentativas + "/" + MAX_TENTATIVAS + ".");
             senhaField.setText("");
         }
     }
@@ -378,8 +376,4 @@ public class LoginView extends JFrame {
             }
         });
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> ViewMenuPrincipal
