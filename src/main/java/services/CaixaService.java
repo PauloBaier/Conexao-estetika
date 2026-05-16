@@ -2,6 +2,7 @@ package services;
 
 import models.Caixa;
 import models.Usuario;
+import models.Venda;
 import models.enums.StatusCaixa;
 import models.enums.TipoUsuario;
 import repositories.CaixaRepository;
@@ -42,13 +43,29 @@ public class CaixaService {
         repository.salvar(caixa);
     }
 
-    public void fecharCaixa(Usuario usuario) {
+
+    public Caixa abrirCaixaComValor(double valorAbertura, Usuario usuario) {
+        Caixa caixa = new Caixa();
+        caixa.setValorAbertura(valorAbertura);
+        caixa.setSaldoAtual(valorAbertura);
+        caixa.setDataAbertura(java.time.LocalDate.now());
+        caixa.setStatus(models.enums.StatusCaixa.ABERTO);
+        caixa.setUsuario(usuario);
+        abrirCaixa(caixa, usuario);
+        return caixa;
+    }
+
+    public void fecharCaixa(Usuario usuario, Venda vendaAtual) {
         validarPermissaoCaixa(usuario);
 
         Caixa caixa = repository.buscarCaixaAberto();
 
         if (caixa == null) {
             throw new IllegalArgumentException("Não existe caixa aberto!");
+        }
+
+        if(vendaAtual != null){
+            throw new RuntimeException("O Caixa não pode ser fechado com uma VENDA em aberto!");
         }
 
         caixa.setDataFechamento(LocalDate.now());
@@ -100,8 +117,8 @@ public class CaixaService {
             throw new IllegalArgumentException("Usuário inativo não pode operar o caixa.");
         }
 
-        if (!TipoUsuario.ADMINISTRADOR.name().equals(usuario.getPerfil()) &&
-            !TipoUsuario.GERENTE.name().equals(usuario.getPerfil())) {
+        if (usuario.getPerfil() != TipoUsuario.ADMINISTRADOR &&
+            usuario.getPerfil() != TipoUsuario.GERENTE) {
 
             throw new IllegalArgumentException("Apenas administrador ou gerente podem operar o caixa.");
         }

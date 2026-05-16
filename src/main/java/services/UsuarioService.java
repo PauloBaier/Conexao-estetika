@@ -123,4 +123,20 @@ public class UsuarioService {
             throw new IllegalArgumentException("Perfil do usuário é obrigatório.");
         }
     }
+
+    public Usuario autenticarComLimiteTentativas(String email, String senha, int tentativaAtual, int maxTentativas) {
+        if (tentativaAtual >= maxTentativas) {
+            throw new IllegalStateException("Número máximo de tentativas atingido. Acesso bloqueado.");
+        }
+        return autenticar(email, senha);
+    }
+
+    public Usuario autorizarOperacaoCaixa(String email, String senha) {
+        Usuario usuario = autenticar(email, senha);
+        if (usuario.getPerfil() == models.enums.TipoUsuario.FUNCIONARIO) {
+            throw new RuntimeException("Usuário '" + usuario.getNome() + "' não tem permissão para autorizar esta operação.");
+        }
+        return usuario;
+    }
+
 }

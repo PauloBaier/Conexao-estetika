@@ -40,6 +40,7 @@ public class MovimentacaoCaixaService {
         }
 
         mov.setCaixa(caixa);
+        mov.setUsuario(usuario);
 
         if (mov.getDataMovimentacao() == null) {
             mov.setDataMovimentacao(LocalDateTime.now());
@@ -168,4 +169,27 @@ public class MovimentacaoCaixaService {
         throw new IllegalArgumentException("Apenas administrador ou gerente podem movimentar o caixa.");
     }
 }
+
+    public void registrarSangria(Caixa caixa, double valor, String descricao, Usuario autorizador) {
+        MovimentacaoCaixa mov = new MovimentacaoCaixa();
+        mov.setCaixa(caixa);
+        mov.setTipo(TipoMovimento.SAIDA);
+        mov.setValor(valor);
+        mov.setDescricao(descricao);
+        mov.setDataMovimentacao(java.time.LocalDateTime.now());
+        mov.setUsuario(autorizador);
+        registrarMovimentacao(mov, autorizador);
+    }
+
+    public void registrarSuprimento(Caixa caixa, double valor, String descricao, Usuario autorizador) {
+        MovimentacaoCaixa mov = new MovimentacaoCaixa();
+        mov.setCaixa(caixa);
+        mov.setTipo(TipoMovimento.ENTRADA);
+        mov.setValor(valor);
+        mov.setDescricao(descricao);
+        mov.setDataMovimentacao(java.time.LocalDateTime.now());
+        mov.setUsuario(autorizador);
+        registrarMovimentacao(mov, autorizador);
+    }
+
 }

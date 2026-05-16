@@ -1,7 +1,6 @@
 package services;
 
-import models.Fornecedor;
-import models.Produto;
+import models.*;
 import repositories.ProdutoRepository;
 
 import java.util.List;
@@ -51,6 +50,14 @@ public class ProdutoService {
         }
 
         return produtoRepository.buscarPorId(id);
+    }
+
+    public List<Produto> buscarPorNome(String nome) {
+        if (nome == null || nome.isEmpty()) {
+            throw new RuntimeException("Nome inválido.");
+        }
+
+        return produtoRepository.buscarPorNome(nome.trim());
     }
 
     public List<Produto> listarTodos() {
@@ -164,6 +171,61 @@ public class ProdutoService {
 
         if (produto.getCategoria() == null) {
             throw new IllegalArgumentException("Categoria é obrigatória!");
+        }
+    }
+
+    public boolean estoqueSuficiente(Venda vendaAtual, Produto produto, int quantidade, VendaService vendaService){
+
+        quantidade += vendaService.quantidadeEmVenda(vendaAtual, produto);
+
+        if(produto.getQuantidadeEstoque() < quantidade){
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    public void salvarDoFormulario(String nome, String precoCompra, String precoVenda,
+                                   String estoque, String minimo, Categoria cat, Fornecedor forn) {
+        try {
+            Produto p = new Produto();
+            p.setNome(nome.trim());
+            // Trata as vírgulas e converte com segurança no Backend
+            p.setPrecoCompra(Double.parseDouble(precoCompra.trim().replace(",", ".")));
+            p.setPrecoVenda(Double.parseDouble(precoVenda.trim().replace(",", ".")));
+            p.setQuantidadeEstoque(Integer.parseInt(estoque.trim()));
+            p.setEstoqueMinimo(Integer.parseInt(minimo.trim()));
+            p.setCategoria(cat);
+            p.adicionarFornecedor(forn);
+
+            salvar(p);
+        } catch (NumberFormatException ex) {
+            throw new RuntimeException("Valores numéricos inválidos. Verifique os campos de preço e estoque.");
+        }
+    }
+
+    public void atualizarDoFormulario(Produto p, String nome, String precoCompra, String precoVenda,
+                                      String estoque, String minimo, Categoria cat, Fornecedor forn) {
+        try {
+            p.setNome(nome.trim());
+            p.setPrecoCompra(Double.parseDouble(precoCompra.trim().replace(",", ".")));
+            p.setPrecoVenda(Double.parseDouble(precoVenda.trim().replace(",", ".")));
+            p.setQuantidadeEstoque(Integer.parseInt(estoque.trim()));
+            p.setEstoqueMinimo(Integer.parseInt(minimo.trim()));
+
+            if (cat != null) {
+                p.setCategoria(cat);
+            }
+
+            if (forn != null) {
+                p.getFornecedores().clear();
+                p.adicionarFornecedor(forn);
+            }
+
+            atualizar(p);
+        } catch (NumberFormatException ex) {
+            throw new RuntimeException("Valores numéricos inválidos. Verifique os campos de preço e estoque.");
         }
     }
 }
