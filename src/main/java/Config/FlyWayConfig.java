@@ -7,7 +7,7 @@ public class FlyWayConfig {
     public static void migrate() {
         Flyway flyway = Flyway.configure()
                 .dataSource(
-                        "jdbc:postgresql://localhost:3600/conexaoestetica",
+                        "jdbc:postgresql://localhost:3600/conexao",
                         "admin",
                         "admin"
                 )

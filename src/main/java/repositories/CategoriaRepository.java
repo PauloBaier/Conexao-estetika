@@ -2,7 +2,7 @@ package repositories;
 
 import Config.HibernateConfig;
 import jakarta.persistence.EntityManager;
-import models.Categoria;
+import models.*;
 
 import java.util.List;
 

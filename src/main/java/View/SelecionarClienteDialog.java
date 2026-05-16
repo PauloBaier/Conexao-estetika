@@ -227,13 +227,7 @@ public class SelecionarClienteDialog extends JDialog {
     }
 
     private void btnSelecionarActionPerformed(java.awt.event.ActionEvent evt) {
-        int linhaSelecionada = tblClientes.getSelectedRow();
-
-        if(linhaSelecionada != -1){
-            clienteSelecionado = clienteService.buscarPorId((long)tblClientes.getModel().getValueAt(linhaSelecionada, 0));
-        }
-
-        dispose();
+        selecionaClienteTabela();
     }
 
     private void selecionaClienteTabela(){

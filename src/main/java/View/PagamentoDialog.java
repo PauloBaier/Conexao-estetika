@@ -197,7 +197,19 @@ public class PagamentoDialog extends JDialog {
     }
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {
-        formaPagamento = cboFormaPagamento.getSelectedItem().toString();
+        String opcaoSelecionada = cboFormaPagamento.getSelectedItem().toString();
+
+        if(opcaoSelecionada.equals("DINHEIRO")) {
+            double valorPago = ((Number)txtValorPago.getValue()).doubleValue();
+            if(valorPago < valorTotal) {
+                JOptionPane.showMessageDialog(this,
+                        "O valor pago (R$ " + valorPago + ") não pode ser menor que o total (R$ " + valorTotal + ")!",
+                        "Pagamento Inválido", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+        }
+
+        formaPagamento = opcaoSelecionada;
         dispose();
     }
 

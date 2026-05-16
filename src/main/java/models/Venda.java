@@ -37,7 +37,7 @@ public class Venda {
     private List<ItemVenda> itens = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "fk_usuario_id", nullable = false)
+    @JoinColumn(name = "fk_usuarios_id", nullable = false)
     private Usuario usuario;
 
     public Venda() {
@@ -72,7 +72,11 @@ public class Venda {
     }
 
     public double getValorTotal() {
-        return valorTotal;
+        double soma = 0;
+        for (ItemVenda item : this.itens) {
+            soma += item.getTotalItem();
+        }
+        return soma;
     }
 
     public void setValorTotal(double valorTotal) {
@@ -141,4 +145,5 @@ public class Venda {
         this.itens.add(item);
         this.valorTotal += item.getTotalItem();
     }
+
 }

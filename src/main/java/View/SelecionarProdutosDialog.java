@@ -229,8 +229,6 @@ public class SelecionarProdutosDialog extends JDialog {
 
     private void btnSelecionarActionPerformed(ActionEvent evt) {
         selecionaProdutoTabela();
-
-        dispose();
     }
 
     private void selecionaProdutoTabela(){

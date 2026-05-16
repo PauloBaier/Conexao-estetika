@@ -30,7 +30,7 @@ public class MovimentacaoCaixa {
     private LocalDateTime dataMovimentacao;
 
     @ManyToOne
-    @JoinColumn(name = "fk_usuario_id", nullable = false)
+    @JoinColumn(name = "fk_usuarios_id", nullable = false)
     private Usuario usuario;
 
     public MovimentacaoCaixa() {

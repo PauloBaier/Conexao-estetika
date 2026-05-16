@@ -16,6 +16,7 @@ public class VendaService {
     private final ItemVendaService itemVendaService;
     private final ContaReceberService contaReceberService;
     private final MovimentacaoCaixaService movimentacaoCaixaService;
+    private ProdutoService produtoService;
      private final UsuarioService usuarioService;
 
     public VendaService(
@@ -24,7 +25,8 @@ public class VendaService {
             ItemVendaService itemVendaService,
             ContaReceberService contaReceberService,
             MovimentacaoCaixaService movimentacaoCaixaService,
-            UsuarioService usuarioService
+            UsuarioService usuarioService,
+            ProdutoService produtoService
     ) {
         this.vendaRepository = vendaRepository;
         this.caixaService = caixaService;
@@ -32,7 +34,7 @@ public class VendaService {
         this.contaReceberService = contaReceberService;
         this.movimentacaoCaixaService = movimentacaoCaixaService;
         this.usuarioService = usuarioService;
-        
+        this.produtoService = produtoService;
     }
 
     public void cancelar(Venda venda) {
@@ -240,5 +242,54 @@ public class VendaService {
         }
 
         return quantidade;
+    }
+
+    public void adicionarItemNaVenda(Venda venda, Produto produto, int quantidade) {
+        if (!produtoService.estoqueSuficiente(venda, produto, quantidade, this)) {
+            throw new RuntimeException("Estoque insuficiente para o produto: " + produto.getNome());
+        }
+        venda.adicionarItem(produto, quantidade);
+    }
+
+    public double calcularSubTotal(Venda venda) {
+        double soma = 0;
+        if (venda != null && venda.getItens() != null) {
+            for (ItemVenda item : venda.getItens()) {
+                soma += item.getTotalItem();
+            }
+        }
+        return soma;
+    }
+
+    public void atualizarQuantidadeItem(Venda venda, int indexLinha, int novaQuantidade) {
+        if (venda == null || venda.getItens() == null) {
+            throw new IllegalArgumentException("Venda inválida.");
+        }
+        if (indexLinha < 0 || indexLinha >= venda.getItens().size()) {
+            throw new IllegalArgumentException("Item não encontrado no carrinho.");
+        }
+        if (novaQuantidade <= 0) {
+            throw new RuntimeException("A quantidade deve ser maior que zero.");
+        }
+
+        ItemVenda item = venda.getItens().get(indexLinha);
+        Produto produto = item.getProduto();
+
+        int quantidadeTotalDesejada = novaQuantidade;
+        for (int i = 0; i < venda.getItens().size(); i++) {
+            if (i != indexLinha) {
+                ItemVenda outroItem = venda.getItens().get(i);
+                if (outroItem.getProduto().getId().equals(produto.getId())) {
+                    quantidadeTotalDesejada += outroItem.getQuantidade();
+                }
+            }
+        }
+
+        if (produto.getQuantidadeEstoque() < quantidadeTotalDesejada) {
+            throw new RuntimeException("Estoque insuficiente para o produto '" + produto.getNome() + "'. Disponível: " + produto.getQuantidadeEstoque());
+        }
+
+        item.setQuantidade(novaQuantidade);
+        item.setTotalItem(item.getPrecoUnitario() * novaQuantidade);
     }
 }

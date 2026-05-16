@@ -16,18 +16,24 @@ public class FinanceiroService {
     private final ContaReceberService contaReceberService;
     private final ContaPagarService contaPagarService;
     private final MovimentacaoCaixaService movimentacaoService;
+    private final CaixaService caixaService;
 
     public FinanceiroService(
             ContaReceberService contaReceberService,
             ContaPagarService contaPagarService,
-            MovimentacaoCaixaService movimentacaoService
+            MovimentacaoCaixaService movimentacaoService,
+            CaixaService caixaService
     ) {
         this.contaReceberService = contaReceberService;
         this.contaPagarService = contaPagarService;
         this.movimentacaoService = movimentacaoService;
+        this.caixaService = caixaService;
     }
 
-    public void receberConta(ContaReceber conta, Caixa caixa, Usuario usuario) {
+    public void receberConta(ContaReceber conta, Usuario usuario) {
+        Caixa caixa = caixaService.buscarCaixaAberto();
+        if (caixa == null) throw new RuntimeException("Não há caixa aberto. Abra o caixa antes de receber contas.");
+
         if (conta == null) {
             throw new IllegalArgumentException("Conta a receber inválida.");
         }
@@ -57,7 +63,10 @@ public class FinanceiroService {
         movimentacaoService.registrarMovimentacao(mov, usuario);
     }
 
-    public void pagarConta(ContaPagar conta, Caixa caixa, Usuario usuario) {
+    public void pagarConta(ContaPagar conta, Usuario usuario) {
+        Caixa caixa = caixaService.buscarCaixaAberto();
+        if (caixa == null) throw new RuntimeException("Não há caixa aberto. Abra o caixa antes de pagar contas.");
+
         if (conta == null) {
             throw new IllegalArgumentException("Conta a pagar inválida.");
         }

@@ -45,10 +45,9 @@ public class VendasView extends JPanel{
     private javax.swing.JTextField txtProduto;
     private javax.swing.JTextField txtUsuario;
 
-    java.awt.Frame framePai;
 
 
-    
+
     public VendasView(VendaService vendaService,
                       CaixaService caixaService,
                       ClienteService clienteService,
@@ -56,7 +55,7 @@ public class VendasView extends JPanel{
                       UsuarioService usuarioService,
                       Usuario usuarioLogado,
                       MovimentacaoCaixaService movimentacaoCaixaService
-                      ){
+    ){
         this.vendaService = vendaService;
         this.caixaService = caixaService;
         this.clienteService = clienteService;
@@ -86,8 +85,7 @@ public class VendasView extends JPanel{
         jScrollPane2 = new javax.swing.JScrollPane();
         tblItenVenda = new javax.swing.JTable();
         btnCancelar = new javax.swing.JButton();
-setBackground(new java.awt.Color(238, 238, 238));
-        setPreferredSize(new java.awt.Dimension(638, 638));
+        setBackground(new java.awt.Color(238, 238, 238));
 
         Titulo.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
         Titulo.setForeground(new java.awt.Color(31, 111, 95));
@@ -136,7 +134,7 @@ setBackground(new java.awt.Color(238, 238, 238));
         btnSaldoCaixa.setBackground(new java.awt.Color(31, 111, 95));
         btnSaldoCaixa.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 12));
         btnSaldoCaixa.setForeground(new java.awt.Color(255, 255, 255));
-        btnSaldoCaixa.setText("💰 Saldo");
+        btnSaldoCaixa.setText("Saldo");
         btnSaldoCaixa.setBorderPainted(false);
         btnSaldoCaixa.setPreferredSize(new java.awt.Dimension(110, 34));
         btnSaldoCaixa.addActionListener(this::btnSaldoCaixaActionPerformed);
@@ -195,57 +193,56 @@ setBackground(new java.awt.Color(238, 238, 238));
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSeparator1)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(41, 41, 41)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblUsuario)
-                    .addComponent(lblCliente)
-                    .addComponent(lblProduto))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtCliente, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(txtUsuario, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(txtProduto))
-                .addContainerGap())
+                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(40, 40, 40)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(lblProduto)
+                                        .addComponent(lblCliente)
+                                        .addComponent(lblUsuario))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(txtUsuario)
+                                        .addComponent(txtCliente)
+                                        .addComponent(txtProduto))
+                                .addContainerGap())
+                        .addComponent(jSeparator1)
         );
         jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblUsuario)
-                    .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblCliente)
-                    .addComponent(txtCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblProduto)
-                    .addComponent(txtProduto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(15, 15, 15)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(lblUsuario)
+                                        .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(lblCliente)
+                                        .addComponent(txtCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(lblProduto)
+                                        .addComponent(txtProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        // 2. Configuração da Tabela e ScrollPane
         tblItenVenda.setBackground(new java.awt.Color(232, 245, 242));
-        tblItenVenda.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        tblItenVenda.setFont(new java.awt.Font("Arial", 0, 12));
         tblItenVenda.setForeground(new java.awt.Color(30, 30, 30));
         tblItenVenda.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null},
-            },
-            new String [] {
-                "Id", "Nome", "Quantidade", "Preço Un.", "Valor Total"
-            }
+                new Object [][] {}, // Tabela inicia vazia limpa
+                new String [] {
+                        "Id", "Nome", "Quantidade", "Preço Un.", "Valor Total"
+                }
         ) {
             Class[] types = new Class [] {
-                java.lang.Long.class, java.lang.String.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class
+                    java.lang.Long.class, java.lang.String.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, true, false, false
+                    false, false, true, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -258,18 +255,21 @@ setBackground(new java.awt.Color(238, 238, 238));
         });
         tblItenVenda.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(tblItenVenda);
+
+        // Ajustando larguras das colunas
         if (tblItenVenda.getColumnModel().getColumnCount() > 0) {
             tblItenVenda.getColumnModel().getColumn(0).setResizable(false);
-            tblItenVenda.getColumnModel().getColumn(0).setPreferredWidth(10);
+            tblItenVenda.getColumnModel().getColumn(0).setPreferredWidth(40);
             tblItenVenda.getColumnModel().getColumn(1).setResizable(false);
-            tblItenVenda.getColumnModel().getColumn(1).setPreferredWidth(80);
+            tblItenVenda.getColumnModel().getColumn(1).setPreferredWidth(220);
             tblItenVenda.getColumnModel().getColumn(2).setResizable(false);
-            tblItenVenda.getColumnModel().getColumn(2).setPreferredWidth(20);
+            tblItenVenda.getColumnModel().getColumn(2).setPreferredWidth(70);
             tblItenVenda.getColumnModel().getColumn(3).setResizable(false);
-            tblItenVenda.getColumnModel().getColumn(3).setPreferredWidth(20);
+            tblItenVenda.getColumnModel().getColumn(3).setPreferredWidth(90);
             tblItenVenda.getColumnModel().getColumn(4).setResizable(false);
-            tblItenVenda.getColumnModel().getColumn(4).setPreferredWidth(20);
+            tblItenVenda.getColumnModel().getColumn(4).setPreferredWidth(100);
         }
+
         tblItenVenda.getModel().addTableModelListener(new TableModelListener() {
             @Override
             public void tableChanged(TableModelEvent e) {
@@ -285,81 +285,76 @@ setBackground(new java.awt.Color(238, 238, 238));
         });
 
         btnCancelar.setBackground(new java.awt.Color(47, 160, 132));
-        btnCancelar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btnCancelar.setFont(new java.awt.Font("Arial", 0, 12));
         btnCancelar.setForeground(new java.awt.Color(255, 255, 255));
         btnCancelar.setText("Cancelar");
         btnCancelar.setBorderPainted(false);
         btnCancelar.setPreferredSize(new java.awt.Dimension(120, 34));
         btnCancelar.addActionListener(this::btnCancelarActionPerfomed);
 
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
-                                .addGap(21, 21, 21)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(20, 20, 20)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(Titulo)
                                         .addGroup(layout.createSequentialGroup()
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                        .addGroup(layout.createSequentialGroup()
-                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                                        .addComponent(btnNovaVenda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                        .addComponent(Titulo))
-                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                .addComponent(btnAbrirCaixa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                .addComponent(btnFecharCaixa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                .addComponent(btnSangria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                        .addGroup(layout.createSequentialGroup()
-                                                                .addComponent(lblSubtotal)
-                                                                .addGap(39, 39, 39)
-                                                                .addComponent(lblSubtotaValor)
-                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                        .addGroup(layout.createSequentialGroup()
-                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                .addComponent(btnSuprimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                .addComponent(btnSaldoCaixa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                                .addComponent(btnFinalizarVenda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 606, Short.MAX_VALUE))
-                                .addContainerGap(11, Short.MAX_VALUE))
+                                                .addComponent(btnNovaVenda, javax.swing.GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(btnAbrirCaixa, javax.swing.GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(btnFecharCaixa, javax.swing.GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(btnSangria, javax.swing.GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(btnSuprimento, javax.swing.GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(btnSaldoCaixa, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE))
+
+                                        // A MÁGICA ACONTECE NESTAS DUAS LINHAS: O Short.MAX_VALUE força eles a ocuparem o espaço vazio!
+                                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addComponent(lblSubtotal)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(lblSubtotaValor, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(btnFinalizarVenda, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(20, 20, 20))
         );
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
-                                .addGap(21, 21, 21)
+                                .addGap(20, 20, 20)
                                 .addComponent(Titulo)
-                                .addGap(35, 35, 35)
+                                .addGap(15, 15, 15)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(btnNovaVenda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(btnAbrirCaixa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(btnFecharCaixa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(btnSangria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(btnSuprimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(btnSaldoCaixa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(12, 12, 12)
-                                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 336, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(10, 10, 10)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                .addComponent(lblSubtotal)
-                                                .addComponent(lblSubtotaValor))
-                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                .addComponent(btnFinalizarVenda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addContainerGap())
+                                        .addComponent(btnNovaVenda, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btnAbrirCaixa, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btnFecharCaixa, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btnSangria, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btnSuprimento, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btnSaldoCaixa, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(15, 15, 15)
+                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(15, 15, 15)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
+                                .addGap(15, 15, 15)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(lblSubtotal)
+                                        .addComponent(lblSubtotaValor)
+                                        .addComponent(btnFinalizarVenda, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(20, 20, 20))
         );
 
         java.awt.Window win = javax.swing.SwingUtilities.getWindowAncestor(this);
-        framePai = (win instanceof java.awt.Frame) ? (java.awt.Frame) win : null;
 
         caixaAtual = caixaService.buscarCaixaAberto();
 
@@ -380,12 +375,10 @@ setBackground(new java.awt.Color(238, 238, 238));
             btnSuprimento.setEnabled(true);
             btnSaldoCaixa.setEnabled(true);
             btnFinalizarVenda.setEnabled(false);
-            caixaAtual = caixaService.buscarCaixaAberto();
         }
 
         txtCliente.setEnabled(false);
         txtProduto.setEnabled(false);
-
         btnCancelar.setEnabled(false);
     }
 
@@ -396,54 +389,26 @@ setBackground(new java.awt.Color(238, 238, 238));
      * Se o usuário já for ADMIN/GERENTE, retorna ele mesmo sem pedir credenciais.
      */
     private models.Usuario autorizarOperacaoCaixa() {
-        boolean eFuncionario = usuarioLogado.getPerfil() == models.enums.TipoUsuario.FUNCIONARIO;
-
-        if (!eFuncionario) {
-            return usuarioLogado; // ADMIN/GERENTE já tem permissão
+        if (usuarioLogado.getPerfil() != models.enums.TipoUsuario.FUNCIONARIO) {
+            return usuarioLogado;
         }
 
-        // Pede credenciais de ADMIN ou GERENTE
         JTextField tfEmail = new JTextField();
         JPasswordField tfSenha = new JPasswordField();
-
         JPanel panel = new JPanel(new java.awt.GridLayout(5, 1, 4, 4));
-        panel.add(new JLabel("Operação requer autorização de Gerente ou Administrador."));
+        panel.add(new JLabel("Operação requer autorização de Gerente/Administrador."));
         panel.add(new JLabel("E-mail:"));
         panel.add(tfEmail);
         panel.add(new JLabel("Senha:"));
         panel.add(tfSenha);
 
-        int resultado = JOptionPane.showConfirmDialog(
-                framePai, panel, "Autorização necessária",
-                JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE
-        );
-
+        int resultado = JOptionPane.showConfirmDialog(null, panel, "Autorização", JOptionPane.OK_CANCEL_OPTION);
         if (resultado != JOptionPane.OK_OPTION) return null;
 
-        String email = tfEmail.getText().trim();
-        String senha = new String(tfSenha.getPassword());
-
-        if (email.isEmpty() || senha.isEmpty()) {
-            JOptionPane.showMessageDialog(framePai, "Preencha e-mail e senha.", "Aviso", JOptionPane.WARNING_MESSAGE);
-            return null;
-        }
-
         try {
-            models.Usuario autorizador = usuarioService.autenticar(email, senha);
-
-            if (autorizador.getPerfil() == models.enums.TipoUsuario.FUNCIONARIO) {
-                JOptionPane.showMessageDialog(framePai,
-                        "Usuário '" + autorizador.getNome() + "' não tem permissão para autorizar esta operação.",
-                        "Acesso negado", JOptionPane.ERROR_MESSAGE);
-                return null;
-            }
-
-            return autorizador;
-
+            return usuarioService.autorizarOperacaoCaixa(tfEmail.getText(), new String(tfSenha.getPassword()));
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(framePai,
-                    "Autenticação falhou: " + ex.getMessage(),
-                    "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Acesso Negado", JOptionPane.ERROR_MESSAGE);
             return null;
         }
     }
@@ -468,7 +433,7 @@ setBackground(new java.awt.Color(238, 238, 238));
         models.Usuario autorizador = autorizarOperacaoCaixa();
         if (autorizador == null) return;
 
-        AberturaCaixaDialog aberturaCaixaDialog = new AberturaCaixaDialog(framePai, true, autorizador);
+        AberturaCaixaDialog aberturaCaixaDialog = new AberturaCaixaDialog(null, true, autorizador);
         Double valorAbertura = aberturaCaixaDialog.getValorAbertura();
 
         if(valorAbertura == null){
@@ -486,7 +451,7 @@ setBackground(new java.awt.Color(238, 238, 238));
                 btnSuprimento.setEnabled(true);
                 btnSaldoCaixa.setEnabled(true);
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(framePai, "Erro ao abrir caixa: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Erro ao abrir caixa: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -498,7 +463,7 @@ setBackground(new java.awt.Color(238, 238, 238));
         try{
             if(caixaService.buscarCaixaAberto() != null){
                 if(vendaAtual != null && !vendaAtual.getItens().isEmpty()){
-                    JOptionPane.showMessageDialog(framePai, "Finalize ou cancele a venda em andamento antes de fechar o caixa!", "Atenção", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Finalize ou cancele a venda em andamento antes de fechar o caixa!", "Atenção", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
                 caixaService.fecharCaixa(autorizador, vendaAtual);
@@ -524,20 +489,20 @@ setBackground(new java.awt.Color(238, 238, 238));
         models.Usuario autorizador = autorizarOperacaoCaixa();
         if (autorizador == null) return;
 
-        MovimentacaoCaixaDialog movimentacaoCaixaDialog = new MovimentacaoCaixaDialog(framePai, true, TipoMovimento.SAIDA);
+        MovimentacaoCaixaDialog movimentacaoCaixaDialog = new MovimentacaoCaixaDialog(null, true, TipoMovimento.SAIDA);
         Double valorSangria = movimentacaoCaixaDialog.getValor();
         String descricao = movimentacaoCaixaDialog.getDescricao();
 
         if(valorSangria != null && descricao != null){
             try {
                 movimentacaoCaixaService.registrarSangria(caixaAtual, valorSangria, descricao, autorizador);
-                JOptionPane.showMessageDialog(framePai, "SANGRIA lançada com sucesso!");
+                JOptionPane.showMessageDialog(null, "SANGRIA lançada com sucesso!");
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(framePai, "Erro na sangria: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Erro na sangria: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             }
         }
         else{
-            JOptionPane.showMessageDialog(framePai, "Operação Cancelada!");
+            JOptionPane.showMessageDialog(null, "Operação Cancelada!");
         }
     }
 
@@ -545,20 +510,20 @@ setBackground(new java.awt.Color(238, 238, 238));
         models.Usuario autorizador = autorizarOperacaoCaixa();
         if (autorizador == null) return;
 
-        MovimentacaoCaixaDialog movimentacaoCaixaDialog = new MovimentacaoCaixaDialog(framePai, true, TipoMovimento.ENTRADA);
+        MovimentacaoCaixaDialog movimentacaoCaixaDialog = new MovimentacaoCaixaDialog(null, true, TipoMovimento.ENTRADA);
         Double valorSuprimento = movimentacaoCaixaDialog.getValor();
         String descricao = movimentacaoCaixaDialog.getDescricao();
 
         if(valorSuprimento != null && descricao != null){
             try {
                 movimentacaoCaixaService.registrarSuprimento(caixaAtual, valorSuprimento, descricao, autorizador);
-                JOptionPane.showMessageDialog(framePai, "SUPRIMENTO lançado com sucesso!");
+                JOptionPane.showMessageDialog(null, "SUPRIMENTO lançado com sucesso!");
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(framePai, "Erro no suprimento: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Erro no suprimento: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             }
         }
         else{
-            JOptionPane.showMessageDialog(framePai, "Operação Cancelada!");
+            JOptionPane.showMessageDialog(null, "Operação Cancelada!");
         }
     }
 
@@ -568,38 +533,38 @@ setBackground(new java.awt.Color(238, 238, 238));
             return;
         }
 
-        int opcao = JOptionPane.showConfirmDialog(framePai, "Deseja cancelar a venda?", "Cancelar", JOptionPane.YES_NO_OPTION);
+        int opcao = JOptionPane.showConfirmDialog(null, "Deseja cancelar a venda?", "Cancelar", JOptionPane.YES_NO_OPTION);
 
         if(opcao == JOptionPane.YES_OPTION){
             try {
                 vendaService.cancelar(vendaAtual);
-                JOptionPane.showMessageDialog(framePai, "Venda cancelada com sucesso!");
+                JOptionPane.showMessageDialog(null, "Venda cancelada com sucesso!");
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(framePai, "Erro ao cancelar: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Erro ao cancelar: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             }
             limparVenda();
         }
     }
 
     private void btnFinalizarVendaActionPerfomed(java.awt.event.ActionEvent evt){
-        PagamentoDialog pagamentoMenu = new PagamentoDialog(framePai, true, vendaAtual.getValorTotal());
+        PagamentoDialog pagamentoMenu = new PagamentoDialog(null, true, vendaAtual.getValorTotal());
         String formaPagamento = pagamentoMenu.getFormaPagamento();
 
         if(formaPagamento != null){
             try {
                 vendaService.aplicarPagamento(vendaAtual, formaPagamento);
                 vendaService.cadastrar(vendaAtual);
-                JOptionPane.showMessageDialog(framePai, "Venda finalizada com sucesso!");
+                JOptionPane.showMessageDialog(null, "Venda finalizada com sucesso!");
                 limparVenda();
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(framePai, "Erro ao finalizar venda: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Erro ao finalizar venda: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
 
     private void txtClienteActionPerformed(java.awt.event.ActionEvent evt) {
         if(vendaAtual == null) return;
-        SelecionarClienteDialog selecionarClienteMenu = new SelecionarClienteDialog(framePai, true, clienteService, txtCliente.getText());
+        SelecionarClienteDialog selecionarClienteMenu = new SelecionarClienteDialog(null, true, clienteService, txtCliente.getText());
         if(selecionarClienteMenu.getClienteSelecionado() != null){
             vendaAtual.setCliente(selecionarClienteMenu.getClienteSelecionado());
             txtCliente.setText(vendaAtual.getCliente().getNome());
@@ -611,52 +576,35 @@ setBackground(new java.awt.Color(238, 238, 238));
 
     private void txtProdutoActionPerformed(java.awt.event.ActionEvent evt) {
         if(vendaAtual == null) return;
-        SelecionarProdutosDialog selecionarProdutoMenu = new SelecionarProdutosDialog(framePai, true, produtoService, txtProduto.getText());
+        SelecionarProdutosDialog selecionarProdutoMenu = new SelecionarProdutosDialog(null, true, produtoService, txtProduto.getText());
         if(selecionarProdutoMenu.getProdutoSelecionado() != null){
-            try{
+            try {
                 Produto produto = selecionarProdutoMenu.getProdutoSelecionado();
                 int quantidade = selecionarProdutoMenu.getQuantidade();
 
-                if(produtoService.estoqueSuficiente(vendaAtual, produto, quantidade, vendaService)){
-                    vendaAtual.adicionarItem(produto, quantidade);
-                }
-                else {
-                    JOptionPane.showMessageDialog(null, "Estoque Insuficiente!");
-                }
+                vendaService.adicionarItemNaVenda(vendaAtual, produto, quantidade);
 
-            }catch (Exception ex){
-                JOptionPane.showMessageDialog(null, ex.getMessage());
+                popularTabelaItens();
+                atualizarSubTotal();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage(), "Aviso de Estoque", JOptionPane.WARNING_MESSAGE);
             }
-
-            popularTabelaItens();
-            atualizarSubTotal();
-        }
-        else{
-            JOptionPane.showMessageDialog(null, "Nenhum Produto foi selecionado!");
         }
     }
 
     private void quantidadeTabelaAtualizada(int linha, int coluna){
-        int quantidade = (int)tblItenVenda.getValueAt(linha, coluna);
-        Long produtoId = (Long)tblItenVenda.getValueAt(linha, 0);
-        Produto produto = produtoService.buscarPorId(produtoId);
+        int quantidadeDigitada = (int)tblItenVenda.getValueAt(linha, coluna);
 
-        int contagem = 0;
+        try {
+            vendaService.atualizarQuantidadeItem(vendaAtual, linha, quantidadeDigitada);
 
-        for(int i = 0; i < tblItenVenda.getRowCount(); i++){
-            if(tblItenVenda.getValueAt(i, 0) == produtoId){
-                contagem += (int)tblItenVenda.getValueAt(i, 2);
-            }
-        }
-
-        if((contagem + quantidade) <= produto.getQuantidadeEstoque()){
-            vendaAtual.getItens().get(linha).setQuantidade(quantidade);
             popularTabelaItens();
             atualizarSubTotal();
-        }else{
-            JOptionPane.showMessageDialog(null, "Estoque Insuficiente!");
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Aviso de Estoque", JOptionPane.WARNING_MESSAGE);
+
             popularTabelaItens();
-            atualizarSubTotal();
         }
     }
 
@@ -664,23 +612,23 @@ setBackground(new java.awt.Color(238, 238, 238));
         Caixa caixa = caixaService.buscarCaixaAberto();
 
         if(caixa == null){
-            JOptionPane.showMessageDialog(framePai, "Nenhum caixa aberto no momento.", "Saldo do Caixa", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Nenhum caixa aberto no momento.", "Saldo do Caixa", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
 
         String mensagem = String.format(
-            "<html><body style='font-family:Arial; padding:8px'>" +
-            "<b style='font-size:14px; color:#1F6F5F'>Saldo do Caixa</b><br><br>" +
-            "&#128176; <b>Saldo Atual:</b>&nbsp; R$ %.2f<br><br>" +
-            "&#128194; <b>Valor de Abertura:</b>&nbsp; R$ %.2f<br><br>" +
-            "&#128197; <b>Aberto em:</b>&nbsp; %s" +
-            "</body></html>",
-            caixa.getSaldoAtual(),
-            caixa.getValorAbertura(),
-            caixa.getDataAbertura() != null ? caixa.getDataAbertura().toString() : "-"
+                "<html><body style='font-family:Arial; padding:8px'>" +
+                        "<b style='font-size:14px; color:#1F6F5F'>Saldo do Caixa</b><br><br>" +
+                        "&#128176; <b>Saldo Atual:</b>&nbsp; R$ %.2f<br><br>" +
+                        "&#128194; <b>Valor de Abertura:</b>&nbsp; R$ %.2f<br><br>" +
+                        "&#128197; <b>Aberto em:</b>&nbsp; %s" +
+                        "</body></html>",
+                caixa.getSaldoAtual(),
+                caixa.getValorAbertura(),
+                caixa.getDataAbertura() != null ? caixa.getDataAbertura().toString() : "-"
         );
 
-        JOptionPane.showMessageDialog(framePai, mensagem, "Saldo do Caixa", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null, mensagem, "Saldo do Caixa", JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void popularTabelaItens(){
@@ -701,13 +649,8 @@ setBackground(new java.awt.Color(238, 238, 238));
     }
 
     private void atualizarSubTotal(){
-        double soma = 0;
-
-        for(ItemVenda item: vendaAtual.getItens()){
-            soma += item.getTotalItem();
-        }
-
-        lblSubtotaValor.setText("" + soma);
+        double soma = vendaService.calcularSubTotal(vendaAtual);
+        lblSubtotaValor.setText(String.format("%.2f", soma));
     }
 
     private void limparVenda(){

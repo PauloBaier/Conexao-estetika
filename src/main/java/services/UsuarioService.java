@@ -131,4 +131,12 @@ public class UsuarioService {
         return autenticar(email, senha);
     }
 
+    public Usuario autorizarOperacaoCaixa(String email, String senha) {
+        Usuario usuario = autenticar(email, senha);
+        if (usuario.getPerfil() == models.enums.TipoUsuario.FUNCIONARIO) {
+            throw new RuntimeException("Usuário '" + usuario.getNome() + "' não tem permissão para autorizar esta operação.");
+        }
+        return usuario;
+    }
+
 }

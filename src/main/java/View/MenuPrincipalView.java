@@ -106,44 +106,42 @@ public class MenuPrincipalView extends JFrame{
         btnVenda.setBackground(new java.awt.Color(47, 160, 132));
         btnVenda.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         btnVenda.setForeground(new java.awt.Color(238, 238, 238));
-        btnVenda.setText("🛒 Venda");
+        btnVenda.setText("Venda");
         btnVenda.setBorderPainted(false);
         btnVenda.addActionListener(this::btnVendaActionPerformed);
 
         btnCadastros.setBackground(new java.awt.Color(47, 160, 132));
         btnCadastros.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         btnCadastros.setForeground(new java.awt.Color(238, 238, 238));
-        btnCadastros.setText("📋 Cadastros");
+        btnCadastros.setText("Cadastros");
         btnCadastros.setBorderPainted(false);
         btnCadastros.addActionListener(this::btnCadastrosActionPerformed);
 
         btnFinanceiro.setBackground(new java.awt.Color(47, 160, 132));
         btnFinanceiro.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         btnFinanceiro.setForeground(new java.awt.Color(238, 238, 238));
-        btnFinanceiro.setText("💵 Financeiro");
+        btnFinanceiro.setText("Financeiro");
         btnFinanceiro.setBorderPainted(false);
         btnFinanceiro.addActionListener(this::btnFinanceiroActionPerformed);
 
         btnRelatorio.setBackground(new java.awt.Color(47, 160, 132));
         btnRelatorio.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         btnRelatorio.setForeground(new java.awt.Color(238, 238, 238));
-        btnRelatorio.setText("📊 Relatório");
+        btnRelatorio.setText("Relatório");
         btnRelatorio.setBorderPainted(false);
         btnRelatorio.addActionListener(this::btnRelatorioActionPerformed);
 
-        btnUsuario.setBackground(new java.awt.Color(31, 111, 95));
-        btnUsuario.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        btnUsuario.setFont(new java.awt.Font("Arial", 1, 14));
         btnUsuario.setForeground(new java.awt.Color(235, 235, 235));
-        btnUsuario.setText("👤 " + usuarioLogado.getNome());
+        btnUsuario.setBackground(new java.awt.Color(32, 111, 95));
+        btnUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/usuario-icon.png")));
+        btnUsuario.setText(usuarioLogado.getNome());
         btnUsuario.setBorderPainted(false);
         btnUsuario.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnUsuario.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnUsuario.addActionListener(this::btnUsuarioActionPerformed);
 
-        jLabel1.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 14));
-        jLabel1.setForeground(new java.awt.Color(238, 238, 238));
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Conexão Estétika");
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/logo-conexao-estetika.png")));
 
         javax.swing.GroupLayout pnlBarraLateralLayout = new javax.swing.GroupLayout(pnlBarraLateral);
         pnlBarraLateral.setLayout(pnlBarraLateralLayout);
@@ -333,10 +331,10 @@ public class MenuPrincipalView extends JFrame{
 
     public static JButton createOutlineButton(String text) {
         JButton btn = new JButton(text);
-        btn.setBackground(WHITE);
-        btn.setForeground(ACCENT_DARK);
+        btn.setBackground(ACCENT_DARK);
+        btn.setForeground(WHITE);
         btn.setFont(FONT_SMALL);
-        btn.setBorder(BorderFactory.createLineBorder(ACCENT_DARK));
+        btn.setBorderPainted(false);
         btn.setFocusPainted(false);
         btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         return btn;

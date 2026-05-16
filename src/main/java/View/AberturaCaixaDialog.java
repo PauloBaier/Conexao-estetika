@@ -127,7 +127,7 @@ public class AberturaCaixaDialog extends JDialog {
     private void btnConfirmarActionPerfomed(java.awt.event.ActionEvent evt){
         double valor = ((Number)txtValorAbertura.getValue()).doubleValue();
         if(valor < 0){
-            JOptionPane.showMessageDialog(null, "Valor de abertura não pode ser negativo!", "Aviso", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Valor de abertura não pode ser negativo!", "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
         }
         this.valorAbertura = valor;

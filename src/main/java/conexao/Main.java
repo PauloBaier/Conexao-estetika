@@ -1,7 +1,6 @@
 package conexao;
 
 import Config.FlyWayConfig;
-import models.Usuario;
 import repositories.*;
 import services.*;
 import View.LoginView;
@@ -17,10 +16,10 @@ public class Main {
         ContaPagarService contaPagarService = new ContaPagarService(new ContaPagarRepository());
         ContaReceberService contaReceberService = new ContaReceberService(new ContaReceberRepository());
         MovimentacaoCaixaService movimentacaoCaixaService = new MovimentacaoCaixaService(new MovimentacaoCaixaRepository(), new CaixaRepository());
-        FinanceiroService financeiroService= new FinanceiroService(contaReceberService, contaPagarService, movimentacaoCaixaService);
         CaixaService caixaService = new CaixaService(new CaixaRepository());
+        FinanceiroService financeiroService= new FinanceiroService(contaReceberService, contaPagarService, movimentacaoCaixaService, caixaService);
         ItemVendaService itemVendaService = new ItemVendaService(new ItemVendaRepository(), produtoService, vendaRepository);
-        VendaService vendaService = new VendaService(vendaRepository, caixaService, itemVendaService, contaReceberService, movimentacaoCaixaService, usuarioService);
+        VendaService vendaService = new VendaService(vendaRepository, caixaService, itemVendaService, contaReceberService, movimentacaoCaixaService, usuarioService, produtoService);
         ClienteService clienteService = new ClienteService(new ClienteRepository());
         EnderecoService enderecoService = new EnderecoService(new EnderecoRepository(), new ClienteRepository());
         FornecedorService fornecedorService = new FornecedorService(new FornecedorRepository());

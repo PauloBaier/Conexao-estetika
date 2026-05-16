@@ -158,41 +158,39 @@ public class FinanceiroPanel extends JPanel {
 
         table.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                int row = table.rowAtPoint(e.getPoint());
+                int viewRow = table.rowAtPoint(e.getPoint());
                 int col = table.columnAtPoint(e.getPoint());
-                if (col != 7 || row < 0) return;
-                String status = (String) model.getValueAt(row, 6);
+
+                if (col != 7 || viewRow < 0) return;
+
+                int modelRow = table.convertRowIndexToModel(viewRow);
+
+                String status = (String) model.getValueAt(modelRow, 6);
                 if (!StatusConta.PENDENTE.name().equals(status)) return;
 
-                long id = (Long) model.getValueAt(row, 0);
-                String fornecedor = (String) model.getValueAt(row, 1);
-                String valor = (String) model.getValueAt(row, 5);
+                long id = Long.parseLong(model.getValueAt(modelRow, 0).toString());
 
-                Caixa caixa = caixaService.buscarCaixaAberto();
-                if (caixa == null) {
-                    JOptionPane.showMessageDialog(FinanceiroPanel.this,
-                            "Não há caixa aberto. Abra o caixa antes de pagar contas.",
-                            "Caixa fechado", JOptionPane.WARNING_MESSAGE);
-                    return;
-                }
+                String fornecedor = (String) model.getValueAt(modelRow, 1);
+                String valor = (String) model.getValueAt(modelRow, 5);
 
                 int confirm = JOptionPane.showConfirmDialog(FinanceiroPanel.this,
                         String.format("Confirmar pagamento?\n\nFornecedor: %s\nValor: %s\nID: #%d",
                                 fornecedor, valor, id),
                         "Pagar conta", JOptionPane.YES_NO_OPTION);
+
                 if (confirm != JOptionPane.YES_OPTION) return;
 
                 try {
                     ContaPagar conta = contaPagarService.buscar(id);
-                    financeiroService.pagarConta(conta, caixa, usuarioLogado);
+                    financeiroService.pagarConta(conta, usuarioLogado);
                     refresh.run();
                     JOptionPane.showMessageDialog(FinanceiroPanel.this,
                             "Conta #" + id + " paga com sucesso!", "Sucesso",
                             JOptionPane.INFORMATION_MESSAGE);
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(FinanceiroPanel.this,
-                            "Erro ao pagar conta: " + ex.getMessage(),
-                            "Erro", JOptionPane.ERROR_MESSAGE);
+                            ex.getMessage(),
+                            "Aviso Financeiro", JOptionPane.WARNING_MESSAGE);
                 }
             }
         });
@@ -254,41 +252,41 @@ public class FinanceiroPanel extends JPanel {
 
         table.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                int row = table.rowAtPoint(e.getPoint());
+                int viewRow = table.rowAtPoint(e.getPoint());
                 int col = table.columnAtPoint(e.getPoint());
-                if (col != 7 || row < 0) return;
-                String status = (String) model.getValueAt(row, 6);
+
+                if (col != 7 || viewRow < 0) return;
+
+                int modelRow = table.convertRowIndexToModel(viewRow);
+
+                String status = (String) model.getValueAt(modelRow, 6);
                 if (!StatusConta.PENDENTE.name().equals(status)) return;
 
-                long id = (Long) model.getValueAt(row, 0);
-                String cliente = (String) model.getValueAt(row, 1);
-                String valor   = (String) model.getValueAt(row, 5);
+                long id = Long.parseLong(model.getValueAt(modelRow, 0).toString());
 
-                Caixa caixa = caixaService.buscarCaixaAberto();
-                if (caixa == null) {
-                    JOptionPane.showMessageDialog(FinanceiroPanel.this,
-                            "Não há caixa aberto. Abra o caixa antes de receber contas.",
-                            "Caixa fechado", JOptionPane.WARNING_MESSAGE);
-                    return;
-                }
+                String cliente = (String) model.getValueAt(modelRow, 1);
+                String valor   = (String) model.getValueAt(modelRow, 5);
 
                 int confirm = JOptionPane.showConfirmDialog(FinanceiroPanel.this,
                         String.format("Confirmar recebimento?\n\nCliente: %s\nValor: %s\nID: #%d",
                                 cliente, valor, id),
                         "Receber conta", JOptionPane.YES_NO_OPTION);
+
                 if (confirm != JOptionPane.YES_OPTION) return;
 
                 try {
                     ContaReceber conta = contaReceberService.buscar(id);
-                    financeiroService.receberConta(conta, caixa, usuarioLogado);
+
+                    financeiroService.receberConta(conta, usuarioLogado);
+
                     refresh.run();
                     JOptionPane.showMessageDialog(FinanceiroPanel.this,
                             "Conta #" + id + " recebida com sucesso!", "Sucesso",
                             JOptionPane.INFORMATION_MESSAGE);
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(FinanceiroPanel.this,
-                            "Erro ao receber conta: " + ex.getMessage(),
-                            "Erro", JOptionPane.ERROR_MESSAGE);
+                            ex.getMessage(),
+                            "Aviso Financeiro", JOptionPane.WARNING_MESSAGE);
                 }
             }
         });

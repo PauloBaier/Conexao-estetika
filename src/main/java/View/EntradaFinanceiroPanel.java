@@ -206,10 +206,11 @@ public class EntradaFinanceiroPanel extends JPanel {
             }
 
             LocalDate vencimento;
+            String textoData = tfVencimento.getText().trim();
             try {
-                vencimento = LocalDate.parse(tfVencimento.getText().trim(), fmt);
+                vencimento = LocalDate.parse(textoData, fmt);
             } catch (Exception ex) {
-                showWarning("Informe a data de vencimento no formato dd/MM/yyyy.");
+                showWarning(String.format("A data '%s' é inválida ou não existe.\nUse o formato DD/MM/YYYY.", textoData));
                 return;
             }
 

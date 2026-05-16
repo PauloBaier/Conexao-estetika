@@ -476,27 +476,20 @@ public class CadastroPanel extends JPanel {
         JButton btnSalvar = MenuPrincipalView.createAccentButton("Salvar");
         btnSalvar.addActionListener(e -> {
             try {
-                if (categorias.isEmpty()) { aviso("Cadastre uma categoria primeiro."); return; }
-                if (fornecedores.isEmpty()) { aviso("Cadastre um fornecedor primeiro."); return; }
-
+                if (categorias.isEmpty() || fornecedores.isEmpty()) {
+                    aviso("Cadastre uma categoria e um fornecedor primeiro."); return;
+                }
                 Categoria cat = categorias.get(cbCategoria.getSelectedIndex());
                 Fornecedor forn = fornecedores.get(cbFornecedor.getSelectedIndex());
 
-                Produto p = new Produto();
-                p.setNome(fNome.getText().trim());
-                p.setPrecoCompra(Double.parseDouble(fCompra.getText().trim().replace(",", ".")));
-                p.setPrecoVenda(Double.parseDouble(fVenda.getText().trim().replace(",", ".")));
-                p.setQuantidadeEstoque(Integer.parseInt(fEstoque.getText().trim()));
-                p.setEstoqueMinimo(Integer.parseInt(fMinimo.getText().trim()));
-                p.setCategoria(cat);
-                p.adicionarFornecedor(forn);
+                produtoService.salvarDoFormulario(
+                        fNome.getText(), fCompra.getText(), fVenda.getText(),
+                        fEstoque.getText(), fMinimo.getText(), cat, forn
+                );
 
-                produtoService.salvar(p);
                 refresh.run();
                 sucesso("Produto cadastrado com sucesso!");
                 dlg.dispose();
-            } catch (NumberFormatException ex) {
-                erro("Valores numéricos inválidos. Use ponto (.) como separador decimal.");
             } catch (Exception ex) {
                 erro(ex.getMessage());
             }
@@ -549,26 +542,17 @@ public class CadastroPanel extends JPanel {
         JButton btnSalvar = MenuPrincipalView.createAccentButton("Salvar Alterações");
         btnSalvar.addActionListener(e -> {
             try {
-                p.setNome(fNome.getText().trim());
-                p.setPrecoCompra(Double.parseDouble(fCompra.getText().trim().replace(",", ".")));
-                p.setPrecoVenda(Double.parseDouble(fVenda.getText().trim().replace(",", ".")));
-                p.setQuantidadeEstoque(Integer.parseInt(fEstoque.getText().trim()));
-                p.setEstoqueMinimo(Integer.parseInt(fMinimo.getText().trim()));
+                Categoria cat = categorias.isEmpty() ? null : categorias.get(cbCategoria.getSelectedIndex());
+                Fornecedor forn = fornecedores.isEmpty() ? null : fornecedores.get(cbFornecedor.getSelectedIndex());
 
-                if (!categorias.isEmpty())
-                    p.setCategoria(categorias.get(cbCategoria.getSelectedIndex()));
+                produtoService.atualizarDoFormulario(
+                        p, fNome.getText(), fCompra.getText(), fVenda.getText(),
+                        fEstoque.getText(), fMinimo.getText(), cat, forn
+                );
 
-                if (!fornecedores.isEmpty()) {
-                    p.getFornecedores().clear();
-                    p.adicionarFornecedor(fornecedores.get(cbFornecedor.getSelectedIndex()));
-                }
-
-                produtoService.atualizar(p);
                 refresh.run();
                 sucesso("Produto atualizado com sucesso!");
                 dlg.dispose();
-            } catch (NumberFormatException ex) {
-                erro("Valores numéricos inválidos. Use ponto (.) como separador decimal.");
             } catch (Exception ex) {
                 erro(ex.getMessage());
             }
