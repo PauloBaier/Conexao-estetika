@@ -5,22 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b2dcdb6e-71f5-40ed-8ccf-da24a433fcb6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/view/MenuPrincipalView.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/View/AberturaCaixaDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/view/dialogs/AberturaCaixaDialog.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/View/CadastroPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/view/panels/CadastroPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/View/EntradaFinanceiroPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/view/panels/EntradaFinanceiroPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/View/FinanceiroPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/view/panels/FinanceiroPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/View/LoginView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/view/LoginView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/View/MenuPrincipalView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/View/MovimentacaoCaixaDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/view/dialogs/MovimentacaoCaixaDialog.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/View/PagamentoDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/view/dialogs/PagamentoDialog.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/View/RelatoriosPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/view/panels/RelatoriosPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/View/SelecionarClienteDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/view/dialogs/SelecionarClienteDialog.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/View/SelecionarProdutosDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/view/dialogs/SelecionarProdutosDialog.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/View/VendasView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/view/VendasView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/conexao/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/conexao/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/conexao/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/conexao/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/view/dialogs/AberturaCaixaDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/view/dialogs/AberturaCaixaDialog.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/view/dialogs/MovimentacaoCaixaDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/view/dialogs/MovimentacaoCaixaDialog.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,17 +33,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;ControllerMenuPrincipalView&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Main.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "dev",
+    "kotlin-language-version-configured": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\paulo\IdeaProjects\ConexaoEstetika\Conexao-estetika\src\main\java\controllers" />
