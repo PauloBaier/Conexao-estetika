@@ -5,22 +5,32 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b2dcdb6e-71f5-40ed-8ccf-da24a433fcb6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/view/MenuPrincipalView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/View/AberturaCaixaDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/view/dialogs/AberturaCaixaDialog.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/View/CadastroPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/view/panels/CadastroPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/View/EntradaFinanceiroPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/view/panels/EntradaFinanceiroPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/View/FinanceiroPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/view/panels/FinanceiroPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/View/LoginView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/view/LoginView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/View/MenuPrincipalView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/View/MovimentacaoCaixaDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/view/dialogs/MovimentacaoCaixaDialog.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/View/PagamentoDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/view/dialogs/PagamentoDialog.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/View/RelatoriosPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/view/panels/RelatoriosPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/View/SelecionarClienteDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/view/dialogs/SelecionarClienteDialog.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/View/SelecionarProdutosDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/view/dialogs/SelecionarProdutosDialog.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/View/VendasView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/view/VendasView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/conexao/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/conexao/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/conexao/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/conexao/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/cadastro/CadastroController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/cadastro/dto/CategoriaResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/cadastro/dto/ClienteResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/cadastro/dto/FornecedorResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/cadastro/dto/ProdutoResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/cadastro/impl/CadastroControllerImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/entrada/EntradaController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/entrada/dto/FornecedorEntradaResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/entrada/dto/ProdutoEntradaResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/entrada/impl/EntradaControllerImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/financeiro/FinanceiroController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/financeiro/dto/ContaPagarResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/financeiro/dto/ContaReceberResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/financeiro/impl/FinanceiroControllerImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/relatorio/RelatorioController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/relatorio/dto/ContaPagarRelatorioResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/relatorio/dto/ContaPagarVencidaResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/relatorio/dto/ContaReceberRelatorioResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/relatorio/dto/ProdutoRelatorioResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/relatorio/impl/RelatorioControllerImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/usuario/UsuarioController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/usuario/dto/LoginResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/usuario/impl/UsuarioControllerImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/venda/VendaController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/venda/dto/VendaResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/venda/impl/VendaControllerImpl.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
