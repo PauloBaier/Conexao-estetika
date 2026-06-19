@@ -52,7 +52,7 @@ public class CaixaService {
         caixa.setStatus(models.enums.StatusCaixa.ABERTO);
         caixa.setUsuario(usuario);
         abrirCaixa(caixa, usuario);
-        return caixa;
+        return repository.buscarCaixaAberto();  // ← busca do banco com id e saldo corretos
     }
 
     public void fecharCaixa(Usuario usuario, Venda vendaAtual) {

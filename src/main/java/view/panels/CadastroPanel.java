@@ -1,6 +1,8 @@
 package view.panels;
+
+import controllers.cadastro.CadastroController;
+import controllers.cadastro.dto.*;
 import models.*;
-import services.*;
 import view.MenuPrincipalView;
 
 import javax.swing.*;
@@ -12,25 +14,10 @@ import java.util.List;
 
 public class CadastroPanel extends JPanel {
 
-    // Services
-    private final ClienteService    clienteService;
-    private final EnderecoService   enderecoService;
-    private final FornecedorService fornecedorService;
-    private final ProdutoService    produtoService;
-    private final CategoriaService  categoriaService;
+    private final CadastroController cadastroController;
 
-    public CadastroPanel(
-            ClienteService    clienteService,
-            EnderecoService   enderecoService,
-            FornecedorService fornecedorService,
-            ProdutoService    produtoService,
-            CategoriaService  categoriaService
-    ) {
-        this.clienteService    = clienteService;
-        this.enderecoService   = enderecoService;
-        this.fornecedorService = fornecedorService;
-        this.produtoService    = produtoService;
-        this.categoriaService  = categoriaService;
+    public CadastroPanel(CadastroController cadastroController) {
+        this.cadastroController = cadastroController;
 
         setLayout(new BorderLayout());
         setBackground(MenuPrincipalView.CONTENT_BG);
@@ -40,7 +27,6 @@ public class CadastroPanel extends JPanel {
     }
 
     private void buildUI() {
-        
 
         JPanel header = new JPanel(new BorderLayout());
         header.setBackground(MenuPrincipalView.CONTENT_BG);
@@ -51,20 +37,20 @@ public class CadastroPanel extends JPanel {
         titleLbl.setForeground(MenuPrincipalView.TEXT_DARK);
         header.add(titleLbl, BorderLayout.WEST);
 
-        // abas
         JTabbedPane tabs = new JTabbedPane();
         tabs.setFont(MenuPrincipalView.FONT_BTN);
         tabs.setBackground(MenuPrincipalView.WHITE);
 
-        tabs.addTab("Clientes",    buildClienteTab());
+        tabs.addTab("Clientes",     buildClienteTab());
         tabs.addTab("Fornecedores", buildFornecedorTab());
-        tabs.addTab("Produtos",    buildProdutoTab());
-        tabs.addTab("Categorias",  buildCategoriaTab());
+        tabs.addTab("Produtos",     buildProdutoTab());
+        tabs.addTab("Categorias",   buildCategoriaTab());
 
         add(header, BorderLayout.NORTH);
         add(tabs,   BorderLayout.CENTER);
     }
-    // aba cliente
+
+    // ABA CLIENTES
     private JPanel buildClienteTab() {
 
         String[] cols = { "ID", "Nome", "Telefone", "E-mail", "CPF" };
@@ -78,33 +64,24 @@ public class CadastroPanel extends JPanel {
 
         Runnable refresh = () -> {
             model.setRowCount(0);
-            for (Cliente c : clienteService.listarTodos()) {
-                model.addRow(new Object[]{
-                        c.getId(),
-                        c.getNome(),
-                        c.getTelefone(),
-                        c.getEmail(),
-                        c.getCpf()
-                });
+            for (ClienteResponse c : cadastroController.listarClientes()) {
+                model.addRow(new Object[]{ c.id(), c.nome(), c.telefone(), c.email(), c.cpf() });
             }
         };
         refresh.run();
 
-        // botões
-        JButton btnNovo     = MenuPrincipalView.createAccentButton("Novo Cadastro");
+        JButton btnNovo      = MenuPrincipalView.createAccentButton("Novo Cadastro");
         JButton btnAtualizar = MenuPrincipalView.createOutlineButton("Atualizar Cadastro");
         JButton btnDeletar   = MenuPrincipalView.createDangerButton("Deletar Cadastro");
         JButton btnRefresh   = MenuPrincipalView.createOutlineButton("↻ Atualizar");
 
-        btnNovo.addActionListener(e -> {
-            dialogNovoCliente(refresh);
-        });
+        btnNovo.addActionListener(e -> dialogNovoCliente(refresh));
 
         btnAtualizar.addActionListener(e -> {
             int row = table.getSelectedRow();
             if (row < 0) { aviso("Selecione um cliente na tabela."); return; }
             Long id = (Long) model.getValueAt(row, 0);
-            Cliente c = clienteService.buscarPorId(id);
+            Cliente c = cadastroController.buscarClientePorId(id);
             if (c != null) dialogEditarCliente(c, refresh);
         });
 
@@ -114,12 +91,10 @@ public class CadastroPanel extends JPanel {
             Long id = (Long) model.getValueAt(row, 0);
             if (confirmar("Deseja realmente deletar este cliente?")) {
                 try {
-                    clienteService.deletar(id);
+                    cadastroController.deletarCliente(id);
                     refresh.run();
                     sucesso("Cliente removido com sucesso!");
-                } catch (Exception ex) {
-                    erro(ex.getMessage());
-                }
+                } catch (Exception ex) { erro(ex.getMessage()); }
             }
         });
 
@@ -160,21 +135,18 @@ public class CadastroPanel extends JPanel {
                 c.setTelefone(fTelefone.getText().trim());
                 c.setEmail(fEmail.getText().trim());
                 c.setCpf(fCpf.getText().trim());
-                clienteService.cadastrar(c);
 
                 Endereco end = new Endereco();
                 end.setRua(fRua.getText().trim());
                 end.setBairro(fBairro.getText().trim());
                 end.setNumero(fNumero.getText().trim());
                 end.setCep(fCep.getText().trim());
-                enderecoService.cadastrarEndereco(end, c.getId());
 
+                cadastroController.cadastrarCliente(c, end);
                 refresh.run();
                 sucesso("Cliente cadastrado com sucesso!");
                 dlg.dispose();
-            } catch (Exception ex) {
-                erro(ex.getMessage());
-            }
+            } catch (Exception ex) { erro(ex.getMessage()); }
         });
 
         layoutDialog(dlg, form, btnSalvar);
@@ -202,22 +174,20 @@ public class CadastroPanel extends JPanel {
                 c.setTelefone(fTelefone.getText().trim());
                 c.setEmail(fEmail.getText().trim());
                 c.setCpf(fCpf.getText().trim());
-                clienteService.atualizar(c);
+                cadastroController.atualizarCliente(c);
                 refresh.run();
                 sucesso("Cliente atualizado com sucesso!");
                 dlg.dispose();
-            } catch (Exception ex) {
-                erro(ex.getMessage());
-            }
+            } catch (Exception ex) { erro(ex.getMessage()); }
         });
 
         layoutDialog(dlg, form, btnSalvar);
     }
-    // fornecedor
+
+    // ABA FORNECEDORES
     private JPanel buildFornecedorTab() {
 
         String[] cols = { "ID", "Nome", "Telefone", "E-mail", "CNPJ", "Razão Social" };
-
         DefaultTableModel model = new DefaultTableModel(cols, 0) {
             @Override public boolean isCellEditable(int r, int c) { return false; }
         };
@@ -228,15 +198,8 @@ public class CadastroPanel extends JPanel {
 
         Runnable refresh = () -> {
             model.setRowCount(0);
-            for (Fornecedor f : fornecedorService.listarTodos()) {
-                model.addRow(new Object[]{
-                        f.getId(),
-                        f.getNome(),
-                        f.getTelefone(),
-                        f.getEmail(),
-                        f.getCnpj(),
-                        f.getRazaoSocial()
-                });
+            for (FornecedorResponse f : cadastroController.listarFornecedores()) {
+                model.addRow(new Object[]{ f.id(), f.nome(), f.telefone(), f.email(), f.cnpj(), f.razaoSocial() });
             }
         };
         refresh.run();
@@ -252,7 +215,7 @@ public class CadastroPanel extends JPanel {
             int row = table.getSelectedRow();
             if (row < 0) { aviso("Selecione um fornecedor na tabela."); return; }
             Long id = (Long) model.getValueAt(row, 0);
-            Fornecedor f = fornecedorService.buscarPorId(id);
+            Fornecedor f = cadastroController.buscarFornecedorPorId(id);
             if (f != null) dialogEditarFornecedor(f, refresh);
         });
 
@@ -262,13 +225,11 @@ public class CadastroPanel extends JPanel {
             Long id = (Long) model.getValueAt(row, 0);
             if (confirmar("Deseja realmente deletar este fornecedor?")) {
                 try {
-                    Fornecedor f = fornecedorService.buscarPorId(id);
-                    fornecedorService.delete(f);
+                    Fornecedor f = cadastroController.buscarFornecedorPorId(id);
+                    cadastroController.deletarFornecedor(f);
                     refresh.run();
                     sucesso("Fornecedor removido com sucesso!");
-                } catch (Exception ex) {
-                    erro(ex.getMessage());
-                }
+                } catch (Exception ex) { erro(ex.getMessage()); }
             }
         });
 
@@ -280,11 +241,11 @@ public class CadastroPanel extends JPanel {
     private void dialogNovoFornecedor(Runnable refresh) {
         JDialog dlg = createDialog("Novo Fornecedor", 420, 440);
 
-        JTextField fNome    = field();
-        JTextField fTel     = field();
-        JTextField fEmail   = field();
-        JTextField fCnpj    = field();
-        JTextField fRazao   = field();
+        JTextField fNome  = field();
+        JTextField fTel   = field();
+        JTextField fEmail = field();
+        JTextField fCnpj  = field();
+        JTextField fRazao = field();
 
         JPanel form = buildForm(
                 "Nome *",          fNome,
@@ -303,13 +264,11 @@ public class CadastroPanel extends JPanel {
                 f.setEmail(fEmail.getText().trim());
                 f.setCnpj(fCnpj.getText().trim());
                 f.setRazaoSocial(fRazao.getText().trim());
-                fornecedorService.salvar(f);
+                cadastroController.salvarFornecedor(f);
                 refresh.run();
                 sucesso("Fornecedor cadastrado com sucesso!");
                 dlg.dispose();
-            } catch (Exception ex) {
-                erro(ex.getMessage());
-            }
+            } catch (Exception ex) { erro(ex.getMessage()); }
         });
 
         layoutDialog(dlg, form, btnSalvar);
@@ -340,22 +299,20 @@ public class CadastroPanel extends JPanel {
                 f.setEmail(fEmail.getText().trim());
                 f.setCnpj(fCnpj.getText().trim());
                 f.setRazaoSocial(fRazao.getText().trim());
-                fornecedorService.atualizar(f);
+                cadastroController.atualizarFornecedor(f);
                 refresh.run();
                 sucesso("Fornecedor atualizado com sucesso!");
                 dlg.dispose();
-            } catch (Exception ex) {
-                erro(ex.getMessage());
-            }
+            } catch (Exception ex) { erro(ex.getMessage()); }
         });
 
         layoutDialog(dlg, form, btnSalvar);
     }
 
+    // ABA PRODUTOS
     private JPanel buildProdutoTab() {
 
         String[] cols = { "ID", "Nome", "Preço Compra", "Preço Venda", "Estoque", "Estoque Mín.", "Categoria" };
-
         DefaultTableModel model = new DefaultTableModel(cols, 0) {
             @Override public boolean isCellEditable(int r, int c) { return false; }
         };
@@ -364,45 +321,35 @@ public class CadastroPanel extends JPanel {
         MenuPrincipalView.setupTable(table);
         table.getColumnModel().getColumn(0).setMaxWidth(50);
 
-        // Destaca linha vermelha se estoque ≤ mínimo
         table.setDefaultRenderer(Object.class, (t, value, isSelected, hasFocus, row, col) -> {
             JLabel lbl = new JLabel(value != null ? value.toString() : "");
             lbl.setOpaque(true);
             lbl.setBorder(new EmptyBorder(0, 8, 0, 8));
-
-            int estoque  = 0;
-            int estoqueMin = 0;
-            try {
-                estoque    = Integer.parseInt(model.getValueAt(row, 4).toString());
-                estoqueMin = Integer.parseInt(model.getValueAt(row, 5).toString());
-            } catch (Exception ignored) {}
-
-            boolean baixo = estoque <= estoqueMin;
-
+            lbl.setFont(MenuPrincipalView.FONT_SMALL);
             if (isSelected) {
-                lbl.setBackground(MenuPrincipalView.ACCENT);
-                lbl.setForeground(MenuPrincipalView.WHITE);
-            } else if (baixo) {
-                lbl.setBackground(new Color(0xFFF3F3));
-                lbl.setForeground(new Color(0xC0392B));
-            } else {
-                lbl.setBackground(row % 2 == 0 ? MenuPrincipalView.WHITE : MenuPrincipalView.CONTENT_BG);
+                lbl.setBackground(new java.awt.Color(200, 230, 220));
                 lbl.setForeground(MenuPrincipalView.TEXT_DARK);
+            } else {
+                int estoque = 0, estoqueMin = 0;
+                try {
+                    estoque    = Integer.parseInt(model.getValueAt(row, 4).toString());
+                    estoqueMin = Integer.parseInt(model.getValueAt(row, 5).toString());
+                } catch (Exception ignored) {}
+                boolean baixo = estoque <= estoqueMin;
+                lbl.setBackground(baixo ? new java.awt.Color(0xFF, 0xF3, 0xF3) : (row % 2 == 0 ? MenuPrincipalView.WHITE : MenuPrincipalView.CONTENT_BG));
+                lbl.setForeground(baixo ? new java.awt.Color(0xC0, 0x39, 0x2B) : MenuPrincipalView.TEXT_DARK);
             }
             return lbl;
         });
 
         Runnable refresh = () -> {
             model.setRowCount(0);
-            for (Produto p : produtoService.listarTodos()) {
+            for (ProdutoResponse p : cadastroController.listarProdutos()) {
                 model.addRow(new Object[]{
-                        p.getId(),
-                        p.getNome(),
-                        String.format("R$ %.2f", p.getPrecoCompra()),
-                        String.format("R$ %.2f", p.getPrecoVenda()),
-                        p.getQuantidadeEstoque(),
-                        p.getEstoqueMinimo(),
-                        p.getCategoria() != null ? p.getCategoria().getNome() : "-"
+                        p.id(), p.nome(),
+                        String.format("R$ %.2f", p.precoCompra()),
+                        String.format("R$ %.2f", p.precoVenda()),
+                        p.quantidadeEstoque(), p.estoqueMinimo(), p.categoria()
                 });
             }
         };
@@ -419,7 +366,7 @@ public class CadastroPanel extends JPanel {
             int row = table.getSelectedRow();
             if (row < 0) { aviso("Selecione um produto na tabela."); return; }
             Long id = (Long) model.getValueAt(row, 0);
-            Produto p = produtoService.buscarPorId(id);
+            Produto p = cadastroController.buscarProdutoPorId(id);
             if (p != null) dialogEditarProduto(p, refresh);
         });
 
@@ -429,13 +376,10 @@ public class CadastroPanel extends JPanel {
             Long id = (Long) model.getValueAt(row, 0);
             if (confirmar("Deseja realmente deletar este produto?")) {
                 try {
-                    Produto p = produtoService.buscarPorId(id);
-                    produtoService.delete(p);
+                    cadastroController.deletarProduto(id);
                     refresh.run();
                     sucesso("Produto removido com sucesso!");
-                } catch (Exception ex) {
-                    erro(ex.getMessage());
-                }
+                } catch (Exception ex) { erro(ex.getMessage()); }
             }
         });
 
@@ -447,25 +391,24 @@ public class CadastroPanel extends JPanel {
     private void dialogNovoProduto(Runnable refresh) {
         JDialog dlg = createDialog("Novo Produto", 440, 520);
 
-        JTextField fNome     = field();
-        JTextField fCompra   = field();
-        JTextField fVenda    = field();
-        JTextField fEstoque  = field();
-        JTextField fMinimo   = field();
+        JTextField fNome    = field();
+        JTextField fCompra  = field();
+        JTextField fVenda   = field();
+        JTextField fEstoque = field();
+        JTextField fMinimo  = field();
 
-        List<Categoria> categorias = categoriaService.listarTodas();
-        JComboBox<String> cbCategoria = new JComboBox<>();
-        for (Categoria cat : categorias) cbCategoria.addItem(cat.getId() + " – " + cat.getNome());
+        List<Categoria> categorias   = cadastroController.listarCategorias();
+        List<Fornecedor> fornecedores = cadastroController.listarTodosFornecedores();
 
-        List<Fornecedor> fornecedores = fornecedorService.listarTodos();
+        JComboBox<String> cbCategoria  = new JComboBox<>();
         JComboBox<String> cbFornecedor = new JComboBox<>();
-        for (Fornecedor f : fornecedores) cbFornecedor.addItem(f.getId() + " – " + f.getNome());
-
+        for (Categoria cat : categorias)   cbCategoria.addItem(cat.getId() + " – " + cat.getNome());
+        for (Fornecedor f  : fornecedores) cbFornecedor.addItem(f.getId()  + " – " + f.getNome());
         styleCombo(cbCategoria);
         styleCombo(cbFornecedor);
 
         JPanel form = buildForm(
-                "Nome *",  fNome,
+                "Nome *",            fNome,
                 "Preço de Compra *", fCompra,
                 "Preço de Venda *",  fVenda,
                 "Qtd. Estoque *",    fEstoque,
@@ -480,20 +423,18 @@ public class CadastroPanel extends JPanel {
                 if (categorias.isEmpty() || fornecedores.isEmpty()) {
                     aviso("Cadastre uma categoria e um fornecedor primeiro."); return;
                 }
-                Categoria cat = categorias.get(cbCategoria.getSelectedIndex());
+                Categoria cat  = categorias.get(cbCategoria.getSelectedIndex());
                 Fornecedor forn = fornecedores.get(cbFornecedor.getSelectedIndex());
 
-                produtoService.salvarDoFormulario(
+                Produto p = new Produto();
+                cadastroController.atualizarProduto(p,
                         fNome.getText(), fCompra.getText(), fVenda.getText(),
-                        fEstoque.getText(), fMinimo.getText(), cat, forn
-                );
+                        fEstoque.getText(), fMinimo.getText(), cat, forn);
 
                 refresh.run();
                 sucesso("Produto cadastrado com sucesso!");
                 dlg.dispose();
-            } catch (Exception ex) {
-                erro(ex.getMessage());
-            }
+            } catch (Exception ex) { erro(ex.getMessage()); }
         });
 
         layoutDialog(dlg, form, btnSalvar);
@@ -508,8 +449,10 @@ public class CadastroPanel extends JPanel {
         JTextField fEstoque = field(String.valueOf(p.getQuantidadeEstoque()));
         JTextField fMinimo  = field(String.valueOf(p.getEstoqueMinimo()));
 
-        List<Categoria> categorias = categoriaService.listarTodas();
-        JComboBox<String> cbCategoria = new JComboBox<>();
+        List<Categoria> categorias   = cadastroController.listarCategorias();
+        List<Fornecedor> fornecedores = cadastroController.listarTodosFornecedores();
+
+        JComboBox<String> cbCategoria  = new JComboBox<>();
         int catIdx = 0;
         for (int i = 0; i < categorias.size(); i++) {
             Categoria cat = categorias.get(i);
@@ -519,7 +462,6 @@ public class CadastroPanel extends JPanel {
         cbCategoria.setSelectedIndex(catIdx);
         styleCombo(cbCategoria);
 
-        List<Fornecedor> fornecedores = fornecedorService.listarTodos();
         JComboBox<String> cbFornecedor = new JComboBox<>();
         int fornIdx = 0;
         for (int i = 0; i < fornecedores.size(); i++) {
@@ -543,29 +485,26 @@ public class CadastroPanel extends JPanel {
         JButton btnSalvar = MenuPrincipalView.createAccentButton("Salvar Alterações");
         btnSalvar.addActionListener(e -> {
             try {
-                Categoria cat = categorias.isEmpty() ? null : categorias.get(cbCategoria.getSelectedIndex());
+                Categoria cat  = categorias.isEmpty()   ? null : categorias.get(cbCategoria.getSelectedIndex());
                 Fornecedor forn = fornecedores.isEmpty() ? null : fornecedores.get(cbFornecedor.getSelectedIndex());
 
-                produtoService.atualizarDoFormulario(
-                        p, fNome.getText(), fCompra.getText(), fVenda.getText(),
-                        fEstoque.getText(), fMinimo.getText(), cat, forn
-                );
+                cadastroController.atualizarProduto(p,
+                        fNome.getText(), fCompra.getText(), fVenda.getText(),
+                        fEstoque.getText(), fMinimo.getText(), cat, forn);
 
                 refresh.run();
                 sucesso("Produto atualizado com sucesso!");
                 dlg.dispose();
-            } catch (Exception ex) {
-                erro(ex.getMessage());
-            }
+            } catch (Exception ex) { erro(ex.getMessage()); }
         });
 
         layoutDialog(dlg, form, btnSalvar);
     }
-    // categoria
+
+    // ABA CATEGORIAS
     private JPanel buildCategoriaTab() {
 
         String[] cols = { "ID", "Nome" };
-
         DefaultTableModel model = new DefaultTableModel(cols, 0) {
             @Override public boolean isCellEditable(int r, int c) { return false; }
         };
@@ -576,8 +515,8 @@ public class CadastroPanel extends JPanel {
 
         Runnable refresh = () -> {
             model.setRowCount(0);
-            for (Categoria c : categoriaService.listarTodas()) {
-                model.addRow(new Object[]{ c.getId(), c.getNome() });
+            for (CategoriaResponse c : cadastroController.listarTodasCategorias()) {
+                model.addRow(new Object[]{ c.id(), c.nome() });
             }
         };
         refresh.run();
@@ -596,7 +535,7 @@ public class CadastroPanel extends JPanel {
                 try {
                     Categoria cat = new Categoria();
                     cat.setNome(fNome.getText().trim());
-                    categoriaService.cadastrar(cat);
+                    cadastroController.cadastrarCategoria(cat);
                     refresh.run();
                     sucesso("Categoria cadastrada com sucesso!");
                     dlg.dispose();
@@ -619,7 +558,7 @@ public class CadastroPanel extends JPanel {
                 try {
                     Categoria cat = new Categoria();
                     cat.setNome(fNome.getText().trim());
-                    categoriaService.atualizar(id, cat);
+                    cadastroController.atualizarCategoria(id, cat);
                     refresh.run();
                     sucesso("Categoria atualizada com sucesso!");
                     dlg.dispose();
@@ -634,7 +573,7 @@ public class CadastroPanel extends JPanel {
             Long id = (Long) model.getValueAt(row, 0);
             if (confirmar("Deseja realmente deletar esta categoria?")) {
                 try {
-                    categoriaService.deletar(id);
+                    cadastroController.deletarCategoria(id);
                     refresh.run();
                     sucesso("Categoria removida com sucesso!");
                 } catch (Exception ex) { erro(ex.getMessage()); }
@@ -649,12 +588,10 @@ public class CadastroPanel extends JPanel {
     private JPanel buildTabLayout(JTable table, Runnable refresh,
                                   JButton btnNovo, JButton btnAtualizar,
                                   JButton btnDeletar, JButton btnRefresh) {
-
         JPanel panel = new JPanel(new BorderLayout(0, 8));
         panel.setBackground(MenuPrincipalView.WHITE);
         panel.setBorder(new EmptyBorder(12, 12, 12, 12));
 
-        // Barra de botões
         JPanel btnBar = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
         btnBar.setBackground(MenuPrincipalView.WHITE);
         btnBar.add(btnNovo);
@@ -667,15 +604,12 @@ public class CadastroPanel extends JPanel {
 
         panel.add(btnBar, BorderLayout.NORTH);
         panel.add(scroll, BorderLayout.CENTER);
-
         return panel;
     }
 
     private JDialog createDialog(String title, int w, int h) {
         JDialog dlg = new JDialog(
-                (Frame) SwingUtilities.getWindowAncestor(this),
-                title, true
-        );
+                (Frame) SwingUtilities.getWindowAncestor(this), title, true);
         dlg.setSize(w, h);
         dlg.setLocationRelativeTo(this);
         dlg.setResizable(false);
@@ -684,7 +618,6 @@ public class CadastroPanel extends JPanel {
         return dlg;
     }
 
-  
     private JPanel buildForm(Object... pairs) {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBackground(MenuPrincipalView.WHITE);
@@ -699,9 +632,7 @@ public class CadastroPanel extends JPanel {
         int row = 0;
         for (int i = 0; i < pairs.length; i += 2) {
             String label = pairs[i].toString();
-
             if (i + 1 >= pairs.length || pairs[i + 1] == null) {
-                // Separador / título de seção
                 JLabel lbl = new JLabel(label);
                 lbl.setFont(new Font("SansSerif", Font.BOLD, 11));
                 lbl.setForeground(MenuPrincipalView.TEXT_MUTED);
@@ -711,7 +642,6 @@ public class CadastroPanel extends JPanel {
                 gbc.insets = new Insets(4, 0, 4, 0);
                 continue;
             }
-
             JLabel lbl = new JLabel(label);
             lbl.setFont(MenuPrincipalView.FONT_LABEL);
             lbl.setForeground(MenuPrincipalView.TEXT_DARK);
@@ -722,7 +652,6 @@ public class CadastroPanel extends JPanel {
             gbc.gridy = row++;
             panel.add(comp, gbc);
         }
-
         return panel;
     }
 
@@ -745,9 +674,7 @@ public class CadastroPanel extends JPanel {
         dlg.setVisible(true);
     }
 
-    private JTextField field() {
-        return field("");
-    }
+    private JTextField field() { return field(""); }
 
     private JTextField field(String value) {
         JTextField tf = new JTextField(value);
@@ -761,7 +688,6 @@ public class CadastroPanel extends JPanel {
                 new EmptyBorder(5, 8, 5, 8)
         ));
         tf.setPreferredSize(new Dimension(0, 34));
-        // realce de foco
         tf.addFocusListener(new FocusAdapter() {
             @Override public void focusGained(FocusEvent e) {
                 tf.setBorder(BorderFactory.createCompoundBorder(
@@ -779,26 +705,17 @@ public class CadastroPanel extends JPanel {
         return tf;
     }
 
-    private void styleCombo(JComboBox<?> cb) {
-        cb.setFont(new Font("SansSerif", Font.PLAIN, 13));
+    private void styleCombo(JComboBox<String> cb) {
+        cb.setFont(MenuPrincipalView.FONT_FIELD != null
+                ? MenuPrincipalView.FONT_FIELD
+                : new Font("SansSerif", Font.PLAIN, 13));
         cb.setBackground(MenuPrincipalView.WHITE);
-        cb.setForeground(MenuPrincipalView.TEXT_DARK);
         cb.setPreferredSize(new Dimension(0, 34));
     }
 
-    
-    private void aviso(String msg) {
-        JOptionPane.showMessageDialog(this, msg, "Aviso", JOptionPane.WARNING_MESSAGE);
-    }
-
-    private void sucesso(String msg) {
-        JOptionPane.showMessageDialog(this, msg, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-    }
-
-    private void erro(String msg) {
-        JOptionPane.showMessageDialog(this, msg, "Erro", JOptionPane.ERROR_MESSAGE);
-    }
-
+    private void aviso(String msg)   { JOptionPane.showMessageDialog(this, msg, "Aviso",   JOptionPane.WARNING_MESSAGE); }
+    private void sucesso(String msg) { JOptionPane.showMessageDialog(this, msg, "Sucesso", JOptionPane.INFORMATION_MESSAGE); }
+    private void erro(String msg)    { JOptionPane.showMessageDialog(this, msg, "Erro",    JOptionPane.ERROR_MESSAGE); }
     private boolean confirmar(String msg) {
         return JOptionPane.showConfirmDialog(this, msg, "Confirmar",
                 JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
