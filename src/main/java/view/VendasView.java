@@ -1,8 +1,9 @@
-package View;
+package view;
 
 import models.*;
 import models.enums.TipoMovimento;
 import services.*;
+import view.dialogs.*;
 
 import javax.swing.*;
 import javax.swing.event.TableModelEvent;

@@ -1,4 +1,4 @@
-package View;
+package view;
 import models.Usuario;
 import services.UsuarioService;
 

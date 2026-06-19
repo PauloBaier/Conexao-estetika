@@ -1,8 +1,28 @@
-package View;
+package view;
 
+import controllers.relatorio.RelatorioController;
+import controllers.relatorio.impl.RelatorioControllerImpl;
+import controllers.usuario.UsuarioController;
+import controllers.usuario.impl.UsuarioControllerImpl;
+import controllers.cadastro.CadastroController;
+import controllers.entrada.EntradaController;
+import controllers.entrada.impl.EntradaControllerImpl;
+import controllers.relatorio.RelatorioController;
+import controllers.relatorio.impl.RelatorioControllerImpl;
+import controllers.usuario.UsuarioController;
+import controllers.usuario.impl.UsuarioControllerImpl;
+import controllers.cadastro.impl.CadastroControllerImpl;
+import controllers.financeiro.FinanceiroController;
+import controllers.financeiro.impl.FinanceiroControllerImpl;
+import controllers.venda.VendaController;
+import controllers.venda.impl.VendaControllerImpl;
 import models.Usuario;
 import services.*;
 import services.RelatorioLocal;
+import view.panels.CadastroPanel;
+import view.panels.EntradaFinanceiroPanel;
+import view.panels.FinanceiroPanel;
+import view.panels.RelatoriosPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -67,23 +87,39 @@ public class MenuPrincipalView extends JFrame{
                              CategoriaService categoriaService,
                              EntradaEstoqueService entradaEstoqueService,
                              RelatorioLocal relatorioLocal
-                             ){
+    ){
 
-        this.usuarioLogado       = usuarioLogado;
-        this.contaPagarService   = contaPagarService;
-        this.contaReceberService = contaReceberService;
-        this.financeiroService   = financeiroService;
-        this.caixaService        = caixaService;
-        this.clienteService      = clienteService;
-        this.produtoService      = produtoService;
-        this.usuarioService      = usuarioService;
+        this.usuarioLogado            = usuarioLogado;
+        this.contaPagarService        = contaPagarService;
+        this.contaReceberService      = contaReceberService;
+        this.financeiroService        = financeiroService;
+        this.caixaService             = caixaService;
+        this.clienteService           = clienteService;
+        this.produtoService           = produtoService;
+        this.usuarioService           = usuarioService;
         this.movimentacaoCaixaService = movimentacaoCaixaService;
-        this.enderecoService     = enderecoService;
-        this.fornecedorService   = fornecedorService;
-        this.categoriaService    = categoriaService;
-        this.entradaEstoqueService = entradaEstoqueService;
-        this.relatorioLocal      = relatorioLocal;
-        this.vendaService        = vendaService;
+        this.enderecoService          = enderecoService;
+        this.fornecedorService        = fornecedorService;
+        this.categoriaService         = categoriaService;
+        this.entradaEstoqueService    = entradaEstoqueService;
+        this.relatorioLocal           = relatorioLocal;
+        this.vendaService             = vendaService;
+
+        // ── Controllers — ponto único de criação ─────────────────────────────
+        VendaController vendaController = new VendaControllerImpl(
+                vendaService, caixaService, movimentacaoCaixaService, usuarioService);
+
+        FinanceiroController financeiroController = new FinanceiroControllerImpl(
+                contaPagarService, contaReceberService, financeiroService);
+
+        RelatorioController relatorioController = new RelatorioControllerImpl(relatorioLocal, produtoService);
+
+        CadastroController cadastroController = new CadastroControllerImpl(
+                clienteService, enderecoService, fornecedorService, produtoService, categoriaService);
+
+        EntradaController entradaController = new EntradaControllerImpl(
+                produtoService, fornecedorService, entradaEstoqueService);
+        // ─────────────────────────────────────────────────────────────────────
 
         pnlBackground = new javax.swing.JPanel();
         pnlBarraLateral = new javax.swing.JPanel();
@@ -98,34 +134,32 @@ public class MenuPrincipalView extends JFrame{
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
-
         pnlBackground.setBackground(new java.awt.Color(238, 238, 238));
-
         pnlBarraLateral.setBackground(new java.awt.Color(31, 111, 95));
 
         btnVenda.setBackground(new java.awt.Color(47, 160, 132));
-        btnVenda.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        btnVenda.setFont(new java.awt.Font("Arial", 1, 14));
         btnVenda.setForeground(new java.awt.Color(238, 238, 238));
         btnVenda.setText("Venda");
         btnVenda.setBorderPainted(false);
         btnVenda.addActionListener(this::btnVendaActionPerformed);
 
         btnCadastros.setBackground(new java.awt.Color(47, 160, 132));
-        btnCadastros.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        btnCadastros.setFont(new java.awt.Font("Arial", 1, 14));
         btnCadastros.setForeground(new java.awt.Color(238, 238, 238));
         btnCadastros.setText("Cadastros");
         btnCadastros.setBorderPainted(false);
         btnCadastros.addActionListener(this::btnCadastrosActionPerformed);
 
         btnFinanceiro.setBackground(new java.awt.Color(47, 160, 132));
-        btnFinanceiro.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        btnFinanceiro.setFont(new java.awt.Font("Arial", 1, 14));
         btnFinanceiro.setForeground(new java.awt.Color(238, 238, 238));
         btnFinanceiro.setText("Financeiro");
         btnFinanceiro.setBorderPainted(false);
         btnFinanceiro.addActionListener(this::btnFinanceiroActionPerformed);
 
         btnRelatorio.setBackground(new java.awt.Color(47, 160, 132));
-        btnRelatorio.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        btnRelatorio.setFont(new java.awt.Font("Arial", 1, 14));
         btnRelatorio.setForeground(new java.awt.Color(238, 238, 238));
         btnRelatorio.setText("Relatório");
         btnRelatorio.setBorderPainted(false);
@@ -146,50 +180,51 @@ public class MenuPrincipalView extends JFrame{
         javax.swing.GroupLayout pnlBarraLateralLayout = new javax.swing.GroupLayout(pnlBarraLateral);
         pnlBarraLateral.setLayout(pnlBarraLateralLayout);
         pnlBarraLateralLayout.setHorizontalGroup(
-            pnlBarraLateralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlBarraLateralLayout.createSequentialGroup()
-                .addGroup(pnlBarraLateralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlBarraLateralLayout.createSequentialGroup()
-                        .addGap(33, 33, 33)
-                        .addComponent(btnUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(pnlBarraLateralLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(pnlBarraLateralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnVenda, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnCadastros, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnFinanceiro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnRelatorio, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap())
+                pnlBarraLateralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pnlBarraLateralLayout.createSequentialGroup()
+                                .addGroup(pnlBarraLateralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(pnlBarraLateralLayout.createSequentialGroup()
+                                                .addGap(33, 33, 33)
+                                                .addComponent(btnUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(0, 0, Short.MAX_VALUE))
+                                        .addGroup(pnlBarraLateralLayout.createSequentialGroup()
+                                                .addContainerGap()
+                                                .addGroup(pnlBarraLateralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(btnVenda, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                        .addComponent(btnCadastros, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                        .addComponent(btnFinanceiro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                        .addComponent(btnRelatorio, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addContainerGap())
         );
         pnlBarraLateralLayout.setVerticalGroup(
-            pnlBarraLateralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlBarraLateralLayout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(57, 57, 57)
-                .addComponent(btnVenda, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnCadastros, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnFinanceiro, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnRelatorio, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 119, Short.MAX_VALUE)
-                .addComponent(btnUsuario)
-                .addGap(34, 34, 34))
+                pnlBarraLateralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pnlBarraLateralLayout.createSequentialGroup()
+                                .addGap(22, 22, 22)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(57, 57, 57)
+                                .addComponent(btnVenda, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnCadastros, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnFinanceiro, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnRelatorio, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 119, Short.MAX_VALUE)
+                                .addComponent(btnUsuario)
+                                .addGap(34, 34, 34))
         );
 
         pnlCardsContainer.setBackground(new java.awt.Color(238, 238, 238));
         cardContainerLayout = new java.awt.CardLayout();
         pnlCardsContainer.setLayout(cardContainerLayout);
 
-        pnlCardsContainer.add(new VendasView(vendaService, caixaService, clienteService, produtoService, usuarioService, usuarioLogado, movimentacaoCaixaService), "telaVenda");
-        pnlCardsContainer.add(new FinanceiroPanel(usuarioLogado, contaPagarService, contaReceberService, financeiroService, caixaService, produtoService, fornecedorService, entradaEstoqueService), "telaFinanceiro");
-        pnlCardsContainer.add(new CadastroPanel(clienteService, enderecoService, fornecedorService, produtoService, categoriaService), "telaCadastro");
-        pnlCardsContainer.add(new RelatoriosPanel(relatorioLocal, produtoService), "telaRelatorio");
-        pnlCardsContainer.add(new EntradaFinanceiroPanel(produtoService, fornecedorService, entradaEstoqueService), "telaEntrada");
+        // Views recebem controllers
+        pnlCardsContainer.add(new VendasView(vendaController, usuarioLogado, clienteService, produtoService), "telaVenda");
+        pnlCardsContainer.add(new FinanceiroPanel(usuarioLogado, financeiroController, entradaController), "telaFinanceiro");
+        pnlCardsContainer.add(new CadastroPanel(cadastroController), "telaCadastro");
+        pnlCardsContainer.add(new RelatoriosPanel(relatorioController), "telaRelatorio");
+        pnlCardsContainer.add(new EntradaFinanceiroPanel(entradaController), "telaEntrada");
 
         javax.swing.GroupLayout pnlBackgroundLayout = new javax.swing.GroupLayout(pnlBackground);
         pnlBackground.setLayout(pnlBackgroundLayout);
@@ -213,24 +248,22 @@ public class MenuPrincipalView extends JFrame{
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlBackground, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(pnlBackground, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlBackground, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(pnlBackground, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
-    }                      
+    }
 
-    private void btnVendaActionPerformed(java.awt.event.ActionEvent evt) {                                         
+    private void btnVendaActionPerformed(java.awt.event.ActionEvent evt) {
         cardContainerLayout.show(pnlCardsContainer, "telaVenda");
-        
     }
 
     private void btnUsuarioActionPerformed(java.awt.event.ActionEvent evt) {
-        // Mostra info do usuário atual e opção de trocar
         String[] opcoes = {"Trocar Usuário", "Cancelar"};
         int escolha = JOptionPane.showOptionDialog(
                 this,
@@ -240,14 +273,12 @@ public class MenuPrincipalView extends JFrame{
                 JOptionPane.INFORMATION_MESSAGE,
                 null, opcoes, opcoes[0]
         );
-
         if (escolha == 0) {
             trocarUsuario();
         }
     }
 
     private void trocarUsuario() {
-        // Campo e-mail
         JTextField tfEmail = new JTextField();
         JPasswordField tfSenha = new JPasswordField();
 
@@ -275,15 +306,16 @@ public class MenuPrincipalView extends JFrame{
         try {
             models.Usuario novoUsuario = usuarioService.autenticar(email, senha);
             usuarioLogado = novoUsuario;
-            btnUsuario.setText("👤 " + novoUsuario.getNome());
+            btnUsuario.setText(novoUsuario.getNome());
             JOptionPane.showMessageDialog(this,
                     "Usuário trocado para: " + novoUsuario.getNome() + " (" + novoUsuario.getPerfil() + ")",
                     "Sucesso", JOptionPane.INFORMATION_MESSAGE);
 
-            // Recarrega a tela de vendas com o novo usuário
+            // Recarrega VendasView com o novo usuário e novo controller
+            VendaController vendaController = new VendaControllerImpl(
+                    vendaService, caixaService, movimentacaoCaixaService, usuarioService);
             pnlCardsContainer.remove(pnlCardsContainer.getComponent(0));
-            pnlCardsContainer.add(new VendasView(vendaService, caixaService, clienteService,
-                    produtoService, usuarioService, novoUsuario, movimentacaoCaixaService), "telaVenda", 0);
+            pnlCardsContainer.add(new VendasView(vendaController, novoUsuario, clienteService, produtoService), "telaVenda", 0);
             cardContainerLayout.show(pnlCardsContainer, "telaVenda");
 
         } catch (Exception ex) {
@@ -291,15 +323,15 @@ public class MenuPrincipalView extends JFrame{
                     "Falha na autenticação: " + ex.getMessage(),
                     "Erro", JOptionPane.ERROR_MESSAGE);
         }
-    }                                        
+    }
 
     private void btnCadastrosActionPerformed(java.awt.event.ActionEvent evt) {
         cardContainerLayout.show(pnlCardsContainer, "telaCadastro");
-    }                                            
+    }
 
-    private void btnFinanceiroActionPerformed(java.awt.event.ActionEvent evt) {                                              
+    private void btnFinanceiroActionPerformed(java.awt.event.ActionEvent evt) {
         cardContainerLayout.show(pnlCardsContainer, "telaFinanceiro");
-    }                                             
+    }
 
     private void btnRelatorioActionPerformed(java.awt.event.ActionEvent evt) {
         cardContainerLayout.show(pnlCardsContainer, "telaRelatorio");
@@ -349,5 +381,5 @@ public class MenuPrincipalView extends JFrame{
         btn.setFocusPainted(false);
         btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         return btn;
-    }                                    
+    }
 }

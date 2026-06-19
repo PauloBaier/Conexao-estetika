@@ -1,8 +1,6 @@
-package View;
+package view.dialogs;
 
-import models.Cliente;
 import models.Produto;
-import services.ClienteService;
 import services.ProdutoService;
 
 import javax.swing.*;
