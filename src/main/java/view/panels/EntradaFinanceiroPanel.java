@@ -1,7 +1,8 @@
-package View;
+package view.panels;
 
 import models.*;
 import services.*;
+import view.MenuPrincipalView;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

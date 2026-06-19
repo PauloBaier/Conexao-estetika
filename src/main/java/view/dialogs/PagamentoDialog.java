@@ -1,4 +1,4 @@
-package View;
+package view.dialogs;
 
 import models.enums.FormaPagamento;
 
