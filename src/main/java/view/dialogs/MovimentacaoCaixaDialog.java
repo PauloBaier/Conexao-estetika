@@ -48,7 +48,7 @@ public class MovimentacaoCaixaDialog extends JDialog {
         lblValor.setText("Valor:");
 
         txtValor.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
-                new javax.swing.text.NumberFormatter(java.text.NumberFormat.getNumberInstance())));
+    new javax.swing.text.NumberFormatter(java.text.NumberFormat.getNumberInstance())));
         txtValor.setValue(0.00);
         txtValor.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
