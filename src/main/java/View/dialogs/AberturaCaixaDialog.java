@@ -1,4 +1,4 @@
-package View;
+package view.dialogs;
 
 import models.Usuario;
 
@@ -42,7 +42,8 @@ public class AberturaCaixaDialog extends JDialog {
         lblValorAbertura.setForeground(new java.awt.Color(30, 30, 30));
         lblValorAbertura.setText("Valor de Abertura:");
 
-        txtValorAbertura.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getCurrencyInstance())));
+        txtValorAbertura.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
+    new javax.swing.text.NumberFormatter(java.text.NumberFormat.getNumberInstance())));
         txtValorAbertura.setValue(0.00);
         txtValorAbertura.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override

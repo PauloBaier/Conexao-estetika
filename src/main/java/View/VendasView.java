@@ -1,8 +1,13 @@
-package View;
+package view;
 
+import controllers.venda.VendaController;
 import models.*;
 import models.enums.TipoMovimento;
-import services.*;
+import view.dialogs.AberturaCaixaDialog;
+import view.dialogs.MovimentacaoCaixaDialog;
+import view.dialogs.PagamentoDialog;
+import view.dialogs.SelecionarClienteDialog;
+import view.dialogs.SelecionarProdutosDialog;
 
 import javax.swing.*;
 import javax.swing.event.TableModelEvent;
@@ -15,13 +20,10 @@ public class VendasView extends JPanel{
     private Venda vendaAtual;
     private Caixa caixaAtual;
 
-    private VendaService vendaService;
-    private CaixaService caixaService;
-    private ClienteService clienteService;
-    private ProdutoService produtoService;
-    private UsuarioService usuarioService;
-    private Usuario usuarioLogado;
-    private MovimentacaoCaixaService movimentacaoCaixaService;
+    private final VendaController vendaController;
+    private final Usuario usuarioLogado;
+    private final services.ClienteService clienteService;
+    private final services.ProdutoService produtoService;
 
     private javax.swing.JLabel Titulo;
     private javax.swing.JButton btnAbrirCaixa;
@@ -45,24 +47,15 @@ public class VendasView extends JPanel{
     private javax.swing.JTextField txtProduto;
     private javax.swing.JTextField txtUsuario;
 
-
-
-
-    public VendasView(VendaService vendaService,
-                      CaixaService caixaService,
-                      ClienteService clienteService,
-                      ProdutoService produtoService,
-                      UsuarioService usuarioService,
+    public VendasView(VendaController vendaController,
                       Usuario usuarioLogado,
-                      MovimentacaoCaixaService movimentacaoCaixaService
+                      services.ClienteService clienteService,
+                      services.ProdutoService produtoService
     ){
-        this.vendaService = vendaService;
-        this.caixaService = caixaService;
-        this.clienteService = clienteService;
-        this.produtoService = produtoService;
-        this.usuarioService = usuarioService;
-        this.usuarioLogado = usuarioLogado;
-        this.movimentacaoCaixaService = movimentacaoCaixaService;
+        this.vendaController = vendaController;
+        this.usuarioLogado   = usuarioLogado;
+        this.clienteService  = clienteService;
+        this.produtoService  = produtoService;
 
         Titulo = new javax.swing.JLabel();
         btnNovaVenda = new javax.swing.JButton();
@@ -180,7 +173,7 @@ public class VendasView extends JPanel{
         txtCliente.addFocusListener(new FocusAdapter() {
             @Override
             public void focusLost(FocusEvent e) {
-                if(vendaAtual.getCliente() != null) {
+                if(vendaAtual != null && vendaAtual.getCliente() != null) {
                     String nomeCliente = vendaAtual.getCliente().getNome();
                     txtCliente.setText(nomeCliente != null ? nomeCliente : "");
                 }
@@ -228,12 +221,11 @@ public class VendasView extends JPanel{
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        // 2. Configuração da Tabela e ScrollPane
         tblItenVenda.setBackground(new java.awt.Color(232, 245, 242));
         tblItenVenda.setFont(new java.awt.Font("Arial", 0, 12));
         tblItenVenda.setForeground(new java.awt.Color(30, 30, 30));
         tblItenVenda.setModel(new javax.swing.table.DefaultTableModel(
-                new Object [][] {}, // Tabela inicia vazia limpa
+                new Object [][] {},
                 new String [] {
                         "Id", "Nome", "Quantidade", "Preço Un.", "Valor Total"
                 }
@@ -256,7 +248,6 @@ public class VendasView extends JPanel{
         tblItenVenda.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(tblItenVenda);
 
-        // Ajustando larguras das colunas
         if (tblItenVenda.getColumnModel().getColumnCount() > 0) {
             tblItenVenda.getColumnModel().getColumn(0).setResizable(false);
             tblItenVenda.getColumnModel().getColumn(0).setPreferredWidth(40);
@@ -292,7 +283,6 @@ public class VendasView extends JPanel{
         btnCancelar.setPreferredSize(new java.awt.Dimension(120, 34));
         btnCancelar.addActionListener(this::btnCancelarActionPerfomed);
 
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -313,11 +303,8 @@ public class VendasView extends JPanel{
                                                 .addComponent(btnSuprimento, javax.swing.GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(btnSaldoCaixa, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE))
-
-                                        // A MÁGICA ACONTECE NESTAS DUAS LINHAS: O Short.MAX_VALUE força eles a ocuparem o espaço vazio!
                                         .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-
                                         .addGroup(layout.createSequentialGroup()
                                                 .addComponent(lblSubtotal)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -354,9 +341,7 @@ public class VendasView extends JPanel{
                                 .addGap(20, 20, 20))
         );
 
-        java.awt.Window win = javax.swing.SwingUtilities.getWindowAncestor(this);
-
-        caixaAtual = caixaService.buscarCaixaAberto();
+        caixaAtual = vendaController.buscarCaixaAberto();
 
         if(caixaAtual == null){
             btnNovaVenda.setEnabled(false);
@@ -382,12 +367,6 @@ public class VendasView extends JPanel{
         btnCancelar.setEnabled(false);
     }
 
-    /**
-     * Se o usuário logado for FUNCIONÁRIO, abre um diálogo pedindo email e senha
-     * de um ADMIN ou GERENTE para autorizar a operação de caixa.
-     * Retorna o usuário autorizado, ou null se cancelado/inválido.
-     * Se o usuário já for ADMIN/GERENTE, retorna ele mesmo sem pedir credenciais.
-     */
     private models.Usuario autorizarOperacaoCaixa() {
         if (usuarioLogado.getPerfil() != models.enums.TipoUsuario.FUNCIONARIO) {
             return usuarioLogado;
@@ -406,7 +385,7 @@ public class VendasView extends JPanel{
         if (resultado != JOptionPane.OK_OPTION) return null;
 
         try {
-            return usuarioService.autorizarOperacaoCaixa(tfEmail.getText(), new String(tfSenha.getPassword()));
+            return vendaController.autorizarOperacaoCaixa(tfEmail.getText(), new String(tfSenha.getPassword()));
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Acesso Negado", JOptionPane.ERROR_MESSAGE);
             return null;
@@ -414,8 +393,7 @@ public class VendasView extends JPanel{
     }
 
     private void btnNovaVendaActionPerfomed(java.awt.event.ActionEvent evt){
-
-        vendaAtual = vendaService.iniciar(usuarioLogado);
+        vendaAtual = vendaController.iniciar(usuarioLogado);
 
         btnNovaVenda.setEnabled(false);
         btnFinalizarVenda.setEnabled(true);
@@ -441,7 +419,7 @@ public class VendasView extends JPanel{
         }
         else{
             try {
-                Caixa novoCaixa = caixaService.abrirCaixaComValor(valorAbertura, autorizador);
+                Caixa novoCaixa = vendaController.abrirCaixaComValor(valorAbertura, autorizador);
                 caixaAtual = novoCaixa;
                 JOptionPane.showMessageDialog(null, "Caixa ABERTO com sucesso!");
                 btnNovaVenda.setEnabled(true);
@@ -461,12 +439,12 @@ public class VendasView extends JPanel{
         if (autorizador == null) return;
 
         try{
-            if(caixaService.buscarCaixaAberto() != null){
+            if(vendaController.buscarCaixaAberto() != null){
                 if(vendaAtual != null && !vendaAtual.getItens().isEmpty()){
                     JOptionPane.showMessageDialog(null, "Finalize ou cancele a venda em andamento antes de fechar o caixa!", "Atenção", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
-                caixaService.fecharCaixa(autorizador, vendaAtual);
+                vendaController.fecharCaixa(autorizador, vendaAtual);
 
                 btnNovaVenda.setEnabled(false);
                 btnAbrirCaixa.setEnabled(true);
@@ -495,7 +473,7 @@ public class VendasView extends JPanel{
 
         if(valorSangria != null && descricao != null){
             try {
-                movimentacaoCaixaService.registrarSangria(caixaAtual, valorSangria, descricao, autorizador);
+                vendaController.registrarSangria(caixaAtual, valorSangria, descricao, autorizador);
                 JOptionPane.showMessageDialog(null, "SANGRIA lançada com sucesso!");
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, "Erro na sangria: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
@@ -516,7 +494,7 @@ public class VendasView extends JPanel{
 
         if(valorSuprimento != null && descricao != null){
             try {
-                movimentacaoCaixaService.registrarSuprimento(caixaAtual, valorSuprimento, descricao, autorizador);
+                vendaController.registrarSuprimento(caixaAtual, valorSuprimento, descricao, autorizador);
                 JOptionPane.showMessageDialog(null, "SUPRIMENTO lançado com sucesso!");
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, "Erro no suprimento: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
@@ -537,7 +515,7 @@ public class VendasView extends JPanel{
 
         if(opcao == JOptionPane.YES_OPTION){
             try {
-                vendaService.cancelar(vendaAtual);
+                vendaController.cancelar(vendaAtual);
                 JOptionPane.showMessageDialog(null, "Venda cancelada com sucesso!");
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, "Erro ao cancelar: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
@@ -552,8 +530,7 @@ public class VendasView extends JPanel{
 
         if(formaPagamento != null){
             try {
-                vendaService.aplicarPagamento(vendaAtual, formaPagamento);
-                vendaService.cadastrar(vendaAtual);
+                vendaController.aplicarPagamento(vendaAtual, formaPagamento);
                 JOptionPane.showMessageDialog(null, "Venda finalizada com sucesso!");
                 limparVenda();
             } catch (Exception ex) {
@@ -582,7 +559,7 @@ public class VendasView extends JPanel{
                 Produto produto = selecionarProdutoMenu.getProdutoSelecionado();
                 int quantidade = selecionarProdutoMenu.getQuantidade();
 
-                vendaService.adicionarItemNaVenda(vendaAtual, produto, quantidade);
+                vendaController.adicionarItemNaVenda(vendaAtual, produto, quantidade);
 
                 popularTabelaItens();
                 atualizarSubTotal();
@@ -596,7 +573,7 @@ public class VendasView extends JPanel{
         int quantidadeDigitada = (int)tblItenVenda.getValueAt(linha, coluna);
 
         try {
-            vendaService.atualizarQuantidadeItem(vendaAtual, linha, quantidadeDigitada);
+            vendaController.atualizarQuantidadeItem(vendaAtual, linha, quantidadeDigitada);
 
             popularTabelaItens();
             atualizarSubTotal();
@@ -609,7 +586,7 @@ public class VendasView extends JPanel{
     }
 
     private void btnSaldoCaixaActionPerformed(java.awt.event.ActionEvent evt){
-        Caixa caixa = caixaService.buscarCaixaAberto();
+        Caixa caixa = vendaController.buscarCaixaAberto();
 
         if(caixa == null){
             JOptionPane.showMessageDialog(null, "Nenhum caixa aberto no momento.", "Saldo do Caixa", JOptionPane.INFORMATION_MESSAGE);
@@ -649,7 +626,7 @@ public class VendasView extends JPanel{
     }
 
     private void atualizarSubTotal(){
-        double soma = vendaService.calcularSubTotal(vendaAtual);
+        double soma = vendaController.calcularSubTotal(vendaAtual);
         lblSubtotaValor.setText(String.format("%.2f", soma));
     }
 
