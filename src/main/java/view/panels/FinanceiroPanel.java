@@ -1,29 +1,27 @@
 package view.panels;
 
+import controllers.financeiro.FinanceiroController;
+import controllers.financeiro.dto.ContaPagarResponse;
+import controllers.financeiro.dto.ContaReceberResponse;
 import models.*;
 import models.enums.*;
-import services.*;
 import view.MenuPrincipalView;
+import controllers.entrada.EntradaController;
+import controllers.entrada.impl.EntradaControllerImpl;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class FinanceiroPanel extends JPanel {
 
     private final Usuario usuarioLogado;
 
-    private final ContaPagarService contaPagarService;
-    private final ContaReceberService contaReceberService;
-    private final FinanceiroService financeiroService;
-    private final CaixaService caixaService;
-    private final ProdutoService produtoService;
-    private final FornecedorService fornecedorService;
-    private final EntradaEstoqueService entradaEstoqueService;
+    private final FinanceiroController financeiroController;
+    private final EntradaController entradaController;
 
     private CardLayout cardLayout;
     private JPanel cards;
@@ -37,22 +35,12 @@ public class FinanceiroPanel extends JPanel {
 
     public FinanceiroPanel(
             Usuario usuarioLogado,
-            ContaPagarService contaPagarService,
-            ContaReceberService contaReceberService,
-            FinanceiroService financeiroService,
-            CaixaService caixaService,
-            ProdutoService produtoService,
-            FornecedorService fornecedorService,
-            EntradaEstoqueService entradaEstoqueService
+            FinanceiroController financeiroController,
+            EntradaController entradaController
     ) {
         this.usuarioLogado         = usuarioLogado;
-        this.contaPagarService     = contaPagarService;
-        this.contaReceberService   = contaReceberService;
-        this.financeiroService     = financeiroService;
-        this.caixaService          = caixaService;
-        this.produtoService        = produtoService;
-        this.fornecedorService     = fornecedorService;
-        this.entradaEstoqueService = entradaEstoqueService;
+        this.financeiroController  = financeiroController;
+        this.entradaController     = entradaController;
 
         setLayout(new BorderLayout());
         setBackground(MenuPrincipalView.CONTENT_BG);
@@ -65,7 +53,7 @@ public class FinanceiroPanel extends JPanel {
         cards = new JPanel(cardLayout);
         cards.setBackground(MenuPrincipalView.CONTENT_BG);
         cards.add(buildListagemCard(), "listagem");
-        cards.add(new EntradaFinanceiroPanel(produtoService, fornecedorService, entradaEstoqueService,
+        cards.add(new EntradaFinanceiroPanel(entradaController,
                 () -> cardLayout.show(cards, "listagem")), "entrada");
         add(cards, BorderLayout.CENTER);
         cardLayout.show(cards, "listagem");
@@ -138,19 +126,17 @@ public class FinanceiroPanel extends JPanel {
                 }
         );
 
-        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
         Runnable refresh = () -> {
             model.setRowCount(0);
-            for (ContaPagar c : contaPagarService.listar()) {
+            for (ContaPagarResponse c : financeiroController.buscarTodasContasPagar()) {
                 model.addRow(new Object[]{
-                        c.getId(),
-                        c.getFornecedor() != null ? c.getFornecedor().getNome() : "-",
-                        c.getDescricao(),
-                        c.getDataEmissao()    != null ? c.getDataEmissao().format(fmt)    : "-",
-                        c.getDataVencimento() != null ? c.getDataVencimento().format(fmt) : "-",
-                        String.format("R$ %.2f", c.getValor()),
-                        c.getStatus().name(),
+                        c.id(),
+                        c.fornecedor(),
+                        c.descricao(),
+                        c.dataEmissao(),
+                        c.dataVencimento(),
+                        String.format("R$ %.2f", c.valor()),
+                        c.status(),
                         "btn"
                 });
             }
@@ -170,7 +156,6 @@ public class FinanceiroPanel extends JPanel {
                 if (!StatusConta.PENDENTE.name().equals(status)) return;
 
                 long id = Long.parseLong(model.getValueAt(modelRow, 0).toString());
-
                 String fornecedor = (String) model.getValueAt(modelRow, 1);
                 String valor = (String) model.getValueAt(modelRow, 5);
 
@@ -182,8 +167,8 @@ public class FinanceiroPanel extends JPanel {
                 if (confirm != JOptionPane.YES_OPTION) return;
 
                 try {
-                    ContaPagar conta = contaPagarService.buscar(id);
-                    financeiroService.pagarConta(conta, usuarioLogado);
+                    ContaPagar conta = financeiroController.buscarContaPagar(id);
+                    financeiroController.pagarConta(conta, usuarioLogado);
                     refresh.run();
                     JOptionPane.showMessageDialog(FinanceiroPanel.this,
                             "Conta #" + id + " paga com sucesso!", "Sucesso",
@@ -232,19 +217,17 @@ public class FinanceiroPanel extends JPanel {
                 }
         );
 
-        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
         Runnable refresh = () -> {
             model.setRowCount(0);
-            for (ContaReceber c : contaReceberService.listar()) {
+            for (ContaReceberResponse c : financeiroController.buscarTodasContasReceber()) {
                 model.addRow(new Object[]{
-                        c.getId(),
-                        c.getCliente() != null ? c.getCliente().getNome() : "Sem cliente",
-                        c.getDescricao(),
-                        c.getDataEmissao()    != null ? c.getDataEmissao().format(fmt)    : "-",
-                        c.getDataVencimento() != null ? c.getDataVencimento().format(fmt) : "-",
-                        String.format("R$ %.2f", c.getValor()),
-                        c.getStatus().name(),
+                        c.id(),
+                        c.cliente(),
+                        c.descricao(),
+                        c.dataEmissao(),
+                        c.dataVencimento(),
+                        String.format("R$ %.2f", c.valor()),
+                        c.status(),
                         "btn"
                 });
             }
@@ -264,7 +247,6 @@ public class FinanceiroPanel extends JPanel {
                 if (!StatusConta.PENDENTE.name().equals(status)) return;
 
                 long id = Long.parseLong(model.getValueAt(modelRow, 0).toString());
-
                 String cliente = (String) model.getValueAt(modelRow, 1);
                 String valor   = (String) model.getValueAt(modelRow, 5);
 
@@ -276,10 +258,8 @@ public class FinanceiroPanel extends JPanel {
                 if (confirm != JOptionPane.YES_OPTION) return;
 
                 try {
-                    ContaReceber conta = contaReceberService.buscar(id);
-
-                    financeiroService.receberConta(conta, usuarioLogado);
-
+                    ContaReceber conta = financeiroController.buscarContaReceber(id);
+                    financeiroController.receberConta(conta, usuarioLogado);
                     refresh.run();
                     JOptionPane.showMessageDialog(FinanceiroPanel.this,
                             "Conta #" + id + " recebida com sucesso!", "Sucesso",
@@ -294,7 +274,6 @@ public class FinanceiroPanel extends JPanel {
 
         return buildTabLayout(table, refresh);
     }
-
 
     private JPanel buildTabLayout(JTable table, Runnable refresh) {
         JPanel panel = new JPanel(new BorderLayout(0, 8));
