@@ -5,32 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b2dcdb6e-71f5-40ed-8ccf-da24a433fcb6" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/cadastro/CadastroController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/cadastro/dto/CategoriaResponse.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/cadastro/dto/ClienteResponse.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/cadastro/dto/FornecedorResponse.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/cadastro/dto/ProdutoResponse.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/cadastro/impl/CadastroControllerImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/entrada/EntradaController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/entrada/dto/FornecedorEntradaResponse.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/entrada/dto/ProdutoEntradaResponse.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/entrada/impl/EntradaControllerImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/financeiro/FinanceiroController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/financeiro/dto/ContaPagarResponse.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/financeiro/dto/ContaReceberResponse.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/financeiro/impl/FinanceiroControllerImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/relatorio/RelatorioController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/relatorio/dto/ContaPagarRelatorioResponse.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/relatorio/dto/ContaPagarVencidaResponse.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/relatorio/dto/ContaReceberRelatorioResponse.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/relatorio/dto/ProdutoRelatorioResponse.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/relatorio/impl/RelatorioControllerImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/usuario/UsuarioController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/usuario/dto/LoginResponse.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/usuario/impl/UsuarioControllerImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/venda/VendaController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/venda/dto/VendaResponse.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/venda/impl/VendaControllerImpl.java" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/controllers/entrada/EntradaController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/controllers/entrada/dto/FornecedorEntradaResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/controllers/entrada/dto/ProdutoEntradaResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/controllers/entrada/impl/EntradaControllerImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/controllers/relatorio/RelatorioController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/controllers/relatorio/dto/ContaPagarRelatorioResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/controllers/relatorio/dto/ContaPagarVencidaResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/controllers/relatorio/dto/ContaReceberRelatorioResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/controllers/relatorio/dto/ProdutoRelatorioResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/controllers/relatorio/impl/RelatorioControllerImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/conexao/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/conexao/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/services/CaixaService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/CaixaService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/services/MovimentacaoCaixaService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/MovimentacaoCaixaService.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,22 +36,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/paulo/IdeaProjects/ConexaoEstetika/Conexao-estetika/src/main/resources/imagens&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;project.propCompiler&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Application.Main.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "dev",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/paulo/IdeaProjects/ConexaoEstetika/Conexao-estetika/src/main/java",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "project.propCompiler"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\paulo\IdeaProjects\ConexaoEstetika\Conexao-estetika\src\main\java" />
       <recent name="C:\Users\paulo\IdeaProjects\ConexaoEstetika\Conexao-estetika\src\main\resources\imagens" />
     </key>
   </component>
