@@ -3,8 +3,8 @@ package conexao;
 import Config.FlyWayConfig;
 import repositories.*;
 import services.*;
-import view.LoginView;
-import view.MenuPrincipalView;
+import View.LoginView;
+import View.MenuPrincipalView;
 
 public class Main {
 
